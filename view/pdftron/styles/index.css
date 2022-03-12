@@ -1,0 +1,26 @@
+/* 
+.chakra-ui-dark .DocumentContainer {
+  background: #1a202c !important;
+} */
+
+.App {
+  background: transparent;
+}
+
+.DocumentContainer {
+  background: transparent;
+  border: none;
+}
+.Header,
+.HeaderItems {
+  background: #36425c13;
+  border: 2ps solid white !important;
+}
+
+.custom-ribbons-container,
+.Tools {
+  opacity: 0;
+}
+.HeaderItems .divider {
+  background: #7b7c7cc7;
+}
