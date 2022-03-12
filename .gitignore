@@ -1,0 +1,13 @@
+.DS_Store
+dist
+dist-ssr
+*.local
+# dependencies
+node_modules/
+package-lock.json
+
+# production
+/build
+
+# api config
+.env
