@@ -1560,7 +1560,7 @@ electron-to-chromium@^1.4.17:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.36.tgz#446c6184dbe5baeb5eae9a875490831e4bc5319a"
   integrity sha512-MbLlbF39vKrXWlFEFpCgDHwdlz4O3LmHM5W4tiLRHjSmEUXjJjz8sZkMgWgvYxlZw3N1iDTmCEtOkkESb5TMCg==
 
-emoji-mart@3.0.1:
+emoji-mart@3.0.1, emoji-mart@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/emoji-mart/-/emoji-mart-3.0.1.tgz#9ce86706e02aea0506345f98464814a662ca54c6"
   integrity sha512-sxpmMKxqLvcscu6mFn9ITHeZNkGzIvD0BSNFE/LJESPbCA8s1jM6bCDPjWbV31xHq7JXaxgpHxLB54RCbBZSlg==
@@ -2919,10 +2919,10 @@ stream-chat-react@^7.0.0:
     "@stream-io/transliterate" "^1.5.5"
     mml-react "^0.4.2"
 
-stream-chat@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/stream-chat/-/stream-chat-6.0.0.tgz#39ec7cefc911a1cbb4debccce142222b05167f4d"
-  integrity sha512-zpzpiMsR2eTYS7UluimGwVcA4vsaP/GQtEUufwlZWhxS07GaSd9SCIDYbJlmdtV47TfiMDOcDKRrm50adkBlBQ==
+stream-chat@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/stream-chat/-/stream-chat-6.1.0.tgz#32f145398ebbddb556034852506aa99a1637b173"
+  integrity sha512-608FqjF3KmSlNtDLzmohpmBQuyUqwj50dBbla3q0DW8QrY5rsUPTcG16UCGC1iVukm5QkRcNjjJ3r067QQqCog==
   dependencies:
     "@babel/runtime" "^7.16.3"
     "@types/jsonwebtoken" "^8.5.6"

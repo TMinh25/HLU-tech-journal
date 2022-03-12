@@ -10,10 +10,6 @@ import { Role } from "../../types";
 import { useSignUpMutation } from "./authApiSlice";
 // import fetch from "node-fetch";
 
-const server = config.server.url as string;
-
-const client = StreamChat.getInstance(config.streamChat.key);
-
 type AuthState = {
   authenticated: boolean;
   currentUser?: User;
@@ -40,12 +36,13 @@ const authSlice = createSlice({
       state.currentUser = payload;
       state.role = payload.role;
     },
-    signOut: (state) => {
+    resetCredentials: (state) => {
       TokenService.updateLocalAccessToken(null);
       TokenService.updateLocalRefreshToken(null);
       state.authenticated = false;
       state.currentUser = undefined;
       state.role = -1;
+      state.isAuthenticating = false;
     },
     modifyCredentials: (state, action: PayloadAction<User>) => {
       state.currentUser = action.payload;
@@ -55,8 +52,8 @@ const authSlice = createSlice({
 
 export const {
   setCredentials,
-  signOut,
   modifyCredentials,
   setIsAuthenticating,
+  resetCredentials,
 } = authSlice.actions;
 export default authSlice.reducer;

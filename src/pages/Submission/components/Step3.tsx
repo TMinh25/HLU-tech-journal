@@ -45,11 +45,11 @@ export default function StepThree({ onNextTab, onPrevTab }: any) {
 
   const addNewAuthor = () => {
     if (
-      values.authors.sub?.findIndex(
+      values.authors?.sub?.some(
         (el: any) =>
-          currentUser?.email == newSubAuthor.email ||
-          el.email == newSubAuthor.email
-      ) >= 0
+          currentUser?.email == newSubAuthor?.email ||
+          el?.email == newSubAuthor?.email
+      )
     ) {
       toast.closeAll();
       toast({
@@ -63,7 +63,8 @@ export default function StepThree({ onNextTab, onPrevTab }: any) {
         title: "Tác giả phải có Họ tên và Email",
       });
     } else {
-      setFieldValue("authors.sub", [...values.authors.sub, newSubAuthor]);
+      const newArr = values.authors.sub || [];
+      setFieldValue("authors.sub", [...newArr, newSubAuthor]);
       setNewSubAuthor(initialAuthorValue);
       newAuthorFirstInputRef.current?.focus();
     }
@@ -71,8 +72,8 @@ export default function StepThree({ onNextTab, onPrevTab }: any) {
 
   const removeAuthor = (index: number) => {
     if (index >= 0) {
-      const newArr = [...values.authors.sub];
-      newArr.splice(index, 1);
+      const newArr = values.authors.sub;
+      newArr?.splice(index, 1);
       setFieldValue("authors.sub", newArr);
     }
   };

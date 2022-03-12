@@ -120,7 +120,7 @@ function App(): JSX.Element {
       <Box>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<LandingPage scrollToTop />}>
+            <Route path="/" element={<LandingPage />}>
               <Route index element={<HomePage />} />
               <Route path="*" element={<NotFound />} />
               <Route path="hooray" element={<PrivateRoute />}>

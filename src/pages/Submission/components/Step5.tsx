@@ -27,13 +27,17 @@ export default function StepFive({ onPrevTab }: any) {
     e.preventDefault();
     console.log(values);
     try {
-      await newSubmissionRequest(values);
+      await newSubmissionRequest(values).unwrap();
       onOpen();
-      // console.log(newSubmission);
-    } catch (error) {
+      toast({
+        status: "success",
+        title: "Cảm ơn bạn đã chọn tạp chí khoa học Đại học Hạ Long",
+      });
+    } catch (error: any) {
       toast({
         status: "error",
         title: "Không thể nộp bản thảo",
+        description: error.data.message,
       });
     }
   };

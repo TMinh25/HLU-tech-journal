@@ -1,2 +1,14 @@
+
+# packages
 /node_modules
+
+# app settings
 .env
+
+# logs
+yarn-error.log
+yarn.lock
+.DS_Store
+dist
+dist-ssr
+*.local

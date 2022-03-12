@@ -57,11 +57,12 @@ import { useAppDispatch } from "../../app/hooks";
 import Logo from "../../assets/HLU Logo.png";
 import { useGetArticleForReviewerQuery } from "../../features/article";
 import { useSignOutMutation } from "../../features/auth/authApiSlice";
-import { signOut } from "../../features/auth/authSlice";
+import { resetCredentials } from "../../features/auth/authSlice";
 import { useAppState } from "../../hooks/useAppState";
 import { useAuth } from "../../hooks/useAuth";
 import Article, { ReviewRoundObject } from "../../interface/article.model";
 import { StreamChatContext } from "../../main";
+import TokenService from "../../services/token.service";
 import { ArticleStatus, ReviewStatus, Role } from "../../types";
 import { Card, NotiBadge } from "../../utils/components";
 
@@ -115,8 +116,8 @@ const NAV_ITEMS: Array<NavItem> = [
   },
 ];
 
-export default function LandingPage({ scrollToTop }: any) {
-  const navigation = useDisclosure();
+export default function LandingPage() {
+  const navigationModal = useDisclosure();
   const signOutModal = useDisclosure();
   const { authenticated, currentUser, role } = useAuth();
   const navigate = useNavigate();
@@ -144,14 +145,35 @@ export default function LandingPage({ scrollToTop }: any) {
     setColorMode(newTheme);
   };
 
-  let reviewerSubmissions: any = [];
+  async function handleSignOut() {
+    try {
+      await signOutMutation().unwrap();
+      dispatch(resetCredentials());
+      streamChatClient.disconnectUser();
+      TokenService.updateLocalAccessToken(null);
+      TokenService.updateLocalRefreshToken(null);
+      signOutModal.onClose();
+      navigate("/");
+    } catch (error) {
+      console.log({ error });
+      toast({
+        status: "error",
+        title: (error as any).data?.message,
+      });
+    }
+  }
+
+  let reviewerSubmissions: any = undefined;
   if (role === Role.reviewers) {
     reviewerSubmissions = useGetArticleForReviewerQuery();
   }
 
-  const ReviewersNav = useMemo(() => {
+  const ReviewersNav = () => {
     if (currentUser?._id && reviewerSubmissions.data) {
-      const reviewerRounds = reviewerSubmissions?.data
+      const reviewerRounds: {
+        review: ReviewRoundObject;
+        article: Article;
+      }[] = reviewerSubmissions?.data
         ?.map((a: Article) =>
           a
             .detail!.review!.filter(
@@ -169,34 +191,36 @@ export default function LandingPage({ scrollToTop }: any) {
             )
         )
         .flat();
-
-      console.log({ reviewerRounds });
-
-      if (role === Role.reviewers)
-        return (
-          <IconButton
-            aria-label="notification-button"
-            onClick={() => navigate("/reviewer")}
-            mr={3}
-            icon={
-              <chakra.div position="relative">
-                <BellIcon />
-                {Boolean(reviewerRounds?.length) && (
-                  <NotiBadge>
-                    {Math.min(reviewerRounds!.length, 5) +
-                      (!!(reviewerRounds!.length > 5) ? "+" : "")}
-                  </NotiBadge>
-                )}
-              </chakra.div>
-            }
-          />
-        );
+      return (
+        <IconButton
+          aria-label="notification-button"
+          onClick={() => navigate("/reviewer")}
+          mr={3}
+          icon={
+            <chakra.div position="relative">
+              <BellIcon />
+              {Boolean(
+                reviewerRounds !== undefined && reviewerRounds?.length
+              ) && (
+                <NotiBadge>
+                  {Math.min(reviewerRounds.length, 5) +
+                    (!!(reviewerRounds.length > 5) ? "+" : "")}
+                </NotiBadge>
+              )}
+            </chakra.div>
+          }
+        />
+      );
     }
-  }, [currentUser?._id, reviewerSubmissions]);
+    return null;
+  };
 
   useEffect(() => {
     const unreadCountListener = streamChatClient.on((event) => {
-      if (event.total_unread_count && event.unread_channels) {
+      if (
+        event.total_unread_count != undefined &&
+        event.unread_channels != undefined
+      ) {
         const { message } = event;
         console.log(message);
         toast({
@@ -226,7 +250,9 @@ export default function LandingPage({ scrollToTop }: any) {
       }
     });
 
-    return () => unreadCountListener.unsubscribe();
+    return () => {
+      unreadCountListener.unsubscribe();
+    };
   }, []);
 
   return (
@@ -243,20 +269,7 @@ export default function LandingPage({ scrollToTop }: any) {
                 colorScheme="red"
                 leftIcon={<Icon as={MdOutlinePowerSettingsNew} />}
                 mr={3}
-                onClick={async () => {
-                  try {
-                    await signOutMutation().unwrap();
-                    streamChatClient.disconnectUser();
-                    dispatch(signOut());
-                    navigate("/");
-                    signOutModal.onClose();
-                  } catch (error) {
-                    toast({
-                      status: "error",
-                      title: (error as any)?.message,
-                    });
-                  }
-                }}
+                onClick={handleSignOut}
                 isLoading={signOutData.isLoading}
               >
                 Đăng Xuất
@@ -285,9 +298,9 @@ export default function LandingPage({ scrollToTop }: any) {
           display={{ base: "flex", md: "none" }}
         >
           <IconButton
-            onClick={navigation.onToggle}
+            onClick={navigationModal.onToggle}
             icon={
-              navigation.isOpen ? (
+              navigationModal.isOpen ? (
                 <CloseIcon w={3} h={3} />
               ) : (
                 <HamburgerIcon w={5} h={5} />
@@ -329,7 +342,7 @@ export default function LandingPage({ scrollToTop }: any) {
                   Biên tập viên
                 </Button>
               )}
-              {ReviewersNav}
+              {role === Role.reviewers && <ReviewersNav />}
               <Popover>
                 <PopoverTrigger>
                   <Avatar
@@ -431,7 +444,7 @@ export default function LandingPage({ scrollToTop }: any) {
           )}
         </Flex>
       </Flex>
-      <Collapse in={navigation.isOpen} animateOpacity>
+      <Collapse in={navigationModal.isOpen} animateOpacity>
         <MobileNav {...{ navigate }} />
       </Collapse>
       <ScaleFade key={location.pathname} initialScale={0.95} in={true}>

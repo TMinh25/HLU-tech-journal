@@ -10,12 +10,13 @@ import {
   Heading,
   IconButton,
   SimpleGrid,
+  Stack,
 } from "@chakra-ui/react";
 import { useMemo } from "react";
 import { useGetAllArticlesQuery } from "../../features/article";
 import Article from "../../interface/article.model";
 import { ArticleStatus } from "../../types";
-import { Card } from "../../utils/components";
+import { BigContainer, Card } from "../../utils/components";
 import HistoryArticleTable from "./components/HistoryArticleTable";
 import NewSubmissionTable from "./components/NewSubmissionTable";
 import ReviewingTable from "./components/ReviewingTable";
@@ -24,9 +25,13 @@ export default function EditorPage(): JSX.Element {
   useGetAllArticlesQuery();
   return (
     <>
-      <Accordion allowMultiple allowToggle defaultIndex={[1, 2]}>
-        <SimpleGrid h="100%" p={12} columns={[1, null, 3]} gap={4}>
-          <GridItem colStart={3} rowStart={1} rowSpan={2} colSpan={2}>
+      <BigContainer>
+        <Accordion allowMultiple allowToggle defaultIndex={[1, 2]}>
+          <Stack
+            spacing={8}
+            //  p={12} columns={[1, null, 3]} gap={4}
+          >
+            {/* <GridItem colStart={3} rowStart={1} rowSpan={2} colSpan={2}>
             <Card>
               <AccordionItem border="none">
                 <AccordionButton _focus={{ outline: "none" }} borderRadius={4}>
@@ -38,18 +43,13 @@ export default function EditorPage(): JSX.Element {
                 <AccordionPanel></AccordionPanel>
               </AccordionItem>
             </Card>
-          </GridItem>
-          <GridItem rowSpan={1} colSpan={2}>
+          </GridItem> */}
             <NewArticleBox />
-          </GridItem>
-          <GridItem rowSpan={1} colSpan={2}>
             <ReviewArticleBox />
-          </GridItem>
-          <GridItem colStart={1} colSpan={2}>
             <HistoryArticleBox />
-          </GridItem>
-        </SimpleGrid>
-      </Accordion>
+          </Stack>
+        </Accordion>
+      </BigContainer>
     </>
   );
 }

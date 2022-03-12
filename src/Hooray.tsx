@@ -1,7 +1,6 @@
 import { Box, Button, Center, HStack, Stack, VStack } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "./app/hooks";
-import { signOut } from "./features/auth/authSlice";
 import { useAuth } from "./hooks/useAuth";
 
 export function Hooray() {
@@ -26,7 +25,6 @@ export function Hooray() {
             {authenticated && (
               <Button
                 onClick={() => {
-                  dispatch(signOut());
                   navigate("/");
                 }}
               >

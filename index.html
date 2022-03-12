@@ -9,5 +9,9 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      var global = globalThis;
+      global.ICAL = global.ICAL || {};
+    </script>
   </body>
 </html>

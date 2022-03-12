@@ -67,7 +67,7 @@ export default function StepTwo({ onNextTab, onPrevTab }: any) {
         formData.append(
           "file",
           currentFile,
-          `${newFileName}.${
+          `${newFileName?.split(".")[0]}.${
             currentFile.name.split(".")[currentFile.name.split(".").length - 1]
           }`
         );

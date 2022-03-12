@@ -8,8 +8,8 @@ export default defineConfig({
     port: 8000,
     strictPort: true,
   },
-  define: {
-    "process.env": process.env,
-    global: {},
-  },
+  // define: {
+  //   "process.env": process.env,
+  //   global: {},
+  // },
 });

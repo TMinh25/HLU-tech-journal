@@ -51,7 +51,7 @@ export default function AdminPage(): JSX.Element {
     <>
       <BigContainer>
         <Accordion allowMultiple allowToggle defaultIndex={[0, 1, 2]}>
-          <Stack>
+          <Stack spacing={8}>
             <JournalGroupBox />
             <JournalBox />
             <UserBox />

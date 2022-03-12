@@ -2,45 +2,94 @@ import { InfoIcon } from "@chakra-ui/icons";
 import {
   Box,
   Center,
+  ChakraProvider,
   Flex,
   Heading,
+  Input,
+  LinkBox,
+  LinkOverlay,
   Skeleton,
   Spacer,
   Stack,
+  Link as ChakraLink,
   Text,
+  InputGroup,
+  InputLeftElement,
+  Icon,
 } from "@chakra-ui/react";
-import { FC, useEffect } from "react";
+import { useState } from "react";
+import { FC, useEffect, useMemo } from "react";
+import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useGetPublishingJournalsQuery } from "../../../features/journal";
 import { BigContainer, Card } from "../../../utils/components";
 
 const PublishingJournalPage: FC = (props) => {
   const journals = useGetPublishingJournalsQuery();
+  const [filter, setFilter] = useState("");
 
   useEffect(() => {
     console.log({ journals });
   }, [journals]);
+
+  const filteredJournals = useMemo(
+    () =>
+      journals.data?.filter(
+        (j) => j.name.includes(filter) || j.tags.includes(filter)
+      ),
+    [filter]
+  );
 
   return (
     <BigContainer>
       <Skeleton as={Box} isLoaded={!journals.isLoading}>
         {journals.data ? (
           <Stack spacing={6}>
-            <Heading as="h2">Số đang xuất bản</Heading>
+            <Flex>
+              <Heading as="h2">Số đang xuất bản</Heading>
+              <Spacer />
+              <Box>
+                <InputGroup>
+                  <InputLeftElement
+                    pointerEvents="none"
+                    children={<Icon as={FaSearch} />}
+                  />
+                  <Input
+                    w="200"
+                    value={filter}
+                    onChange={({ target }) => setFilter(target.value)}
+                  />
+                </InputGroup>
+              </Box>
+            </Flex>
             <Stack>
-              {journals.data.map((j) => (
-                <Link to={`/journal/${j._id}`}>
-                  <Card>
-                    <Flex align="center">
-                      <Heading size="sm">{j.name}</Heading>
-                      <Spacer />
-                      <Text mr={4} isTruncated color="gray.500">
-                        {new Date(j.createdBy.at).toLocaleDateString("vi")}
-                      </Text>
-                    </Flex>
-                  </Card>
-                </Link>
-              ))}
+              {filteredJournals?.length ? (
+                filteredJournals?.map((j) => (
+                  <LinkBox>
+                    <Card>
+                      <Flex align="center">
+                        <LinkOverlay as={Link} to={`/journal/${j._id}`}>
+                          <Heading size="sm">{j.name}</Heading>
+                        </LinkOverlay>
+                        <Spacer />
+                        <ChakraLink
+                          as={Link}
+                          to={`/journal-group/${j.journalGroup._id}`}
+                        >
+                          {j.journalGroup.name}
+                        </ChakraLink>
+                        <Text mx={4} isTruncated color="gray.500">
+                          {new Date(j.createdBy.at).toLocaleDateString("vi")}
+                        </Text>
+                      </Flex>
+                    </Card>
+                  </LinkBox>
+                ))
+              ) : (
+                <Center color={"gray.500"} h={200}>
+                  Không có tạp chí nào được tìm thấy
+                </Center>
+              )}
             </Stack>
           </Stack>
         ) : (

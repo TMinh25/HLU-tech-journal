@@ -7,7 +7,6 @@ import {
 import config from "../config";
 import TokenService from "../services/token.service";
 import { setError } from "./appState";
-import { signOut } from "./auth/authSlice";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: config.server.url,
@@ -58,7 +57,6 @@ const baseQueryWithReauthenticate: BaseQueryFn<
           description: "Vui lòng đăng nhập lại",
         })
       );
-      api.dispatch(signOut());
       api.dispatch(setError(null));
     }
   }
