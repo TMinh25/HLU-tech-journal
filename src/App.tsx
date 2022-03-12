@@ -32,6 +32,7 @@ import AdminUser from "./pages/Admin/pages/AdminUser";
 import ArticlePage from "./pages/Article";
 import EditorPage from "./pages/Editor";
 import EditorArticle from "./pages/Editor/pages/Article";
+import HomePage from "./pages/Home";
 import JournalPage from "./pages/Journal/page/JournalPage";
 import PublishedJournalPage from "./pages/Journal/page/PublishedJournalPage";
 import PublishingJournalPage from "./pages/Journal/page/PublishingJournalPage";
@@ -120,16 +121,7 @@ function App(): JSX.Element {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<LandingPage scrollToTop />}>
-              <Route
-                index
-                element={
-                  <BigContainer>
-                    <Heading textAlign="center" size="xl">
-                      Tạp chí khoa học công nghệ Đại học Hạ Long
-                    </Heading>
-                  </BigContainer>
-                }
-              />
+              <Route index element={<HomePage />} />
               <Route path="*" element={<NotFound />} />
               <Route path="hooray" element={<PrivateRoute />}>
                 <Route index element={<Hooray />} />

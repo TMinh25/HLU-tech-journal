@@ -1,9 +1,11 @@
+import { CloseIcon } from "@chakra-ui/icons";
 import {
   Accordion,
   AccordionButton,
   AccordionItem,
   AccordionPanel,
   Box,
+  Center,
   Collapse,
   Drawer,
   DrawerBody,
@@ -20,7 +22,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import WebViewer, { Core, UI } from "@pdftron/webviewer";
-import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Card, CircularProgressInderterminate, BigContainer } from "../";
 import { useGetFileQuery } from "../../../features/fileUpload";
@@ -73,6 +75,10 @@ const PDFViewer: FC = (props) => {
     [plagChecked]
   );
 
+  const ribbonHeader = useMemo(() => {
+    return <h2>{file.data?.title}</h2>;
+  }, [file.data]);
+
   useEffect(() => {
     setIsLoading(true);
     // if (file.data?.downloadUri && !file.isLoading) {
@@ -83,7 +89,7 @@ const PDFViewer: FC = (props) => {
         css: "pdftron/styles/index.css",
         disableLogs: true,
         disabledElements: [
-          "ribbons",
+          // "ribbons",
           "toolsHeader",
           "toggleNotesButton",
           "viewControlsButton",
@@ -104,23 +110,35 @@ const PDFViewer: FC = (props) => {
 
         if (authenticated && role < Role.users) {
           instance.UI.setHeaderItems((header) => {
-            header.push({
-              type: "actionButton",
-              img: "/view/search-para.svg",
-              onClick: onOpen,
-            });
             const leftPanel = header.get("leftPanelButton");
             leftPanel.insertBefore({
               type: "actionButton",
               img: "/view/favicon.svg",
               onClick: () => navigate("/"),
             });
+            const searchButton = header.get("searchButton");
+            searchButton.insertBefore({
+              type: "actionButton",
+              img: "/view/download.svg",
+              onClick: () =>
+                file.data?.downloadUri &&
+                window.open(file.data?.downloadUri, "_blank")?.focus(),
+            });
+            searchButton.insertBefore({
+              type: "customElement",
+              render: () => <h2>{file.data?.title}</h2>,
+            });
+            header.push({
+              type: "actionButton",
+              img: "/view/search-para.svg",
+              onClick: onOpen,
+            });
           });
 
           instance.UI.textPopup.update([
             {
               type: "actionButton",
-              img: "/view/favicon.svg",
+              img: "/view/search-para.svg",
               onClick: () => handleSearchPlag(documentViewer),
             },
           ]);
@@ -147,6 +165,33 @@ const PDFViewer: FC = (props) => {
   }, []);
 
   useEffect(() => console.log({ plagChecked }), [plagChecked]);
+
+  if (file.isError || !file.data) {
+    return (
+      <BigContainer>
+        <Box textAlign="center" py={10} px={6}>
+          <Box display="inline-block">
+            <Flex
+              flexDirection="column"
+              justifyContent="center"
+              alignItems="center"
+              bg={"red.500"}
+              rounded={"50px"}
+              w={"55px"}
+              h={"55px"}
+              textAlign="center"
+            >
+              <CloseIcon boxSize={"20px"} color={"white"} />
+            </Flex>
+          </Box>
+          <Heading as="h2" size="xl" mt={6} mb={2}>
+            Đã có lỗi xảy ra
+          </Heading>
+          <Text color={"gray.500"}>{file.error as any}</Text>
+        </Box>
+      </BigContainer>
+    );
+  }
 
   return (
     <BigContainer p={0} maxW="full">
