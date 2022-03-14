@@ -21,7 +21,7 @@ const Steps: FC<StepsProps> = (props) => {
             isCompleted: activeStep > i,
             isLastStep: arr.length !== i + 1,
             isFirstStep: i == 0,
-            step: i + 1,
+            step: i,
             setStep: setStep ? () => setStep(i) : undefined,
           }}
         >

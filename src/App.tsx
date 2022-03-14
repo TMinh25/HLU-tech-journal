@@ -1,21 +1,6 @@
-import {
-  Avatar,
-  Box,
-  CloseButton,
-  Heading,
-  HStack,
-  LinkBox,
-  LinkOverlay,
-  Portal,
-  Progress,
-  Spacer,
-  Stack,
-  Text,
-  useColorModeValue,
-} from "@chakra-ui/react";
-import { useContext, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
-import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+import { Box, Progress } from "@chakra-ui/react";
+import { useContext, useEffect } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useAppDispatch } from "./app/hooks";
 import { useFetchAuthInfoMutation } from "./features/auth/authApiSlice";
 import { setCredentials, setIsAuthenticating } from "./features/auth/authSlice";
@@ -50,7 +35,7 @@ import ProfilePage from "./pages/User";
 import AuthorArticleDetail from "./pages/User/pages/author";
 import TokenService from "./services/token.service";
 import { Role } from "./types";
-import { BigContainer, Card, PrivateRoute } from "./utils/components";
+import { PrivateRoute } from "./utils/components";
 import PDFViewer from "./utils/components/PDFViewer";
 
 // client-side you initialize the Chat client with your API key
@@ -72,17 +57,15 @@ function App(): JSX.Element {
         try {
           const user = await fetchAuthInfo().unwrap();
           console.log("app");
-          streamChatClient
-            .connectUser(
-              {
-                id: user._id,
-                image: user.photoURL,
-                name: user.aliases,
-              },
-              user.streamToken
-            )
-            .then(() => console.log("connected user"))
-            .catch((e) => console.error(e));
+          await streamChatClient.connectUser(
+            {
+              id: user._id,
+              image: user.photoURL,
+              name: user.aliases,
+            },
+            user.streamToken
+          );
+          console.log("connected user");
           dispatch(setCredentials(user));
         } catch (error: any) {
           console.log(error);
@@ -93,8 +76,9 @@ function App(): JSX.Element {
             title,
             description: "Vui lòng thử lại sau.",
           });
+        } finally {
+          dispatch(setIsAuthenticating(false));
         }
-        dispatch(setIsAuthenticating(false));
       }
     };
 

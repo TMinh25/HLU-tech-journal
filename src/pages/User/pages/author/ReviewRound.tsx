@@ -18,7 +18,6 @@ import {
   Stack,
   Tag,
   Text,
-  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import { FC, useContext, useEffect, useState } from "react";
@@ -78,7 +77,6 @@ interface ReviewRoundProps {
 
 const ReviewRound: FC<ReviewRoundProps> = ({ reviewRound }) => {
   const { articleId } = useParams();
-  const [isChatLoading, setIsChatLoading] = useState(false);
   const reviewer = useGetUserQuery(reviewRound.reviewer);
   const article = useGetArticleQuery(articleId);
   const [confirmSubmittedResult, confirmSubmittedResultData] =
@@ -86,34 +84,6 @@ const ReviewRound: FC<ReviewRoundProps> = ({ reviewRound }) => {
   const reviewRoundDetailModal = useDisclosure();
   const { toast } = useAppState();
   const { currentUser } = useAuth();
-  const [chatChannel, setChatChannel] = useState<Channel>();
-  const [unread, setUnread] = useState<number>();
-  const streamChatClient = useContext(StreamChatContext);
-
-  const getChannelForAuthor = async () => {
-    setIsChatLoading(true);
-    if (currentUser && article.data && !chatChannel) {
-      const chatChannel = streamChatClient.channel("messaging", {
-        members: [currentUser._id, reviewRound.editor],
-      });
-
-      await chatChannel.watch();
-      setChatChannel(chatChannel);
-    }
-    setIsChatLoading(false);
-  };
-
-  useEffect(() => {
-    (async () => await getChannelForAuthor())();
-
-    return function cleanup() {
-      if (chatChannel) {
-        setIsChatLoading(true);
-        chatChannel.stopWatching();
-        setIsChatLoading(false);
-      }
-    };
-  }, []);
 
   if (!articleId || !reviewRound) return <CircularProgressInderterminate />;
 
@@ -170,64 +140,6 @@ const ReviewRound: FC<ReviewRoundProps> = ({ reviewRound }) => {
                         </Text>
                       )}
                     </Stack>
-                  </AccordionPanel>
-                </AccordionItem>
-              </Card>
-              <Card p={4}>
-                <AccordionItem border="none">
-                  <AccordionButton borderRadius={2} py={4}>
-                    <Heading size="sm">Thành viên</Heading>
-                    <Spacer />
-                    <AccordionIcon />
-                  </AccordionButton>
-                  <AccordionPanel py={4}>
-                    <SimpleGrid columns={[1, null, 2, 3]} spacing={6}>
-                      {reviewer.data && (
-                        <UserBox author={reviewer.data} role="Phản biện" />
-                      )}
-                      {article.data && (
-                        <>
-                          <UserBox
-                            author={article.data.authors.main}
-                            role="Tác giả chính"
-                          />
-                          {article.data?.authors.sub?.map((author) => (
-                            <UserBox
-                              author={author}
-                              role="Tác giả phụ & người đóng góp"
-                            />
-                          ))}
-                        </>
-                      )}
-                    </SimpleGrid>
-                  </AccordionPanel>
-                </AccordionItem>
-              </Card>
-              <Card p={4}>
-                <AccordionItem border="none">
-                  <AccordionButton
-                    borderRadius={2}
-                    py={4}
-                    onClick={getChannelForAuthor}
-                  >
-                    <Heading size="sm">
-                      Thảo luận<Text as="span"> - </Text>
-                      <Text
-                        as="span"
-                        color={useColorModeValue("gray.600", "gray.400")}
-                      >
-                        phản biện
-                      </Text>
-                    </Heading>
-                    <Spacer />
-                    <AccordionIcon />
-                  </AccordionButton>
-                  <AccordionPanel py={4} px={0} position="relative">
-                    <GetStreamChat
-                      isLoading={isChatLoading}
-                      streamChatClient={streamChatClient}
-                      channel={chatChannel}
-                    />
                   </AccordionPanel>
                 </AccordionItem>
               </Card>

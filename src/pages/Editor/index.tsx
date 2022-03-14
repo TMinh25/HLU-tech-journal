@@ -26,7 +26,7 @@ export default function EditorPage(): JSX.Element {
   return (
     <>
       <BigContainer>
-        <Accordion allowMultiple allowToggle defaultIndex={[1, 2]}>
+        <Accordion allowMultiple allowToggle defaultIndex={[0, 1]}>
           <Stack
             spacing={8}
             //  p={12} columns={[1, null, 3]} gap={4}

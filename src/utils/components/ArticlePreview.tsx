@@ -1,11 +1,13 @@
 import {
   Avatar,
-  AvatarGroup, BoxProps, Heading,
+  AvatarGroup,
+  BoxProps,
+  Heading,
   HStack,
   Link,
   Stack,
   Text,
-  useColorModeValue
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { FC } from "react";
 import Article from "../../interface/article.model";

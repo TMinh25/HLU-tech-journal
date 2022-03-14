@@ -10,12 +10,14 @@ import {
   Center,
   Heading,
   HStack,
+  Radio,
+  RadioGroup,
   Select,
   Stack,
   Text,
   Tooltip,
-  useColorModeValue,
   useDisclosure,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { FC, useEffect, useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone";
@@ -54,13 +56,12 @@ const StageThree: FC<{
   const { articleId, roundId } = useParams();
   const article = useGetArticleQuery(articleId);
 
-  let roundIndex = -1;
   const reviewRound = useMemo(() => {
     if (article.data?.detail?.review && roundId) {
-      roundIndex = article.data?.detail?.review?.findIndex(
+      let index = article.data?.detail?.review?.findIndex(
         (r) => r._id === roundId
       );
-      return article.data?.detail?.review![roundIndex];
+      return article.data?.detail?.review![index];
     }
   }, [article.data?.detail?.review]);
   const [fileUpload, fileUploadData] = useUploadFileMutation();
@@ -106,22 +107,24 @@ const StageThree: FC<{
   };
 
   useEffect(() => {
-    const stageStorage = JSON.parse(
-      localStorage.getItem(`review-stage-${articleId}-${roundIndex}`) || "{}"
-    );
     let timeOutId: NodeJS.Timeout;
-    if (JSON.stringify(result) != JSON.stringify(stageStorage)) {
-      timeOutId = setTimeout(() => {
-        localStorage.setItem(
-          `review-stage-${articleId}-${roundIndex}`,
-          JSON.stringify({ ...stageStorage, ...result })
-        );
-        // toast({
-        //   status: "success",
-        //   title: "Đã lưu vào bản thảo đang đánh giá!",
-        //   duration: 2000,
-        // });
-      }, 1000);
+    if (roundId) {
+      const stageStorage = JSON.parse(
+        localStorage.getItem(`review-stage-${articleId}-${roundId}`) || "{}"
+      );
+      if (JSON.stringify(result) != JSON.stringify(stageStorage)) {
+        timeOutId = setTimeout(() => {
+          localStorage.setItem(
+            `review-stage-${articleId}-${roundId}`,
+            JSON.stringify({ ...stageStorage, ...result })
+          );
+          // toast({
+          //   status: "success",
+          //   title: "Đã lưu vào bản thảo đang đánh giá!",
+          //   duration: 2000,
+          // });
+        }, 1000);
+      }
     }
     return () => clearTimeout(timeOutId);
   }, [result]);
@@ -216,9 +219,9 @@ const StageThree: FC<{
           <Box>
             <FormControlComponent
               id="commentForEveryone"
-              helperText="Dành cho tác giả và ban biên tập"
+              helperText="Đánh giá bài báo"
               inputType="textarea"
-              formLabel="Đánh giá cho tác giả và ban biên tập"
+              formLabel="Đánh giá bài báo"
               value={result.commentForEveryone}
               noOfLines={5}
               onChange={({ target }: any) =>
@@ -227,9 +230,9 @@ const StageThree: FC<{
             />
             <FormControlComponent
               id="commentForEditors"
-              helperText="Dành cho ban biên tập"
+              helperText="Góp ý cho ban biên tập"
               inputType="textarea"
-              formLabel="Đánh giá cho ban biên tập"
+              formLabel="Góp ý cho ban biên tập"
               value={result.commentForEditors}
               noOfLines={5}
               onChange={({ target }: any) =>
@@ -299,34 +302,29 @@ const StageThree: FC<{
             chọn đề xuất
           </Text>
           <Box>
-            <Select
-              size="lg"
-              variant="filled"
-              placeholder="Chọn đề xuất"
+            <RadioGroup
+              name="recommendations"
               value={result.recommendations}
-              onChange={({ target }) =>
-                setResult({ ...result, recommendations: target.value })
-              }
+              onChange={(res) => setResult({ ...result, recommendations: res })}
             >
-              <option key={"review-result-1"} value={ReviewResult.accepted}>
-                {toResultRecommendationString(ReviewResult.accepted)}
-              </option>
-              <option key={"review-result-2"} value={ReviewResult.declined}>
-                {toResultRecommendationString(ReviewResult.declined)}
-              </option>
-              <option key={"review-result-3"} value={ReviewResult.revision}>
-                {toResultRecommendationString(ReviewResult.revision)}
-              </option>
-              <option key={"review-result-4"} value={ReviewResult.resubmission}>
-                {toResultRecommendationString(ReviewResult.resubmission)}
-              </option>
-              <option key={"review-result-5"} value={ReviewResult.resubmit}>
-                {toResultRecommendationString(ReviewResult.resubmit)}
-              </option>
-              <option key={"review-result-6"} value={ReviewResult.other}>
-                {toResultRecommendationString(ReviewResult.other)}
-              </option>
-            </Select>
+              <Stack>
+                <Radio value={ReviewResult.accepted}>
+                  {toResultRecommendationString(ReviewResult.accepted)}
+                </Radio>
+                <Radio value={ReviewResult.declined}>
+                  {toResultRecommendationString(ReviewResult.declined)}
+                </Radio>
+                <Radio value={ReviewResult.revision}>
+                  {toResultRecommendationString(ReviewResult.revision)}
+                </Radio>
+                <Radio value={ReviewResult.resubmit}>
+                  {toResultRecommendationString(ReviewResult.resubmit)}
+                </Radio>
+                <Radio value={ReviewResult.other}>
+                  {toResultRecommendationString(ReviewResult.other)}
+                </Radio>
+              </Stack>
+            </RadioGroup>
             {result.recommendations === ReviewResult.other && (
               <FormControlComponent
                 id="otherRecommendation"

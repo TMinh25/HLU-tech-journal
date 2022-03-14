@@ -14,3 +14,4 @@ export { default as PopoverUserInfoAdmin } from "./PopoverUserInfoAdmin";
 export { default as PrivateRoute } from "./PrivateRoute";
 export { default as SubmissionPreview } from "./SubmissionPreview";
 export { default as TagsComponent } from "./TagsComponent";
+export { default as SocialButton } from "./SocialButton";

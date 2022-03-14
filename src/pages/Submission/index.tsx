@@ -23,13 +23,11 @@ import StepOne from "./components/Step1";
 import StepTwo from "./components/Step2";
 import StepThree from "./components/Step3";
 import StepFour from "./components/Step4";
-import StepFive from "./components/Step5";
 
 const steps = [
   "Bắt đầu",
-  "Tải file bản thảo",
   "Nhập dữ liệu mô tả",
-  "Tải file phụ trợ",
+  "Tải file bản thảo",
   "Khẳng định nộp bài",
 ];
 
@@ -183,14 +181,6 @@ export default function SubmissionPage() {
               </TabPanel>
               <TabPanel>
                 <StepFour {...{ onNextTab, onPrevTab }} />
-              </TabPanel>
-              <TabPanel>
-                <StepFive
-                  {...{
-                    onNextTab,
-                    onPrevTab,
-                  }}
-                />
               </TabPanel>
             </TabPanels>
           </FormikProvider>

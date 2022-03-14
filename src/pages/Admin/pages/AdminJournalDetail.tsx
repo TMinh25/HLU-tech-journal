@@ -22,11 +22,13 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  SimpleGrid,
   Skeleton,
   Spacer,
   Stack,
   Tag,
   Text,
+  useColorModeValue,
   useDisclosure,
   UseDisclosureReturn,
 } from "@chakra-ui/react";
@@ -37,7 +39,7 @@ import {
   AiOutlineInfoCircle,
 } from "react-icons/ai";
 import { IoDocumentTextOutline } from "react-icons/io5";
-import { MdOutlineArticle } from "react-icons/md";
+import { MdOutlineAdd, MdOutlineArticle } from "react-icons/md";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useToggleVisibleMutation } from "../../../features/article";
 import {
@@ -46,7 +48,7 @@ import {
 } from "../../../features/journal";
 import { ArticleStatus } from "../../../types";
 import { getArticleStatusType, toArticleStatusString } from "../../../utils";
-import { BigContainer, Card } from "../../../utils/components";
+import { AuthorBox, BigContainer, Card } from "../../../utils/components";
 import Article from "../../../interface/article.model";
 
 const AdminJournalDetail = (props: any) => {
@@ -77,6 +79,42 @@ const AdminJournalDetail = (props: any) => {
               <EditablePreview />
               <EditableInput />
             </Editable>
+            <Card>
+              <Heading size="md" mb={4}>
+                Danh sách biên tập viên
+              </Heading>
+              {journalsArticles.data && (
+                <SimpleGrid
+                  columns={{ base: 1, md: 1, lg: 2, xl: 3 }}
+                  spacing={6}
+                >
+                  {journal.data?.editors.map((editor, index) => (
+                    <AuthorBox
+                      showUserId
+                      author={{
+                        _id: editor._id,
+                        displayName: editor.name,
+                        photoURL: editor.photoURL,
+                      }}
+                      // onRemoveAuthor={() => removeAuthor(index)}
+                    />
+                  ))}
+
+                  <Button
+                    border={".5px solid"}
+                    borderColor={useColorModeValue("gray.300", "gray.500")}
+                    key="add-editor"
+                    bg={useColorModeValue("gray.100", "gray.700")}
+                    boxShadow={"lg"}
+                    p={4}
+                    rounded={"xl"}
+                    h="100%"
+                  >
+                    <Icon as={MdOutlineAdd} />
+                  </Button>
+                </SimpleGrid>
+              )}
+            </Card>
             <Card>
               <Heading size="md" mb={4}>
                 Danh sách bài báo
@@ -143,9 +181,9 @@ const AdminJournalDetail = (props: any) => {
             </Card>
           </Stack>
         </Skeleton>
-        <Text css={{ whiteSpace: "pre-line" }}>
+        {/* <Text css={{ whiteSpace: "pre-line" }}>
           {JSON.stringify(journal?.data)}
-        </Text>
+        </Text> */}
       </BigContainer>
     </>
   );

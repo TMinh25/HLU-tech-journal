@@ -54,6 +54,7 @@ const StageOne: FC<{
     notes?: string
   ) => {
     try {
+      console.log(reason, notes)
       await response({
         _id: articleId,
         _roundId: roundId,

@@ -9,9 +9,9 @@ import {
   Avatar,
   Box,
   Button,
-  chakra,
   CloseButton,
   Collapse,
+  Container,
   Flex,
   FormLabel,
   Heading,
@@ -38,13 +38,19 @@ import {
   Stack,
   Switch,
   Text,
-  useColorMode,
-  useColorModeValue,
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
+import { useColorMode, useColorModeValue, chakra } from "@chakra-ui/system";
 import { useContext, useEffect, useMemo } from "react";
-import { FaUser } from "react-icons/fa";
+import {
+  FaFacebook,
+  FaInstagram,
+  FaTwitter,
+  FaUser,
+  FaUserSecret,
+  FaYoutube,
+} from "react-icons/fa";
 import { MdOutlinePowerSettingsNew } from "react-icons/md";
 import {
   Link,
@@ -64,7 +70,7 @@ import Article, { ReviewRoundObject } from "../../interface/article.model";
 import { StreamChatContext } from "../../main";
 import TokenService from "../../services/token.service";
 import { ArticleStatus, ReviewStatus, Role } from "../../types";
-import { Card, NotiBadge } from "../../utils/components";
+import { Card, NotiBadge, SocialButton } from "../../utils/components";
 
 interface NavItem {
   label: string;
@@ -74,41 +80,55 @@ interface NavItem {
 }
 
 const NAV_ITEMS: Array<NavItem> = [
+  // {
+  //   label: "Tạp Chí Khoa Học",
+  //   href: "#",
+  //   children: [
+  //     {
+  //       label: "Số Mới Ra",
+  //       href: "/journal/recent-published",
+  //     },
+  //     {
+  //       label: "Đã Xuất Bản",
+  //       subLabel: "Các tạp chí cũ, các số cũ ",
+  //       href: "/journal/published",
+  //     },
+  //     {
+  //       label: "Đang Xuất Bản",
+  //       subLabel: "Các tạp chí đang trong quá trình biên tập",
+  //       href: "/journal/publishing",
+  //     },
+  //   ],
+  // },
+  // {
+  //   label: "Hội thảo Khoa Học",
+  //   href: "#",
+  //   children: [
+  //     {
+  //       label: "Đã Xuất Bản",
+  //       subLabel: "Các hội thảo đã tổ chức",
+  //       href: "/",
+  //     },
+  //     {
+  //       label: "Đang Xuất Bản",
+  //       subLabel: "Hội thảo sắp tới...",
+  //       href: "/",
+  //     },
+  //   ],
+  // },
   {
-    label: "Tạp Chí Khoa Học",
-    href: "#",
-    children: [
-      {
-        label: "Số Mới Ra",
-        href: "/journal/recent-published",
-      },
-      {
-        label: "Đã Xuất Bản",
-        subLabel: "Các tạp chí cũ, các số cũ ",
-        href: "/journal/published",
-      },
-      {
-        label: "Đang Xuất Bản",
-        subLabel: "Các tạp chí đang trong quá trình biên tập",
-        href: "/journal/publishing",
-      },
-    ],
+    label: "Số Mới Ra",
+    href: "/journal/recent-published",
   },
   {
-    label: "Hội thảo Khoa Học",
-    href: "#",
-    children: [
-      {
-        label: "Đã Xuất Bản",
-        subLabel: "Các hội thảo đã tổ chức",
-        href: "/",
-      },
-      {
-        label: "Đang Xuất Bản",
-        subLabel: "Hội thảo sắp tới...",
-        href: "/",
-      },
-    ],
+    label: "Đã Xuất Bản",
+    subLabel: "Các tạp chí cũ, các số cũ ",
+    href: "/journal/published",
+  },
+  {
+    label: "Đang Xuất Bản",
+    subLabel: "Các tạp chí đang trong quá trình biên tập",
+    href: "/journal/publishing",
   },
   {
     label: "Đăng Kí Nộp Bản Thảo",
@@ -163,64 +183,9 @@ export default function LandingPage() {
     }
   }
 
-  let reviewerSubmissions: any = undefined;
-  if (role === Role.reviewers) {
-    reviewerSubmissions = useGetArticleForReviewerQuery();
-  }
-
-  const ReviewersNav = () => {
-    if (currentUser?._id && reviewerSubmissions.data) {
-      const reviewerRounds: {
-        review: ReviewRoundObject;
-        article: Article;
-      }[] = reviewerSubmissions?.data
-        ?.map((a: Article) =>
-          a
-            .detail!.review!.filter(
-              (r: ReviewRoundObject) => r.reviewer === currentUser?._id
-            )
-            .map((r: ReviewRoundObject) => ({
-              review: r,
-              article: a,
-            }))
-            .filter(
-              (r: { review: ReviewRoundObject; article: Article }) =>
-                r.article.status === ArticleStatus.review &&
-                (r.review.status === ReviewStatus.request ||
-                  r.review.status === ReviewStatus.reviewing)
-            )
-        )
-        .flat();
-      return (
-        <IconButton
-          aria-label="notification-button"
-          onClick={() => navigate("/reviewer")}
-          mr={3}
-          icon={
-            <chakra.div position="relative">
-              <BellIcon />
-              {Boolean(
-                reviewerRounds !== undefined && reviewerRounds?.length
-              ) && (
-                <NotiBadge>
-                  {Math.min(reviewerRounds.length, 5) +
-                    (!!(reviewerRounds.length > 5) ? "+" : "")}
-                </NotiBadge>
-              )}
-            </chakra.div>
-          }
-        />
-      );
-    }
-    return null;
-  };
-
   useEffect(() => {
     const unreadCountListener = streamChatClient.on((event) => {
-      if (
-        event.total_unread_count != undefined &&
-        event.unread_channels != undefined
-      ) {
+      if (event.total_unread_count && event.unread_channels) {
         const { message } = event;
         console.log(message);
         toast({
@@ -255,6 +220,59 @@ export default function LandingPage() {
     };
   }, []);
 
+  let reviewerSubmissions: any = undefined;
+  if (role === Role.reviewers) {
+    reviewerSubmissions = useGetArticleForReviewerQuery();
+  }
+
+  const ReviewersButton = () => {
+    if (currentUser?._id && reviewerSubmissions.data) {
+      const reviewerRounds: {
+        review: ReviewRoundObject;
+        article: Article;
+      }[] = reviewerSubmissions?.data
+        ?.map((a: Article) =>
+          a
+            .detail!.review!.filter(
+              (r: ReviewRoundObject) => r.reviewer === currentUser?._id
+            )
+            .map((r: ReviewRoundObject) => ({
+              review: r,
+              article: a,
+            }))
+            .filter(
+              (r: { review: ReviewRoundObject; article: Article }) =>
+                r.article.status === ArticleStatus.review &&
+                (r.review.status === ReviewStatus.request ||
+                  r.review.status === ReviewStatus.reviewing)
+            )
+        )
+        .flat();
+      return (
+        <Button
+          isFullWidth
+          borderRadius={0}
+          px={11}
+          iconSpacing="auto"
+          rightIcon={
+            reviewerRounds.length ? (
+              <NotiBadge>
+                {Math.min(reviewerRounds.length, 5) +
+                  (!!(reviewerRounds.length > 5) ? "+" : "")}
+              </NotiBadge>
+            ) : (
+              <BellIcon />
+            )
+          }
+          onClick={() => navigate("/reviewer")}
+          mr={6}
+        >
+          Phản biện
+        </Button>
+      );
+    }
+    return null;
+  };
   return (
     <Box>
       {authenticated && (
@@ -324,25 +342,6 @@ export default function LandingPage() {
         <Flex align={{ base: "center" }}>
           {authenticated ? (
             <>
-              {role === Role.admin && (
-                <Button
-                  onClick={() => navigate("/admin")}
-                  rightIcon={<Icon as={FaUser} />}
-                  mr={6}
-                >
-                  Quản trị hệ thống
-                </Button>
-              )}
-              {role === Role.editors && (
-                <Button
-                  onClick={() => navigate("/editor")}
-                  rightIcon={<Icon as={FaUser} />}
-                  mr={6}
-                >
-                  Biên tập viên
-                </Button>
-              )}
-              {role === Role.reviewers && <ReviewersNav />}
               <Popover>
                 <PopoverTrigger>
                   <Avatar
@@ -399,6 +398,32 @@ export default function LandingPage() {
                       >
                         Trang cá nhân
                       </Button>
+                      {role === Role.editors && (
+                        <Button
+                          isFullWidth
+                          borderRadius={0}
+                          px={11}
+                          iconSpacing="auto"
+                          rightIcon={<Icon as={FaUser} />}
+                          onClick={() => navigate("/editor")}
+                        >
+                          Biên tập viên
+                        </Button>
+                      )}
+                      {role === Role.admin && (
+                        <Button
+                          isFullWidth
+                          borderRadius={0}
+                          px={11}
+                          iconSpacing="auto"
+                          rightIcon={<Icon as={FaUserSecret} />}
+                          onClick={() => navigate("/admin")}
+                          mr={6}
+                        >
+                          Quản trị hệ thống
+                        </Button>
+                      )}
+                      {role === Role.reviewers && <ReviewersButton />}
                     </VStack>
                     <Button
                       colorScheme="red"
@@ -448,7 +473,7 @@ export default function LandingPage() {
         <MobileNav {...{ navigate }} />
       </Collapse>
       <ScaleFade key={location.pathname} initialScale={0.95} in={true}>
-        <Box>
+        <Box __css={{ minH: "calc(100vh - 60px)" }}>
           <Outlet />
         </Box>
       </ScaleFade>
@@ -471,6 +496,62 @@ export default function LandingPage() {
           <Text>© 2020 Chakra Templates. All rights reserved</Text>
         </Stack>
       </Box> */}
+      <Box
+        bg={useColorModeValue("gray.50", "gray.900")}
+        color={useColorModeValue("gray.700", "gray.200")}
+      >
+        <Container
+          as={Stack}
+          maxW={"6xl"}
+          py={4}
+          spacing={4}
+          justify={"center"}
+          align={"center"}
+        >
+          <Link to={"/"}>
+            <Image src={Logo} h={30} />
+          </Link>
+
+          {/* <Stack direction={"row"} spacing={6}>
+            <Link to={"/"}>Home</Link>
+            <Link to={"/"}>About</Link>
+            <Link to={"/"}>Blog</Link>
+            <Link to={"/"}>Contact</Link>
+          </Stack> */}
+        </Container>
+
+        <Box
+          borderTopWidth={1}
+          borderStyle={"solid"}
+          borderColor={useColorModeValue("gray.200", "gray.700")}
+        >
+          <Container
+            as={Stack}
+            maxW={"6xl"}
+            py={4}
+            direction={{ base: "column", md: "row" }}
+            spacing={4}
+            justify={{ base: "center", md: "space-between" }}
+            align={{ base: "center", md: "center" }}
+          >
+            <Text>© 2022 HLU Tech Journal. All rights reserved</Text>
+            <Stack direction={"row"} spacing={6}>
+              <SocialButton
+                label={"Twitter"}
+                href={"https://www.facebook.com/sipp.minhh"}
+              >
+                <FaFacebook />
+              </SocialButton>
+              <SocialButton
+                label={"Instagram"}
+                href={"https://www.instagram.com/not.gr4y/"}
+              >
+                <FaInstagram />
+              </SocialButton>
+            </Stack>
+          </Container>
+        </Box>
+      </Box>
     </Box>
   );
 }

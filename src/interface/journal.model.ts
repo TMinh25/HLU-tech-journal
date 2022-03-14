@@ -19,7 +19,7 @@ export default interface Journal {
 }
 
 export interface EditorInJournal {
-  _id: number;
+  _id: string;
   name: string;
   photoURL?: string;
 }

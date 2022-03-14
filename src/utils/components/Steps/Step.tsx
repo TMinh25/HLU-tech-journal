@@ -10,7 +10,6 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import * as React from "react";
 import { useStep } from "./hooks";
 
 export interface StepProps extends BoxProps {

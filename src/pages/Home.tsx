@@ -9,9 +9,10 @@ import {
   IconProps,
   Center,
   Image,
+  Box,
 } from "@chakra-ui/react";
 import Logo from "../favicon.svg";
-import Illustrator from "../5569700.jpg";
+import Illustration from "../hero-image.svg";
 import { Link } from "react-router-dom";
 
 export default function HomePage() {
@@ -58,7 +59,7 @@ export default function HomePage() {
           </Button>
         </Stack>
         <Flex w={"full"}>
-          <Image src={Illustrator} cursor={"pointer"} />
+          <Image src={Illustration} cursor={"pointer"} />
         </Flex>
       </Stack>
     </Container>

@@ -97,8 +97,8 @@ export default function ReviewingTable({ data }: any) {
           return (
             <Text>
               {originalRow.detail?.review?.length
-                ? originalRow.detail.review.length + " vòng đánh giá"
-                : "Chưa có đánh giá"}
+                ? originalRow.detail.review.length + " phản biện"
+                : "Chưa có phản biện"}
             </Text>
           );
         },

@@ -14,8 +14,8 @@ import {
   Tag,
   Text,
   Tooltip,
-  useColorModeValue,
   Wrap,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { FC } from "react";
 import { GoCalendar, GoGlobe, GoVerified } from "react-icons/go";

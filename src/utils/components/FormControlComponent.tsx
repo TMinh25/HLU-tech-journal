@@ -18,12 +18,8 @@ interface FormControlComponentProps {
   placeholder?: string;
   helperText?: string;
   value?: string | ReadonlyArray<string> | number;
-  onChange?: ChangeEventHandler<
-    HTMLElement | HTMLTextAreaElement | HTMLInputElement
-  >;
-  onBlur?: FocusEventHandler<
-    HTMLElement | HTMLTextAreaElement | HTMLInputElement
-  >;
+  onChange?: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
+  onBlur?: FocusEventHandler<HTMLTextAreaElement | HTMLInputElement>;
   formLabel?: string;
   isRequired?: boolean;
   inputType?: "textarea" | string;

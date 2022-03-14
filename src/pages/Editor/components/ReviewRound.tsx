@@ -32,9 +32,9 @@ import {
   Stack,
   Tag,
   Text,
-  useColorModeValue,
   useDisclosure,
   VStack,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import {
   FC,
@@ -123,9 +123,18 @@ const ReviewRound: FC<ReviewRoundProps> = ({ reviewRound }) => {
 
   const getChannelForReviewer = async () => {
     setIsChatLoading({ ...isChatLoading, reviewer: true });
-    if (currentUser && reviewer.data && !reviewerChatChannel) {
+    if (
+      article.data?.detail?.review?.length &&
+      reviewer.data &&
+      !reviewerChatChannel
+    ) {
       const chatChannel = streamChatClient.channel("messaging", {
-        members: [currentUser._id, reviewer.data._id],
+        members: [
+          reviewer.data._id,
+          ...[
+            ...new Set(article.data.detail?.review?.map((r) => r.editor) || []),
+          ],
+        ],
       });
       await chatChannel.watch();
       setReviewerChatChannel(chatChannel);
@@ -135,9 +144,18 @@ const ReviewRound: FC<ReviewRoundProps> = ({ reviewRound }) => {
 
   const getChannelForAuthor = async () => {
     setIsChatLoading({ ...isChatLoading, author: true });
-    if (currentUser && article.data?.authors.main && !authorChatChannel) {
+    if (
+      article.data?.detail?.review?.length &&
+      article.data?.authors.main &&
+      !authorChatChannel
+    ) {
       const chatChannel = streamChatClient.channel("messaging", {
-        members: [currentUser._id, article.data.authors.main._id],
+        members: [
+          article.data.authors.main._id,
+          ...[
+            ...new Set(article.data.detail?.review?.map((r) => r.editor) || []),
+          ],
+        ],
       });
       await chatChannel.watch();
       setAuthorChatChannel(chatChannel);
@@ -213,6 +231,24 @@ const ReviewRound: FC<ReviewRoundProps> = ({ reviewRound }) => {
           <Stack spacing={0}>
             <Text fontWeight={"bold"}>Trạng thái</Text>
             <Text>{toReviewStatusString(reviewRound.status)}</Text>
+            {reviewRound.status === ReviewStatus.requestRejected && (
+              <>
+                <Text>
+                  <Text as="span" fontWeight={"bold"}>
+                    Lí do:{" "}
+                  </Text>
+                  {reviewRound.reject?.reason}
+                </Text>
+                {reviewRound.reject?.notes && (
+                  <Text>
+                    <Text as="span" fontWeight={"bold"}>
+                      Ghi chú:{" "}
+                    </Text>
+                    {reviewRound.reject?.notes}
+                  </Text>
+                )}
+              </>
+            )}
           </Stack>
           <Spacer />
           <Menu placement="bottom-end">
@@ -236,6 +272,34 @@ const ReviewRound: FC<ReviewRoundProps> = ({ reviewRound }) => {
             </Portal>
           </Menu>
         </Alert>
+        {reviewer.data && <UserBox author={reviewer.data} role="Phản biện" />}
+        {(reviewRound.status === ReviewStatus.reviewSubmitted ||
+          reviewRound.status === ReviewStatus.confirmed ||
+          reviewRound.status === ReviewStatus.denied) && (
+          <>
+            <Alert borderRadius={2} status="success" variant="left-accent">
+              <AlertIcon />
+              <Stack spacing={0}>
+                <AlertTitle mr={2}>
+                  {toReviewStatusString(reviewRound.status)}
+                </AlertTitle>
+                <AlertDescription>
+                  Đề xuất:{" "}
+                  {toResultRecommendationString(
+                    reviewRound.result?.recommendations
+                  )}
+                </AlertDescription>
+              </Stack>
+              <Spacer />
+              <Button
+                colorScheme={"green"}
+                onClick={reviewRoundDetailModal.onOpen}
+              >
+                Xem đánh giá
+              </Button>
+            </Alert>
+          </>
+        )}
         <Box>
           <Accordion allowMultiple allowToggle defaultIndex={[0]}>
             <Stack spacing={4}>
@@ -282,15 +346,12 @@ const ReviewRound: FC<ReviewRoundProps> = ({ reviewRound }) => {
               <Card p={4}>
                 <AccordionItem border="none">
                   <AccordionButton borderRadius={2} py={4}>
-                    <Heading size="sm">Thành viên</Heading>
+                    <Heading size="sm">Nhóm tác giả</Heading>
                     <Spacer />
                     <AccordionIcon />
                   </AccordionButton>
                   <AccordionPanel py={4}>
                     <SimpleGrid columns={[1, null, 2, 3]} spacing={6}>
-                      {reviewer.data && (
-                        <UserBox author={reviewer.data} role="Phản biện" />
-                      )}
                       {article.data && (
                         <>
                           <UserBox
@@ -309,36 +370,6 @@ const ReviewRound: FC<ReviewRoundProps> = ({ reviewRound }) => {
                   </AccordionPanel>
                 </AccordionItem>
               </Card>
-              {(reviewRound.status === ReviewStatus.reviewSubmitted ||
-                reviewRound.status === ReviewStatus.confirmed) && (
-                <>
-                  <Alert
-                    borderRadius={2}
-                    status="success"
-                    variant="left-accent"
-                  >
-                    <AlertIcon />
-                    <Stack spacing={0}>
-                      <AlertTitle mr={2}>
-                        {toReviewStatusString(reviewRound.status)}
-                      </AlertTitle>
-                      <AlertDescription>
-                        Đề xuất:{" "}
-                        {toResultRecommendationString(
-                          reviewRound.result?.recommendations
-                        )}
-                      </AlertDescription>
-                    </Stack>
-                    <Spacer />
-                    <Button
-                      colorScheme={"green"}
-                      onClick={reviewRoundDetailModal.onOpen}
-                    >
-                      Xem đánh giá
-                    </Button>
-                  </Alert>
-                </>
-              )}
               {role === Role.editors && (
                 <>
                   <Card p={4}>
@@ -438,12 +469,12 @@ const UnassignReviewRoundDialog: FC<{
       <AlertDialogOverlay>
         <AlertDialogContent>
           <AlertDialogHeader fontSize="lg" fontWeight="bold">
-            Gỡ phản biện khỏi vòng này?
+            Gỡ phản biện này?
           </AlertDialogHeader>
 
           <AlertDialogBody>
-            Hãy chắc chắn rằng bạn muốn gỡ phản biện khỏi vòng phản biện này. Họ
-            có thể thấy rằng họ đã bị gỡ khỏi vòng phản biện.
+            Hãy chắc chắn rằng bạn muốn gỡ phản biện khỏi đánh giá này. Họ có
+            thể thấy rằng họ đã bị gỡ khỏi đánh giá.
           </AlertDialogBody>
 
           <AlertDialogFooter>

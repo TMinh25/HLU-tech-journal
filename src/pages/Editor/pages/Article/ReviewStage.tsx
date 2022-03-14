@@ -59,14 +59,14 @@ export default function ReviewStage() {
                   key={"tab-" + index}
                   mx={1}
                 >
-                  Vòng {index + 1}
+                  Phản biện {index + 1}
                 </Tab>
               );
             })}
             {role === Role.editors &&
               article.data?.status === ArticleStatus.review && (
                 <Tab onClick={onOpen}>
-                  Vòng phản biện mới <AddIcon ml={3} />
+                  Thêm phản biện mới <AddIcon ml={3} />
                 </Tab>
               )}
           </TabList>
@@ -81,11 +81,11 @@ export default function ReviewStage() {
               <Box textAlign="center" py={16} px={6}>
                 <WarningTwoIcon boxSize={"50px"} color={"orange.300"} />
                 <Heading as="h2" size="xl" mt={6} mb={2}>
-                  Chưa có vòng phản biện nào
+                  Chưa có đánh giá nào
                 </Heading>
                 <Text color={"gray.500"}>
-                  Chọn tạo vòng phản biện mới và điền thông tin vào mẫu để có
-                  vòng phản biện mới
+                  Chọn tạo đánh giá mới mới và điền thông tin vào mẫu để mời
+                  phản biện đánh giá
                 </Text>
               </Box>
             )}
@@ -96,9 +96,9 @@ export default function ReviewStage() {
                   <Text color={"gray.500"} mt={16}>
                     Chọn{" "}
                     <Button as="a" color="green.400" onClick={onOpen}>
-                      tạo vòng phản biện mới
+                      tạo đánh giá mới
                     </Button>{" "}
-                    và điền thông tin vào mẫu để có vòng phản biện mới
+                    và điền thông tin vào mẫu để mời phản biện đánh giá
                   </Text>
                 </Box>
               </Center>

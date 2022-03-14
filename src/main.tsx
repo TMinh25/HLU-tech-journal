@@ -13,6 +13,9 @@ import {
 import { createContext } from "react";
 import { StreamChat } from "stream-chat";
 import config from "./config";
+import stream from "getstream";
+
+console.log(config);
 
 const customTheme = extendTheme(
   {
@@ -31,16 +34,14 @@ const customTheme = extendTheme(
   })
 );
 
-export const StreamChatContext = createContext<StreamChat>(
-  StreamChat.getInstance(config.streamChat.key)
-);
+const client = StreamChat.getInstance(config.streamChat.key);
+
+export const StreamChatContext = createContext(client);
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <StreamChatContext.Provider
-        value={StreamChat.getInstance(config.streamChat.key)}
-      >
+      <StreamChatContext.Provider value={client}>
         <ChakraProvider theme={customTheme}>
           <App />
         </ChakraProvider>

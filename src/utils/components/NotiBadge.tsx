@@ -6,9 +6,9 @@ const NotiBadge: FC<BadgeProps> = (props) => {
     <Badge
       as={"span"}
       color={"white"}
-      position={"absolute"}
-      bottom={"-20px"}
-      left={"-24px"}
+      // position={"absolute"}
+      // bottom={"-20px"}
+      // left={"-24px"}
       fontSize={"xs"}
       bgColor={"red.600"}
       borderRadius={"full"}
@@ -16,8 +16,8 @@ const NotiBadge: FC<BadgeProps> = (props) => {
       display="flex"
       alignItems="center"
       justifyContent="center"
-      h={6}
-      w={6}
+      h={4}
+      w={4}
       {...props}
     />
   );

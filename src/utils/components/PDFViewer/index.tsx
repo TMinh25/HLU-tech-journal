@@ -20,6 +20,7 @@ import {
   Text,
   Tooltip,
   useDisclosure,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import WebViewer, { Core, UI } from "@pdftron/webviewer";
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -259,9 +260,12 @@ const PlagAccordionItem: FC<{
                         <Text
                           as="span"
                           color={
-                            ["green", "yellow", "red", "purple"][
-                              Math.min(Number(p?.similarityFound || 0), 3)
-                            ]
+                            [
+                              useColorModeValue("black", "white"),
+                              useColorModeValue("green.600", "green.400"),
+                              useColorModeValue("yellow.600", "yellow.400"),
+                              useColorModeValue("red.600", "red.400"),
+                            ][Math.min(Number(p?.similarityFound || 0), 3)]
                           }
                         >
                           {p.similarityFound}
@@ -272,11 +276,14 @@ const PlagAccordionItem: FC<{
                         <Text
                           as="span"
                           color={
-                            ["green", "yellow", "red", "purple"][
+                            [
+                              useColorModeValue("black", "white"),
+                              useColorModeValue("green.600", "green.400"),
+                              useColorModeValue("yellow.600", "yellow.400"),
+                              useColorModeValue("red.600", "red.400"),
+                            ][
                               Math.min(
-                                Math.floor(
-                                  (Number(p.similarityPercent) / 25) * 1.2
-                                ),
+                                Math.floor(Number(p.similarityPercent) / 25),
                                 3
                               )
                             ]

@@ -30,10 +30,9 @@ const StageTwo: FC<{
   const { articleId, roundId } = useParams();
   const article = useGetArticleQuery(articleId);
 
-  let roundIndex = -1;
   const reviewRound = useMemo(() => {
     if (article.data?.detail?.review && roundId) {
-      roundIndex = article.data?.detail?.review?.findIndex(
+      const roundIndex = article.data?.detail?.review?.findIndex(
         (r) => r._id === roundId
       );
       return article.data?.detail?.review![roundIndex];

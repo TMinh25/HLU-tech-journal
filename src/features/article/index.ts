@@ -108,9 +108,10 @@ export const articleApiSlice = createApi({
           notes?: string;
         }
       >({
-        query: ({ _id, status, _roundId }) => ({
+        query: ({ _id, status, _roundId, ...body }) => ({
           url: `/article/${_id}/submission/${_roundId}/review/response?status=${status}`,
           method: "POST",
+          body,
         }),
       }),
       reviewSubmit: builder.mutation<
@@ -152,6 +153,30 @@ export const articleApiSlice = createApi({
           body,
         }),
       }),
+      requestRevision: builder.mutation<
+        { success: boolean; message: string },
+        { _id: string | undefined; text?: string; files: IFile[] }
+      >({
+        query: ({ _id, ...body }) => ({
+          url: `/article/${_id}/revision/request`,
+          method: "POST",
+          body,
+        }),
+      }),
+      responseRevision: builder.mutation<
+        { success: boolean; message: string },
+        {
+          _id: string | undefined;
+          _revisionId: string | undefined;
+          responseFile: IFile;
+        }
+      >({
+        query: ({ _id, _revisionId, ...body }) => ({
+          url: `/article/${_id}/revision/response/${_revisionId}`,
+          method: "POST",
+          body,
+        }),
+      }),
       toggleVisible: builder.mutation<
         { success: boolean; message: string },
         string | undefined
@@ -180,5 +205,7 @@ export const {
   useUnassignedReviewerMutation,
   useSendToPublishingMutation,
   useCompleteSubmissionMutation,
+  useRequestRevisionMutation,
+  useResponseRevisionMutation,
   useToggleVisibleMutation,
 } = articleApiSlice;

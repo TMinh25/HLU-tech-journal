@@ -1,6 +1,7 @@
 import { AttachmentIcon, SmallCloseIcon } from "@chakra-ui/icons";
 import {
   Button,
+  ButtonProps,
   Flex,
   HStack,
   Icon,
@@ -12,21 +13,38 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { FC } from "react";
+import { GoPencil } from "react-icons/go";
+import { Link } from "react-router-dom";
 import IFile from "../../interface/file";
 
-const FileDisplayButton: FC<{
-  file?: IFile;
-  systemFile?: File;
-  onRemoveFile?: () => void;
-  displayId?: boolean;
-}> = ({ file, systemFile, onRemoveFile, displayId = false }) => {
+const FileDisplayButton: FC<
+  {
+    file?: IFile;
+    systemFile?: File;
+    onChangeFile?: () => void;
+    onRemoveFile?: () => void;
+    displayId?: boolean;
+  } & ButtonProps
+> = ({
+  file,
+  systemFile,
+  onChangeFile,
+  onRemoveFile,
+  displayId = false,
+  ...props
+}) => {
   return (
     <>
       {file && (
         <LinkBox as="article">
           <Flex align="center">
-            <LinkOverlay w="100%" href={`/view/${file._id}`} isExternal>
-              <Button isTruncated isFullWidth>
+            <LinkOverlay
+              as={Link}
+              w="100%"
+              to={`/view/${file._id}`}
+              target="_blank"
+            >
+              <Button isTruncated isFullWidth {...props}>
                 <HStack align="center">
                   <Icon as={AttachmentIcon} />
                   <Text>{file?.title}</Text>
@@ -43,6 +61,15 @@ const FileDisplayButton: FC<{
                 )}
               </Button>
             </LinkOverlay>
+            {onChangeFile && (
+              <IconButton
+                aria-label="change-file"
+                icon={<Icon as={GoPencil} />}
+                size="sm"
+                ml={4}
+                onClick={onChangeFile}
+              />
+            )}
             {onRemoveFile && (
               <IconButton
                 colorScheme={"red"}

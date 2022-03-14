@@ -14,15 +14,15 @@ import {
   ModalOverlay,
   Stack,
   Tooltip,
+  UseDisclosureReturn,
   useColorModeValue,
-  UseDisclosureReturn
 } from "@chakra-ui/react";
 import { Select } from "chakra-react-select";
 import { FC, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import {
   useGetArticleQuery,
-  useSendToPublishingMutation
+  useSendToPublishingMutation,
 } from "../../../../features/article";
 import { useUploadFileMutation } from "../../../../features/fileUpload";
 import { useAppState } from "../../../../hooks/useAppState";

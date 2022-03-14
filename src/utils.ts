@@ -36,7 +36,7 @@ export function toArticleStatusString(
       return "Đang đánh giá";
     case ArticleStatus.publishing:
     case "publishing":
-      return "Đang xuất bản";
+      return "Hoàn thiện bài báo";
     case ArticleStatus.completed:
     case "completed":
       return "Hoàn tất";
@@ -71,9 +71,9 @@ export function toReviewStatusString(
     case ReviewStatus.unassign:
       return "Chưa có phản biện";
     case ReviewStatus.unassigned:
-      return "Vòng phản biện đã bị gỡ";
+      return "Phản biện đã bị gỡ";
     case ReviewStatus.request:
-      return "Đã yêu cầu phản biện";
+      return "Đã gửi lời mời đánh giá";
     case ReviewStatus.requestRejected:
       return "Phản biện từ chối đánh giá";
     case ReviewStatus.reviewing:
@@ -111,15 +111,13 @@ export function toResultRecommendationString(
 ): string {
   switch (result) {
     case ReviewResult.accepted:
-      return "Chấp nhận bản thảo";
+      return "Đồng ý, không cần chỉnh sửa";
     case ReviewResult.declined:
-      return "Từ chối bản thảo";
-    case ReviewResult.resubmission:
-      return "Không đúng chuyên san";
+      return "Không đồng ý";
     case ReviewResult.resubmit:
-      return "Gửi lại bản thảo sau khi hoàn thiện hơn";
+      return "Chỉnh sửa bản thảo, và gửi lại để đánh giá";
     case ReviewResult.revision:
-      return "Chỉnh sửa một số chi tiết nhỏ";
+      return "Chỉnh sửa bản thảo, không cần gửi lại";
     case ReviewResult.other:
     default:
       return "Khác";
@@ -136,7 +134,6 @@ export function getReviewResultType(status: ReviewResult | string) {
     case ReviewResult.revision:
     case ReviewResult.other:
       return "warning";
-    case ReviewResult.resubmission:
     default:
       return "info";
   }

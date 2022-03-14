@@ -52,8 +52,14 @@ export default interface Article {
       helperFiles?: IFile[];
     };
     review?: ReviewRoundObject[];
-    publishing?: {
-      draftFile: IFile[];
+    publishing: {
+      draftFile?: IFile[];
+      request: {
+        _id?: string;
+        text?: string;
+        files: IFile[];
+        responseFile?: IFile;
+      }[];
     };
   };
   files: IFile[];

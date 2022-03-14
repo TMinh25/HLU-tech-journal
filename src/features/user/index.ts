@@ -27,6 +27,14 @@ export const userApiSlice = createApi({
         transformResponse: (response: { success: boolean; data: User }) =>
           response.data,
       }),
+      getAllReviewFields: builder.query<string[], void>({
+        query: () => ({
+          url: `/user/review-fields`,
+          method: "GET",
+        }),
+        transformResponse: (response: { success: boolean; data: string[] }) =>
+          response.data,
+      }),
       findUser: builder.query<
         User[],
         {
@@ -59,6 +67,7 @@ export const userApiSlice = createApi({
 export const {
   useGetAllUsersQuery,
   useGetUserQuery,
+  useGetAllReviewFieldsQuery,
   useFindUserQuery,
   useDeleteUserMutation,
   useToggleDisableUserMutation,

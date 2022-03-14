@@ -36,8 +36,9 @@ export default function ReviewStage() {
         lazyBehavior="keepMounted"
         index={tabIndex}
         onChange={(index) => setTabIndex(index)}
+        defaultIndex={Number(review?.length ? review.length - 1 : 0)}
       >
-        <TabList>
+        <TabList border="none">
           {review?.map((reviewRound, index) => {
             const tabColor =
               getReviewStatusType(reviewRound.status) == "error"
@@ -56,7 +57,7 @@ export default function ReviewStage() {
                 key={"tab-" + index}
                 mx={1}
               >
-                Vòng {index + 1}
+                Phản biện {index + 1}
               </Tab>
             );
           })}
@@ -72,12 +73,8 @@ export default function ReviewStage() {
             <Box textAlign="center" py={16} px={6}>
               <WarningTwoIcon boxSize={"50px"} color={"orange.300"} />
               <Heading as="h2" size="xl" mt={6} mb={2}>
-                Chưa có vòng phản biện nào
+                Chưa có đánh giá nào
               </Heading>
-              <Text color={"gray.500"}>
-                Chọn tạo vòng phản biện mới và điền thông tin vào mẫu để có vòng
-                phản biện mới
-              </Text>
             </Box>
           )}
         </TabPanels>

@@ -27,36 +27,28 @@ const ReviewArticleDetail: FC = (props) => {
 
   const article = useGetArticleQuery(articleId);
 
-  const getRoundIndex = (): number => {
+  const reviewRound = useMemo(() => {
     if (article.data?.detail?.review && roundId) {
       const roundIndex = article.data?.detail?.review?.findIndex(
         (r) => r._id === roundId
       );
-      return roundIndex;
-    }
-    return -1;
-  };
-
-  const reviewRound = useMemo(() => {
-    if (article.data?.detail?.review && roundId) {
-      const roundIndex = getRoundIndex();
       return article.data?.detail?.review![roundIndex];
     }
   }, [article.data?.detail?.review]);
 
   const stageStepIndex = parseInt(
-    localStorage.getItem(
-      `review-stage-${articleId}-${getRoundIndex()}-index`
-    ) || "0"
+    localStorage.getItem(`review-stage-${articleId}-${roundId}-index`) || "0"
   );
 
   const [tabIndex, setTabIndex] = useState<number>(stageStepIndex);
 
   const toStage = (index: number) => {
-    localStorage.setItem(
-      `review-stage-${articleId}-${getRoundIndex()}-index`,
-      index.toString()
-    );
+    if (roundId) {
+      localStorage.setItem(
+        `review-stage-${articleId}-${roundId}-index`,
+        index.toString()
+      );
+    }
     setTabIndex(index);
   };
 

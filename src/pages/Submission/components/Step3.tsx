@@ -1,236 +1,191 @@
+import { DownloadIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
+  Center,
   Divider,
-  FormControl,
-  FormHelperText,
-  FormLabel,
+  Editable,
+  EditableInput,
+  EditablePreview,
+  Flex,
   Heading,
   HStack,
-  Input,
-  Kbd,
-  SimpleGrid,
+  Icon,
+  Link,
+  ListItem,
+  OrderedList,
+  Text,
   Tooltip,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useFormikContext } from "formik";
-import { KeyboardEvent, useRef, useState } from "react";
+import { useState } from "react";
+import { useDropzone } from "react-dropzone";
+import { RiFolderUploadLine } from "react-icons/ri";
 import { useNavigate } from "react-router";
+import { useUploadFileMutation } from "../../../features/fileUpload";
 import { useAppState } from "../../../hooks/useAppState";
-import { useAuth } from "../../../hooks/useAuth";
 import { NewSubmissionRequest } from "../../../interface/requestAndResponse";
-import {
-  AuthorBox,
-  FormControlComponent,
-  TagsComponent,
-} from "../../../utils/components";
-
-const initialAuthorValue = {
-  displayName: "",
-  email: "",
-  workPlace: "",
-  backgroundInfomation: "",
-};
+import { FileDisplayButton } from "../../../utils/components";
 
 export default function StepThree({ onNextTab, onPrevTab }: any) {
   const prevStep = 1;
   const nextStep = 3;
   const { toast } = useAppState();
-  const { values, setFieldValue, handleChange, handleBlur } =
-    useFormikContext<NewSubmissionRequest>();
-  const { currentUser } = useAuth();
-  const newAuthorFirstInputRef = useRef<HTMLInputElement>(null);
-  const [newSubAuthor, setNewSubAuthor] = useState(initialAuthorValue);
-  const [newTag, setNewTag] = useState("");
+  const { values, setFieldValue } = useFormikContext<NewSubmissionRequest>();
+  const [currentFile, setCurrentFile] = useState<File>();
+  const [newFileName, setNewFileName] = useState<string>();
+  const [fileUpload, fileUploadData] = useUploadFileMutation();
   const navigate = useNavigate();
 
-  const addNewAuthor = () => {
-    if (
-      values.authors?.sub?.some(
-        (el: any) =>
-          currentUser?.email == newSubAuthor?.email ||
-          el?.email == newSubAuthor?.email
-      )
-    ) {
-      toast.closeAll();
-      toast({
-        status: "warning",
-        title: "Email của các tác giả phải khác nhau",
-      });
-    } else if (!newSubAuthor.displayName || !newSubAuthor.email) {
-      toast.closeAll();
-      toast({
-        status: "warning",
-        title: "Tác giả phải có Họ tên và Email",
-      });
-    } else {
-      const newArr = values.authors.sub || [];
-      setFieldValue("authors.sub", [...newArr, newSubAuthor]);
-      setNewSubAuthor(initialAuthorValue);
-      newAuthorFirstInputRef.current?.focus();
+  const onDrop = (acceptedFiles: File[]) => {
+    if (acceptedFiles[0]) {
+      setCurrentFile(acceptedFiles[0]);
+      setNewFileName(acceptedFiles[0].name);
     }
   };
 
-  const removeAuthor = (index: number) => {
-    if (index >= 0) {
-      const newArr = values.authors.sub;
-      newArr?.splice(index, 1);
-      setFieldValue("authors.sub", newArr);
-    }
-  };
+  // useEffect(() => {
+  //   console.log(currentFile);
+  // }, [currentFile]);
 
-  const handleAddTag = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (
-      e.key === "Enter" &&
-      Boolean(newTag) &&
-      values.tags.indexOf(newTag) < 0
-    ) {
-      setFieldValue("tags", [...values.tags, newTag]);
-      setNewTag("");
-      return;
-    }
-  };
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: [
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/pdf",
+    ],
+    maxFiles: 1,
+    multiple: false,
+  });
 
-  const handleRemoveTag = (index: number) => {
-    const newArr = [...values.tags];
-    newArr.splice(index, 1);
-    setFieldValue("tags", newArr);
+  const onFileUpload = async () => {
+    if (currentFile) {
+      try {
+        const formData = new FormData();
+        formData.append(
+          "file",
+          currentFile,
+          `${newFileName?.split(".")[0]}.${
+            currentFile.name.split(".")[currentFile.name.split(".").length - 1]
+          }`
+        );
+        const fileUploadRes = await fileUpload(formData).unwrap();
+        setFieldValue("detail.submission.file", fileUploadRes);
+        toast({ status: "success", title: "Tải file thành công" });
+      } catch (error) {
+        toast({ status: "error", title: "Tải file thất bại" });
+        console.error(error);
+      }
+    }
   };
 
   return (
     <>
       <Heading size="2xl" mb={4}>
-        Dữ liệu mô tả
+        Tải bản thảo lên hệ thống
       </Heading>
+      <Text>Để tải một bản thảo lên tạp chí, xin hoàn thành các bước sau</Text>
+      <OrderedList pl={6}>
+        <ListItem>
+          Trên trang này, hãy nhấp chuột vào hoặc kéo thả file vào ô tải file
+          lên hệ thống
+        </ListItem>
+        <ListItem>Xác định file quý vị cần gửi và chọn file đó</ListItem>
+        <ListItem>
+          Nhấp chuột vào nút Tải lên để hệ thống tự động tải file
+        </ListItem>
+        <ListItem>
+          Khi bài nộp được tải lên thành công, nhấp chuột vào nút tiếp tục để
+          sang bước tiếp theo
+        </ListItem>
+      </OrderedList>
+      <Text pb={2}>
+        Gặp khó khăn? Liên hệ với{" "}
+        <Link
+          target={"_blank"}
+          href="https://www.facebook.com/sipp.minhh"
+          color={"green.200"}
+        >
+          Nguyễn Trường Minh
+        </Link>{" "}
+        để được trợ giúp.
+      </Text>
+      <Divider my={6} />
+      <Box {...getRootProps()}>
+        <input {...getInputProps()} />
+        <Tooltip label="Nhấp chuột để mở cửa sổ chọn tệp tin">
+          <Center
+            h={250}
+            cursor="pointer"
+            border={"2px dashed"}
+            borderColor={useColorModeValue("gray.500", "gray.200")}
+            borderRadius={8}
+            background={useColorModeValue("gray.200", "gray.700")}
+          >
+            <DownloadIcon mr={2} />
+            Nhấp chuột hoặc kéo thả file vào vùng này
+          </Center>
+        </Tooltip>
+      </Box>
+      <Divider my={6} />
       <Box>
-        <Heading mb={4} size="md">
-          Tác giả chính
-        </Heading>
-        <SimpleGrid columns={{ base: 1, md: 1, lg: 2, xl: 3 }} spacing={8}>
-          <Tooltip label="Đây là bạn" aria-label="Who is this?">
-            <Box>
-              <AuthorBox author={{ ...currentUser! }} />
+        <Flex>
+          <Box flex={1}>
+            <Heading mb={4} size="md">
+              File hiện có
+            </Heading>
+            <Box p={4}>
+              {currentFile && (
+                <>
+                  <FileDisplayButton
+                    systemFile={currentFile}
+                    onRemoveFile={() => setCurrentFile(undefined)}
+                  />
+                  <Tooltip label={currentFile.name}>
+                    <Editable
+                      onChange={(val) => setNewFileName(val)}
+                      defaultValue={currentFile.name}
+                      w="100%"
+                    >
+                      <EditablePreview w="100%" isTruncated />
+                      <EditableInput />
+                    </Editable>
+                  </Tooltip>
+                </>
+              )}
             </Box>
-          </Tooltip>
-        </SimpleGrid>
-      </Box>
-      <Divider my={6} />
-      <Box>
-        <Heading mb={4} size="md">
-          Các tác giả khác
-        </Heading>
-        <SimpleGrid columns={{ base: 1, md: 1, lg: 2, xl: 3 }} spacing={8}>
-          {values.authors.sub?.map((author: any, index: number) => (
-            <AuthorBox
-              author={author}
-              onRemoveAuthor={() => removeAuthor(index)}
-            />
-          ))}
-        </SimpleGrid>
-        <HStack mt={6} spacing={4} justify="flex-end" align="flex-end">
-          <FormControl flex={1} id="displayName">
-            <Input
-              ref={newAuthorFirstInputRef}
-              placeholder="Họ & Tên"
-              name="displayName"
-              value={newSubAuthor.displayName}
-              onChange={({ target: { name, value } }: any) =>
-                setNewSubAuthor((prev) => ({
-                  ...prev,
-                  [name]: value,
-                }))
-              }
-            />
-          </FormControl>
-          <FormControl flex={1} id="email">
-            <Input
-              placeholder="Email"
-              name="email"
-              value={newSubAuthor.email}
-              onChange={({ target: { name, value } }: any) =>
-                setNewSubAuthor((prev) => ({
-                  ...prev,
-                  [name]: value,
-                }))
-              }
-            />
-          </FormControl>
-          <FormControl flex={1} id="workPlace">
-            <Input
-              placeholder="Nơi làm việc"
-              name="workPlace"
-              value={newSubAuthor.workPlace}
-              onChange={({ target: { name, value } }: any) =>
-                setNewSubAuthor((prev) => ({
-                  ...prev,
-                  [name]: value,
-                }))
-              }
-            />
-          </FormControl>
-          <FormControl flex={1} id="backgroundInfomation">
-            <Input
-              placeholder="Thông tin lí lịch"
-              name="backgroundInfomation"
-              value={newSubAuthor.backgroundInfomation}
-              onChange={({ target: { name, value } }: any) =>
-                setNewSubAuthor((prev) => ({
-                  ...prev,
-                  [name]: value,
-                }))
-              }
-            />
-          </FormControl>
-          <Button onClick={addNewAuthor} colorScheme={"green"}>
-            Thêm tác giả
-          </Button>
-        </HStack>
-      </Box>
-      <Divider my={6} />
-      <Box>
-        <Heading mb={4} size="md">
-          Tiêu đề và Tóm tắt
-        </Heading>
-        <FormControlComponent
-          id="title"
-          formLabel="Tiêu đề của bài báo"
-          value={values.title}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          isRequired
-          helperText="Tên bản thảo sẽ được hiển thị trên tạp chí lúc xuất bản"
-        />
-        <FormControlComponent
-          id="abstract"
-          formLabel="Tóm tắt"
-          value={values.abstract}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          isRequired
-          inputType="textarea"
-        />
-      </Box>
-      <Divider my={6} />
-      <Box>
-        <Heading mb={4} size="md">
-          Chỉ mục
-        </Heading>
-        <FormControl id="tags">
-          <FormLabel>Từ khóa</FormLabel>
-          <TagsComponent
-            marginTop={0}
-            marginBottom={2}
-            tags={values.tags}
-            onRemoveTag={handleRemoveTag}
-          />
-          <Input
-            value={newTag}
-            onChange={({ target }) => setNewTag(target.value)}
-            onKeyPress={handleAddTag}
-          />
-          <FormHelperText>
-            Ấn <Kbd>Enter</Kbd> để nhập thẻ tiếp theo
-          </FormHelperText>
-        </FormControl>
+            <Text fontSize="sm" color="gray.500">
+              Bạn có thể nhấp vào tên file để thay đổi tên file
+            </Text>
+          </Box>
+          <Box flex={1}>
+            <Heading mb={4} size="md">
+              File đã tải lên
+            </Heading>
+            <Box p={4}>
+              {values.detail?.submission.file && (
+                <FileDisplayButton
+                  file={values.detail?.submission.file}
+                  onRemoveFile={() =>
+                    setFieldValue("detail.submission.file", undefined)
+                  }
+                />
+              )}
+            </Box>
+          </Box>
+        </Flex>
+        <Button
+          mt={2}
+          isDisabled={!currentFile}
+          isLoading={fileUploadData.isLoading}
+          onClick={onFileUpload}
+          colorScheme="green"
+        >
+          <Text mr={2}>Tải lên</Text>
+          <Icon as={RiFolderUploadLine} />
+        </Button>
       </Box>
       <Box>
         <HStack my={8}>
@@ -241,9 +196,7 @@ export default function StepThree({ onNextTab, onPrevTab }: any) {
           <Button
             onClick={() => onNextTab(nextStep)}
             colorScheme="green"
-            isDisabled={
-              !Boolean(values.authors && values.title && values.abstract)
-            }
+            isDisabled={!values.detail?.submission.file}
           >
             Tiếp theo
           </Button>

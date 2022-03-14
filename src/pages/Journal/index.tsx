@@ -7,8 +7,8 @@ import {
   Link,
   Skeleton,
   Text,
-  useColorModeValue,
   Wrap,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import moment from "moment";
 import React, { useMemo } from "react";

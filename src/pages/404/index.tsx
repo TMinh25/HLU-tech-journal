@@ -3,9 +3,9 @@ import {
   Heading,
   Text,
   Button,
-  useColorModeValue,
   Center,
   Flex,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 

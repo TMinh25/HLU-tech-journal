@@ -34,16 +34,23 @@ const SelectPublishedFileModal: FC<{
   onClose: () => void;
   articleId: string | undefined;
   publishedFile?: IFile;
-  setPublishedFile: React.Dispatch<React.SetStateAction<IFile | undefined>>;
+  setPublishedFile: (val: IFile) => void;
 }> = ({ isOpen, onClose, articleId, publishedFile, setPublishedFile }) => {
   const { toast } = useAppState();
   const article = useGetArticleQuery(articleId);
   const [fileUpload, fileUploadData] = useUploadFileMutation();
-  const [allFiles, setAllFiles] = useState<IFile[]>([]);
+  const [allFiles, setAllFiles] = useState<any[]>([]);
 
   useEffect(() => {
     if (article.data?.files.length) {
-      setAllFiles(article.data.files);
+      const files = [
+        ...article.data.files,
+        ...Array.from<IFile | undefined>(
+          article.data.detail?.publishing.request?.map((r) => r.responseFile) ||
+            []
+        ),
+      ];
+      setAllFiles([...new Set(files)]);
     }
   }, [article.data?.files]);
 

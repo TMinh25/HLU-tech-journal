@@ -1,8 +1,9 @@
 const SERVER = {
-  url: (import.meta.env.BACKEND_URL as string) || "http://localhost:3000",
+  // TODO: change on production
+  url: "http://localhost:3000/" || import.meta.env.VITE_BACKEND_URL,
 };
 const STREAM_CHAT = {
-  key: (import.meta.env.STREAM_KEY as string) || "wfkg5ysm9qcp",
+  key: import.meta.env.VITE_STREAM_KEY,
 };
 
 const config = {

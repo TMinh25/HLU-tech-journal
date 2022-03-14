@@ -103,12 +103,12 @@ export interface NewSubmissionRequest {
 export interface RequestReviewerRequest {
   _id: string | undefined;
   importantDates: {
-    responseDueDate: Date;
-    reviewDueDate: Date;
+    responseDueDate: Date | null;
+    reviewDueDate: Date | null;
   };
   reviewer: string;
-  displayFile: IFile | undefined;
-  files: IFile[];
+  displayFile?: IFile;
+  files?: IFile[];
 }
 
 export interface ReviewSubmitRequest {

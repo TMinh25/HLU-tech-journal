@@ -55,11 +55,13 @@ const ReviewSubmittedDetailModal: FC<{
                 - {reviewer?.email}
               </Text>
             </Heading>
-            <Text color="gray">
-              Sau khi xem xét xong đánh giá, hãy nhấn nút "Xác nhận" để cho biết
-              rằng quá trình đánh giá có thể tiếp tục. Sau đó tác giả có thể
-              thấy được đánh giá của phản biện.
-            </Text>
+            {reviewRound.status === ReviewStatus.reviewSubmitted && (
+              <Text color="gray">
+                Sau khi xem xét xong đánh giá, hãy nhấn nút "Xác nhận" để cho
+                biết rằng quá trình đánh giá có thể tiếp tục. Sau đó tác giả có
+                thể thấy được đánh giá của phản biện.
+              </Text>
+            )}
             {result?.submittedAt && (
               <Alert status="info" variant={"left-accent"}>
                 <AlertIcon />
@@ -85,15 +87,13 @@ const ReviewSubmittedDetailModal: FC<{
             <UnorderedList stylePosition="inside">
               {result?.commentForEveryone && (
                 <Box>
-                  <ListItem fontWeight="bold">
-                    Dành cho tác giả và biên tập viên
-                  </ListItem>
+                  <ListItem fontWeight="bold">Đánh giá bài báo</ListItem>
                   <Text opacity={0.8}>{result?.commentForEveryone}</Text>
                 </Box>
               )}
               {result?.commentForEditors && (
                 <Box>
-                  <ListItem fontWeight="bold">Dành cho biên tập viên</ListItem>
+                  <ListItem fontWeight="bold">Góp ý cho biên tập viên</ListItem>
                   <Text opacity={0.8}>{result?.commentForEditors}</Text>
                 </Box>
               )}

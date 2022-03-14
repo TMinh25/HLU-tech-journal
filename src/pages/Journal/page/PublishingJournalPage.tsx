@@ -32,13 +32,17 @@ const PublishingJournalPage: FC = (props) => {
     console.log({ journals });
   }, [journals]);
 
-  const filteredJournals = useMemo(
-    () =>
-      journals.data?.filter(
-        (j) => j.name.includes(filter) || j.tags.includes(filter)
-      ),
-    [filter]
-  );
+  const filteredJournals = useMemo(() => {
+    if (filter) {
+      return journals.data?.filter(
+        (j) =>
+          j.name.toLowerCase().includes(filter.toLowerCase()) ||
+          j.tags.includes(filter) ||
+          j.journalGroup.name.toLocaleLowerCase().includes(filter.toLowerCase())
+      );
+    }
+    return journals.data;
+  }, [filter, journals.data]);
 
   return (
     <BigContainer>
@@ -57,6 +61,7 @@ const PublishingJournalPage: FC = (props) => {
                   <Input
                     w="200"
                     value={filter}
+                    placeholder="Tìm kiếm"
                     onChange={({ target }) => setFilter(target.value)}
                   />
                 </InputGroup>

@@ -18,7 +18,8 @@ export default function ChatInner() {
       bg={useColorModeValue("white", "gray.800")}
       color={useColorModeValue("gray.900", "white")}
     >
-      <Box h={"100%"} pb={14}>
+      <ChannelHeader />
+      <Box h={"100%"} pb={125}>
         <VirtualizedMessageList
           Message={CustomMessage}
           defaultItemHeight={100}

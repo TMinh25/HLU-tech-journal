@@ -7,6 +7,9 @@ import {
   AlertDialogHeader,
   AlertDialogOverlay,
   Box,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
   Button,
   Flex,
   FormControl,
@@ -38,11 +41,13 @@ import {
   Tag,
   Text,
   Textarea,
-  useColorModeValue,
   useDisclosure,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { BsCheckLg } from "react-icons/bs";
+import { MdOutlineNavigateNext } from "react-icons/md";
+import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import {
   useEditorResponseMutation,
@@ -64,7 +69,7 @@ const steps = [
   // { status: ArticleStatus.submission, label: "Nộp bản thảo" },
   { status: ArticleStatus.submission, label: "Nhận bản thảo" },
   { status: ArticleStatus.review, label: "Đánh giá bản thảo" },
-  { status: ArticleStatus.publishing, label: "Xuất bản" },
+  { status: ArticleStatus.publishing, label: "Hoàn thiện bài báo" },
 ];
 
 const indexArticleStatus = (articleStatus: string | undefined) => {
@@ -129,6 +134,7 @@ const EditorArticle = (props: any) => {
   }
 
   if (article.isError) return <NotFound />;
+  const roleHref = role === 1 ? "admin" : "editor";
 
   return (
     <>
@@ -136,6 +142,28 @@ const EditorArticle = (props: any) => {
         <Skeleton h={800} isLoaded={!article.isLoading}>
           <Flex mb={2} align="center">
             <Box>
+              <Breadcrumb>
+                <BreadcrumbItem>
+                  <BreadcrumbLink
+                    as={Link}
+                    to={`/${roleHref}/journal-group/${article.data?.journalGroup._id}`}
+                  >
+                    {article.data?.journalGroup.name}
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbItem>
+                  <BreadcrumbLink
+                    as={Link}
+                    to={`/${roleHref}/journal/${article.data?.journal._id}`}
+                  >
+                    {article.data?.journal.name}
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+              </Breadcrumb>
+              {/* <Heading
+                size="sm"
+                color={useColorModeValue("gray.600", "gray.400")}
+              ></Heading> */}
               <Heading as="h3" size="md" lineHeight={1.5}>
                 {article.data?.title}
                 <Tag
@@ -160,7 +188,7 @@ const EditorArticle = (props: any) => {
             {article.data?.status !== ArticleStatus.completed &&
               article.data?.status !== ArticleStatus.reject &&
               role === Role.editors && (
-                <Menu colorScheme="green" placement="bottom-end" isLazy>
+                <Menu placement="bottom-end" isLazy>
                   <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
                     Hành Động
                   </MenuButton>
@@ -197,7 +225,7 @@ const EditorArticle = (props: any) => {
                             ),
                           }}
                         >
-                          Chuyển tiếp tới xuất bản
+                          Chuyển tiếp tới hoàn thiện bài báo
                         </MenuItem>
                       )}
                       {article.data?.status === ArticleStatus.publishing && (
@@ -257,13 +285,17 @@ const EditorArticle = (props: any) => {
                 {steps.map((step, index) => (
                   <Tab
                     isDisabled={
-                      index > indexArticleStatus(article?.data?.status)
+                      role === Role.admin
+                        ? false
+                        : index > indexArticleStatus(article?.data?.status)
                     }
                     border="2px"
                     borderRadius={4}
                     borderColor={
                       index <= indexArticleStatus(article?.data?.status) ||
                       article.data?.status == ArticleStatus.completed
+                        ? "green.600"
+                        : role === Role.admin
                         ? "green.600"
                         : "yellow.600"
                     }
@@ -312,10 +344,10 @@ const EditorArticle = (props: any) => {
             <AlertDialogBody color={useColorModeValue("gray.600", "gray.400")}>
               <Stack>
                 <Text>
-                  Bạn chưa hoàn thành một vòng phản biện hoặc có một số vòng
-                  phản biện chưa hoàn thành, bạn chắc chắn muốn tiếp tục chứ?
+                  Bạn chưa hoàn thành một đánh giá của phản biện hoặc có một số
+                  đánh giá chưa hoàn thành, bạn chắc chắn muốn tiếp tục chứ?
                 </Text>
-                <Text>Nếu tiếp tục, các vòng phản biện đó sẽ bị gỡ</Text>
+                <Text>Nếu tiếp tục, các đánh giá đó sẽ bị gỡ</Text>
               </Stack>
             </AlertDialogBody>
 

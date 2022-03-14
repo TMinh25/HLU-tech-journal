@@ -3,21 +3,18 @@ import {
   Box,
   Stack,
   Text,
-  Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
-import moment from "moment";
+import { formatRelative } from "date-fns";
+import { vi } from "date-fns/locale";
 import { FC } from "react";
 import {
   Attachment,
   Avatar,
   FixedHeightMessageProps,
-  MessageTimestamp,
   useMessageContext,
 } from "stream-chat-react";
 import Card from "../Card";
-import { formatRelative } from "date-fns";
-import { vi } from "date-fns/locale";
 
 const CustomMessage: FC<FixedHeightMessageProps> = (props) => {
   const { message: propMessage } = props;
@@ -60,10 +57,10 @@ const CustomMessage: FC<FixedHeightMessageProps> = (props) => {
                 </Text>
               )}
             </Stack>
-            {message.user.image ? (
+            {message.user?.image ? (
               <Avatar
-                image={message.user.image}
-                name={message.user.name || message.user.id}
+                image={message.user?.image}
+                name={message.user?.name || message.user.id}
                 shape="circle"
                 size={38}
                 user={message.user}
@@ -90,10 +87,10 @@ const CustomMessage: FC<FixedHeightMessageProps> = (props) => {
           py={2}
           mb={2}
         >
-          {message.user.image ? (
+          {message.user?.image ? (
             <Avatar
-              image={message.user.image}
-              name={message.user.name || message.user.id}
+              image={message.user?.image}
+              name={message.user?.name || message.user?.id}
               shape="circle"
               size={38}
               user={message.user}

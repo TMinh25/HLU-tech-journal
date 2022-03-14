@@ -31,8 +31,6 @@ export enum ReviewResult {
   revision = "revision",
   /** Yêu cầu gửi lại bản thảo vì cần sửa nhiều */
   resubmit = "resubmit",
-  /** Yêu cầu gửi bản thảo sang chuyên san khác vì không phù hợp */
-  resubmission = "resubmission",
   /** Từ chối bản thảo vì sai quá nhiều */
   declined = "declined",
   /** Nội dung khác */

@@ -7,6 +7,7 @@ import {
 import {
   Avatar,
   AvatarGroup,
+  Badge,
   Center,
   Flex,
   IconButton,
@@ -28,7 +29,6 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import * as moment from "moment/moment";
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Column, usePagination, useSortBy, useTable } from "react-table";
@@ -46,7 +46,9 @@ export default function JournalsTable({ data }: any) {
       {
         Header: "Chuyên san",
         accessor: (originalRow) => (
-          <Text isTruncated>{originalRow.journalGroup?.name}</Text>
+          <Badge isTruncated size="sm">
+            {originalRow.journalGroup?.name}
+          </Badge>
         ),
       },
       {
@@ -85,7 +87,9 @@ export default function JournalsTable({ data }: any) {
       {
         Header: "Ngày khởi tạo",
         accessor: (originalRow) =>
-          moment(originalRow.createdBy?.at.toString()).format("L LTS"),
+          new Date(originalRow.createdBy?.at.toString()).toLocaleDateString(
+            "vi"
+          ),
       },
       {
         Header: "Trạng thái",
