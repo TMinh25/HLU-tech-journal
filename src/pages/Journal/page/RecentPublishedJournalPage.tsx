@@ -13,7 +13,7 @@ const RecentPublishedJournalPage: FC = (props) => {
         {journal.data ? (
           <Navigate to={`/journal/${journal.data._id}`} />
         ) : (
-          <Box>Không có tạp chí mới xuất bản</Box>
+          <Box>Không có số mới xuất bản</Box>
         )}
       </Skeleton>
     </BigContainer>

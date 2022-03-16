@@ -40,7 +40,7 @@ const ConfirmCompleteSubmission: FC<
             {publishedFile ? (
               <Text>
                 Bài báo sau khi xuất bản sẽ cần quản trị viên chấp nhận mới có
-                thể xuất hiện trên tạp chí của trang web.
+                thể xuất hiện trên số của trang web.
               </Text>
             ) : (
               <Text>Vui lòng chọn tệp tin xuất bản của bài báo!</Text>

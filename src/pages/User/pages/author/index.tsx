@@ -167,7 +167,7 @@ const AuthorArticleDetail: FC = () => {
       title: "Nộp bản thảo",
       colorScheme: "yellow",
       description:
-        "Đây là giai đoạn bạn vừa nộp bản thảo và đang đợi ban biên tập tạp chí chấp nhận bản thảo để đánh giá.",
+        "Đây là giai đoạn bạn vừa nộp bản thảo và đang đợi ban biên tập số chấp nhận bản thảo để đánh giá.",
     },
     {
       status: ArticleStatus.review,
@@ -182,7 +182,7 @@ const AuthorArticleDetail: FC = () => {
       title: "Hoàn thiện bài báo",
       colorScheme: "yellow",
       description:
-        "Ban biên tập sẽ bắt đầu xuất bản tạp chí lên tạp chí mà bạn đã chọn nộp bản thảo. Một số chỉnh sửa sẽ cần thiết trong bước này",
+        "Ban biên tập sẽ bắt đầu xuất bản số lên số mà bạn đã chọn nộp bản thảo. Một số chỉnh sửa sẽ cần thiết trong bước này",
       children: <Revisions />,
     },
     {

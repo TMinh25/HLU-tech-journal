@@ -86,7 +86,7 @@ export default function StepThree({ onNextTab, onPrevTab }: any) {
       <Heading size="2xl" mb={4}>
         Tải bản thảo lên hệ thống
       </Heading>
-      <Text>Để tải một bản thảo lên tạp chí, xin hoàn thành các bước sau</Text>
+      <Text>Để tải một bản thảo lên số, xin hoàn thành các bước sau</Text>
       <OrderedList pl={6}>
         <ListItem>
           Trên trang này, hãy nhấp chuột vào hoặc kéo thả file vào ô tải file

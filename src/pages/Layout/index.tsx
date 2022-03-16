@@ -90,12 +90,12 @@ const NAV_ITEMS: Array<NavItem> = [
   //     },
   //     {
   //       label: "Đã Xuất Bản",
-  //       subLabel: "Các tạp chí cũ, các số cũ ",
+  //       subLabel: "Các số cũ, các số cũ ",
   //       href: "/journal/published",
   //     },
   //     {
   //       label: "Đang Xuất Bản",
-  //       subLabel: "Các tạp chí đang trong quá trình biên tập",
+  //       subLabel: "Các số đang trong quá trình biên tập",
   //       href: "/journal/publishing",
   //     },
   //   ],
@@ -121,13 +121,13 @@ const NAV_ITEMS: Array<NavItem> = [
     href: "/journal/recent-published",
   },
   {
-    label: "Đã Xuất Bản",
-    subLabel: "Các tạp chí cũ, các số cũ ",
+    label: "Số đã xuất Bản",
+    subLabel: "Các số cũ, các số cũ ",
     href: "/journal/published",
   },
   {
-    label: "Đang Xuất Bản",
-    subLabel: "Các tạp chí đang trong quá trình biên tập",
+    label: "Số đang Xuất Bản",
+    subLabel: "Các số đang trong quá trình biên tập",
     href: "/journal/publishing",
   },
   {
@@ -328,7 +328,7 @@ export default function LandingPage() {
             aria-label={"Toggle Navigation"}
           />
         </Flex>
-        <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
+        <Flex justify={{ base: "center", md: "start" }}>
           <Image
             src={Logo}
             h={30}
@@ -339,7 +339,7 @@ export default function LandingPage() {
             <DesktopNav {...{ navigate }} />
           </Flex>
         </Flex>
-        <Flex align={{ base: "center" }}>
+        <Flex flex={1} justifyContent="flex-end" align={{ base: "center" }}>
           {authenticated ? (
             <>
               <Popover>

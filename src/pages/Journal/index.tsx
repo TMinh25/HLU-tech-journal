@@ -159,7 +159,7 @@ export default function JournalPage(props: RouteProps) {
             ))}
         </Wrap>
         {Boolean(recentPublishedJournals.data) || (
-          <Text>Không có tạp chí nào đã xuất bản</Text>
+          <Text>Không có nào đã xuất bản</Text>
         )}
       </Skeleton>
       <Divider marginTop="5" />
@@ -187,7 +187,7 @@ export default function JournalPage(props: RouteProps) {
         </Wrap>
         {(Boolean(allJournals.data) &&
           allJournals.data?.some((j) => !j.status)) || (
-          <Text>Không có tạp chí nào đang xuất bản</Text>
+          <Text>Không có số nào đang xuất bản</Text>
         )}
       </Skeleton>
       <Divider marginTop="5" />

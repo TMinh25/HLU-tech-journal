@@ -103,7 +103,7 @@ export default function NewUserModal({
       <Modal size={"6xl"} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader mb={6}>Tạo tạp chí mới</ModalHeader>
+          <ModalHeader mb={6}>Tạo số mới</ModalHeader>
           <ModalCloseButton />
           <form onSubmit={handleSubmit}>
             <ModalBody pb={6}>

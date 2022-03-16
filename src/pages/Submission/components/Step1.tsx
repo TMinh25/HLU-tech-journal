@@ -61,11 +61,11 @@ export default function StepOne({ onNextTab }: any) {
       <Divider my={6} />
       <Box>
         <Heading as={"h2"} pb={2} size="lg">
-          Chuyên san của tạp chí
+          Chuyên san của số
         </Heading>
         <Text>
           Lựa chọn chuyên san phù hợp cho bản thảo cần nộp (xem Chuyên mục và
-          Chính sách trong trang Giới thiệu Tạp chí)
+          Chính sách trong trang Giới thiệu Số)
         </Text>
         <FormControl
           my={4}
@@ -118,21 +118,21 @@ export default function StepOne({ onNextTab }: any) {
           isDisabled={!values.journalGroup._id || allJournals.isError}
         >
           <HStack>
-            <FormLabel>Tạp chí</FormLabel>
+            <FormLabel>Số</FormLabel>
             {(touched.journalId || errors.journalId) && (
               <>
                 <Spacer />
                 <FormErrorMessage pb={2}>
                   {(allJournals.isError &&
                     (allJournals.error as any)?.data.error.title) ||
-                    "Chuyên san này không có tạp chí nào đang xuất bản" ||
+                    "Chuyên san này không có số nào đang xuất bản" ||
                     errors.journalId}
                 </FormErrorMessage>
               </>
             )}
           </HStack>
           <Select
-            placeholder="Tạp chí"
+            placeholder="Số"
             value={values.journalId}
             onChange={handleChange}
             onBlur={handleBlur}
@@ -184,7 +184,7 @@ export default function StepOne({ onNextTab }: any) {
             isChecked={statement[0]}
             onChange={(e) => setStatement([e.target.checked, statement[1]])}
           >
-            Bài nộp chưa từng được xuất bản hoặc được gửi cho tạp chí khác.
+            Bài nộp chưa từng được xuất bản hoặc được gửi cho số khác.
           </Checkbox>
           <Checkbox
             isChecked={statement[1]}
@@ -200,8 +200,8 @@ export default function StepOne({ onNextTab }: any) {
           Lưu ý về bản quyền
         </Heading>
         <Text>
-          Bản quyền bản thảo thuộc về Tạp chí. Mọi sự sao chép, in lại dưới mọi
-          hình thức đều phải được sự đồng ý của Tạp chí.
+          Bản quyền bản thảo thuộc về Số. Mọi sự sao chép, in lại dưới mọi hình
+          thức đều phải được sự đồng ý của Số.
         </Text>
         <Checkbox
           pl={6}
@@ -209,12 +209,12 @@ export default function StepOne({ onNextTab }: any) {
           onChange={(e) => setCopyrightAllowed(e.target.checked)}
         >
           Tác giả nhất trí với các điều khoản trong Thỏa thuận về Bản quyền sẽ
-          được áp dụng cho bài nộp này, và khi được xuất bản trên tạp chí.
+          được áp dụng cho bài nộp này, và khi được xuất bản trên số.
         </Checkbox>
 
         <Divider my={6} />
         <Heading as={"h2"} pb={2} size="lg">
-          Tuyên bố về Bí mật cá nhân của Tạp chí
+          Tuyên bố về Bí mật cá nhân của Số
         </Heading>
         <Text>
           Thông tin người dùng được nhập vào hệ thống chỉ được sử dụng vào các

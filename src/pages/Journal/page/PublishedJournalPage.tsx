@@ -89,7 +89,7 @@ const PublishedJournalPage: FC = (props) => {
                 ))
               ) : (
                 <Center color={"gray.500"} h={200}>
-                  Không có tạp chí nào được tìm thấy
+                  Không có số nào được tìm thấy
                 </Center>
               )}
             </Stack>
@@ -99,10 +99,10 @@ const PublishedJournalPage: FC = (props) => {
             <Box textAlign="center">
               <InfoIcon boxSize={"50px"} color={"blue.500"} />
               <Heading as="h2" size="xl" mt={6} mb={2}>
-                Không có tạp chí nào đã xuất bản
+                Không có số nào đã xuất bản
               </Heading>
               <Text color={"gray.500"}>
-                Cảm ơn bạn đã ghé thăm tạp chí của chúng tôi
+                Cảm ơn bạn đã ghé thăm số của chúng tôi
               </Text>
             </Box>
           </Center>

@@ -54,7 +54,7 @@ export default function HistoryArticleTable({ data }: any) {
         },
       },
       {
-        Header: "Tạp chí",
+        Header: "Số",
         accessor: (row) => (
           <Tooltip label={row.journal.name}>
             <Text isTruncated>{row.journal.name}</Text>

@@ -23,7 +23,7 @@ const AdminJournal: FC = () => {
       <BigContainer>
         <Skeleton isLoaded={!journals.isLoading}>
           <Stack spacing={6}>
-            <Heading as="h2">Tạp chí</Heading>
+            <Heading as="h2">Số</Heading>
             <Stack>
               {journals.data?.length ? (
                 journals.data.map((j) => (

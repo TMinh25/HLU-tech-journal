@@ -3,41 +3,23 @@ import {
   Button,
   FormControl,
   HStack,
-  Input,
   InputGroup,
   InputRightElement,
   Textarea,
   useColorModeValue,
-  VStack,
 } from "@chakra-ui/react";
 import React from "react";
 import { FileUploadButton, ImageDropzone } from "react-file-utils";
 import ResizeTextarea from "react-textarea-autosize";
 import {
-  MessageInputProps,
-  SendButton,
   UploadsPreview,
   useChannelStateContext,
   useMessageInputContext,
-  MessageInput,
 } from "stream-chat-react";
-import {
-  AttachmentType,
-  ChannelType,
-  CommandType,
-  EventType,
-  MessageType,
-} from "./index";
 
-const CustomMessageInput: React.FC<MessageInputProps> = () => {
+const CustomMessageInput = () => {
   const { acceptedFiles, maxNumberOfFiles, multipleUploads } =
-    useChannelStateContext<
-      AttachmentType,
-      ChannelType,
-      CommandType,
-      EventType,
-      MessageType
-    >();
+    useChannelStateContext();
 
   const messageInput = useMessageInputContext();
 

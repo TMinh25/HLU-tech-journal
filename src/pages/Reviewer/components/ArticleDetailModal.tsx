@@ -39,7 +39,7 @@ const ArticleDetailModal: FC<{
               </Heading>
               <Heading size="md">
                 <Text as="span" textDecor={"underline"}>
-                  Tạp chí:
+                  Số:
                 </Text>{" "}
                 {article?.journal.name}
               </Heading>

@@ -2,12 +2,15 @@ import { Box, useColorModeValue } from "@chakra-ui/react";
 import {
   ChannelHeader,
   MessageInput,
-  VirtualizedMessageList,
+  MessageList,
+  useShouldForceScrollToBottom,
 } from "stream-chat-react";
-import { CustomMessage } from ".";
+import { CustomMessage } from "./index";
 import Card from "../Card";
 
 export default function ChatInner() {
+  // useShouldForceScrollToBottom();
+
   return (
     <Card
       p={0}
@@ -19,13 +22,14 @@ export default function ChatInner() {
       color={useColorModeValue("gray.900", "white")}
     >
       <ChannelHeader />
-      <Box h={"100%"} pb={125}>
-        <VirtualizedMessageList
+      <Box h={"100%"} pb={100} overflowY="auto">
+        <MessageList Message={CustomMessage} />
+        {/* <VirtualizedMessageList
           Message={CustomMessage}
           defaultItemHeight={100}
-        />
+        /> */}
       </Box>
-      <MessageInput />
+      <MessageInput focus />
     </Card>
   );
 }

@@ -197,7 +197,7 @@ export default function StepTwo({ onNextTab, onPrevTab }: any) {
           onChange={handleChange}
           onBlur={handleBlur}
           isRequired
-          helperText="Tên bản thảo sẽ được hiển thị trên tạp chí lúc xuất bản"
+          helperText="Tên bản thảo sẽ được hiển thị trên số lúc xuất bản"
         />
         <FormControlComponent
           id="abstract"

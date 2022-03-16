@@ -1,17 +1,32 @@
 import { Icon, Skeleton } from "@chakra-ui/react";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { Channel, StreamChat } from "stream-chat";
-import { Channel as ChatChannel, Chat } from "stream-chat-react";
-import { ChatInner, CustomMessageInput } from ".";
+import {
+  Channel as ChatChannel,
+  Chat,
+  usePrependedMessagesCount,
+  useScrollLocationLogic,
+} from "stream-chat-react";
+import { useAuth } from "../../../hooks/useAuth";
 import Card from "../Card";
+import { CustomMessageInput, ChatInner } from "./index";
 
 const GetStreamChat: FC<{
   isLoading: boolean;
   streamChatClient: StreamChat;
   channel?: Channel;
-}> = ({ isLoading, streamChatClient, channel }): JSX.Element => {
+}> = ({ isLoading, streamChatClient, channel }) => {
   const theme = localStorage.getItem("chakra-ui-color-mode");
+
+  const { currentUser } = useAuth();
+
+  const { scrollToBottom } = useScrollLocationLogic({
+    currentUserId: currentUser?._id,
+    scrolledUpThreshold: 2000,
+  });
+
+  useEffect(() => scrollToBottom(), [channel]);
 
   return (
     <Skeleton

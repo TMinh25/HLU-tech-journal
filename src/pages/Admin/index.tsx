@@ -102,7 +102,7 @@ function JournalGroupBox(props: any) {
         .catch((error) => {
           toast({
             status: "error",
-            title: "Không thể tạo tạp chí mới",
+            title: "Không thể tạo số mới",
             description: "Vui lòng thử lại",
           });
           console.error(error);
@@ -185,7 +185,7 @@ function JournalBox(props: any) {
       .unwrap()
       .then((journal) => {
         console.log(journal);
-        toast({ status: "success", title: "Tạo tạp chí thành công" });
+        toast({ status: "success", title: "Tạo số thành công" });
 
         refetch();
         onClose();
@@ -193,7 +193,7 @@ function JournalBox(props: any) {
       .catch((error) => {
         toast({
           status: "error",
-          title: "Không thể tạo tạp chí mới",
+          title: "Không thể tạo số mới",
           description: "Vui lòng thử lại",
         });
         console.error(error);
@@ -206,7 +206,7 @@ function JournalBox(props: any) {
         <Flex align="center">
           <AccordionButton borderRadius={4} _focus={{ outline: "none" }}>
             <AccordionIcon mr={3} />
-            <Heading as="h3">Tạp chí</Heading>
+            <Heading as="h3">Số</Heading>
           </AccordionButton>
           <Flex justifySelf={"flex-end"}>
             <Button
@@ -216,7 +216,7 @@ function JournalBox(props: any) {
               onClick={onOpen}
               mr={2}
             >
-              Tạo tạp chí mới
+              Tạo số mới
             </Button>
             <IconButton
               aria-label="refetch-journals"

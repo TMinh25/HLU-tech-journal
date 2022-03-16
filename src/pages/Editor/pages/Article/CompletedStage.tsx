@@ -22,7 +22,7 @@ export default function CompletedStage() {
             {article.data?.visible || " và đang chờ quản trị viên chấp thuận"}!
           </Heading>
           <Text color={"gray.500"}>
-            Cảm ơn bạn đã là hỗ trợ tạp chí trong quá trình biên tập.
+            Cảm ơn bạn đã là hỗ trợ số trong quá trình biên tập.
             <Text>Chúng tôi chân thành đánh giá cao công việc của bạn!</Text>
           </Text>
         </>

@@ -85,8 +85,8 @@ export default function NewJournalModal({
     validationSchema: yup.object({
       name: yup
         .string()
-        .required("Tên tạp chí là bắt buộc")
-        .min(10, "Tên tạp chí phải dài hơn 10 kí tự"),
+        .required("Tên số là bắt buộc")
+        .min(10, "Tên số phải dài hơn 10 kí tự"),
       tags: yup.array().of(yup.string()),
       description: yup.string(),
       editors: yup.array().of(
@@ -95,7 +95,7 @@ export default function NewJournalModal({
           name: yup.string(),
         })
       ),
-      journalGroup: yup.string().required("Phải chọn chuyên san cho tạp chí!"),
+      journalGroup: yup.string().required("Phải chọn chuyên san cho số!"),
     }),
     onSubmit,
   });
@@ -127,7 +127,7 @@ export default function NewJournalModal({
       <Modal isCentered size={"xl"} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Tạo tạp chí mới</ModalHeader>
+          <ModalHeader>Tạo số mới</ModalHeader>
           <ModalCloseButton />
           <form onSubmit={handleSubmit}>
             <ModalBody pb={6}>
@@ -166,7 +166,7 @@ export default function NewJournalModal({
                 touched={touched.name?.toString()}
                 error={errors.name}
                 value={values.name}
-                formLabel="Tên tạp chí"
+                formLabel="Tên số"
                 onChange={handleChange}
                 onBlur={handleBlur}
                 isRequired={true}

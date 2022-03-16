@@ -32,7 +32,7 @@ export default function HomePage() {
           <Center>
             <Image src={Logo} h={100} cursor={"pointer"} />
           </Center>
-          Tạp chí khoa học{" "}
+          Số khoa học{" "}
           <Text as={"span"} color={"blue.400"}>
             Đại học Hạ Long
           </Text>

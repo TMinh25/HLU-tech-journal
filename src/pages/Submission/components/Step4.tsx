@@ -31,7 +31,7 @@ export default function StepFour({ onPrevTab }: any) {
       onOpen();
       toast({
         status: "success",
-        title: "Cảm ơn bạn đã chọn tạp chí khoa học Đại học Hạ Long",
+        title: "Cảm ơn bạn đã chọn số khoa học Đại học Hạ Long",
       });
     } catch (error: any) {
       toast({
@@ -50,7 +50,7 @@ export default function StepFour({ onPrevTab }: any) {
         </Heading>
         <form onSubmit={handleSubmit}>
           <Box>
-            Để nộp bàn thảo cho Tạp chí Khoa học - Đại học Hạ Long, hãy{" "}
+            Để nộp bàn thảo cho Số Khoa học - Đại học Hạ Long, hãy{" "}
             <Link
               as="button"
               color="green.200"
@@ -61,7 +61,7 @@ export default function StepFour({ onPrevTab }: any) {
             </Link>
             . Tác giả chính của bài nộp sẽ nhận được một thư xác nhận qua email
             và có thể xem được tiến trình của bài nộp trong quá trình biên tập.
-            Cảm ơn quý vị gửi bài viết cho Tạp chí Khoa học - Đại học Hạ Long.
+            Cảm ơn quý vị gửi bài viết cho Số Khoa học - Đại học Hạ Long.
           </Box>
           <SubmissionPreview w="md" submission={values} />
           <HStack my={8}>

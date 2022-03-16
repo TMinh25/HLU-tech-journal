@@ -40,7 +40,7 @@ export default function JournalsTable({ data }: any) {
   const columns: readonly Column<Journal>[] = useMemo(
     () => [
       {
-        Header: "Tên tạp chí",
+        Header: "Tên số",
         accessor: "name" as keyof Journal,
       },
       {
@@ -198,9 +198,7 @@ export default function JournalsTable({ data }: any) {
             )}
           </TableCaption>
         </Table>
-        {data.length === 0 && (
-          <Center color="gray.500">Chưa có tạp chí nào!</Center>
-        )}
+        {data.length === 0 && <Center color="gray.500">Chưa có số nào!</Center>}
       </TableContainer>
     </>
   );

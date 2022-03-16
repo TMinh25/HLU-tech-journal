@@ -2,7 +2,7 @@ import {
   ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  ChevronUpIcon
+  ChevronUpIcon,
 } from "@chakra-ui/icons";
 import {
   Avatar,
@@ -27,7 +27,7 @@ import {
   Th,
   Thead,
   Tooltip,
-  Tr
+  Tr,
 } from "@chakra-ui/react";
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
@@ -50,7 +50,7 @@ export default function NewSubmissionTable({ data }: any) {
         },
       },
       {
-        Header: "Tạp chí",
+        Header: "Số",
         accessor: (row) => (
           <Tooltip label={row.journal.name}>
             <Text isTruncated>{row.journal.name}</Text>
