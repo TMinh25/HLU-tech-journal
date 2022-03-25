@@ -34,9 +34,6 @@ export default function StepOne({ onNextTab }: any) {
   const { currentUser } = useAuth();
 
   const allJournalGroups = useGetAllJournalGroupsQuery();
-  const allJournals = useGetJournalsInGroupQuery(values.journalGroup._id, {
-    skip: !Boolean(values.journalGroup._id),
-  });
   const navigate = useNavigate();
 
   const [statement, setStatement] = useState<boolean[]>([false, false]);
@@ -106,44 +103,6 @@ export default function StepOne({ onNextTab }: any) {
                 {journalGroup.name}
               </option>
             ))}
-          </Select>
-        </FormControl>
-        <FormControl
-          my={4}
-          isRequired
-          id="journalId"
-          isInvalid={Boolean(
-            (touched.journalId && errors.journalId) || allJournals.isError
-          )}
-          isDisabled={!values.journalGroup._id || allJournals.isError}
-        >
-          <HStack>
-            <FormLabel>Số</FormLabel>
-            {(touched.journalId || errors.journalId) && (
-              <>
-                <Spacer />
-                <FormErrorMessage pb={2}>
-                  {(allJournals.isError &&
-                    (allJournals.error as any)?.data.error.title) ||
-                    "Chuyên san này không có số nào đang xuất bản" ||
-                    errors.journalId}
-                </FormErrorMessage>
-              </>
-            )}
-          </HStack>
-          <Select
-            placeholder="Số"
-            value={values.journalId}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          >
-            {allJournals.data
-              ?.filter((journal) => !journal.status)
-              .map((journal, index) => (
-                <option key={"journal-" + index} value={journal._id}>
-                  {journal.name}
-                </option>
-              ))}
           </Select>
         </FormControl>
         <FormControl
@@ -252,8 +211,7 @@ export default function StepOne({ onNextTab }: any) {
               colorScheme="green"
               isDisabled={
                 !Boolean(
-                  values.journalId &&
-                    values.journalGroup &&
+                  values.journalGroup &&
                     values.language &&
                     statement.every((i) => i) &&
                     copyrightAllowed &&

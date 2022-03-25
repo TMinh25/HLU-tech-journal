@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { useFormikContext } from "formik";
 import { useNavigate } from "react-router";
-import { useNewJournalSubmissionMutation } from "../../../features/journal";
+import { useNewSubmissionMutation } from "../../../features/article";
 import { useAppState } from "../../../hooks/useAppState";
 import { NewSubmissionRequest } from "../../../interface/requestAndResponse";
 import { SubmissionPreview } from "../../../utils/components";
@@ -20,7 +20,7 @@ export default function StepFour({ onPrevTab }: any) {
   const { values } = useFormikContext<NewSubmissionRequest>();
   const { toast } = useAppState();
   const [newSubmissionRequest, newSubmissionRequestData] =
-    useNewJournalSubmissionMutation();
+    useNewSubmissionMutation();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleSubmit = async (e: any) => {

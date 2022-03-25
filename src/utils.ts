@@ -17,6 +17,9 @@ export function toRoleString(role: Role | string | number | undefined): string {
     case Role.editors:
       return "Ban Biên Tập";
     case 3:
+    case Role.copyeditors:
+      return "Phản Biện";
+    case 4:
     case Role.reviewers:
       return "Phản Biện";
     default:
@@ -143,7 +146,9 @@ export function toAttendedRoleSrting(role: AttendedRole | string) {
     case AttendedRole.author:
       return "Tác giả";
     case AttendedRole.editor:
-      return "Ban biên tập";
+      return "Tổng biên tập";
+    case AttendedRole.copyeditor:
+      return "Biên tập viên";
     case AttendedRole.reviewer:
       return "Phản biện";
     default:

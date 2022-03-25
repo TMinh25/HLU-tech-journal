@@ -4,9 +4,9 @@ import IFile from "./file";
 export default interface Article {
   _id: string;
   title: string;
-  journal: {
-    _id: string;
+  journal?: {
     name: string;
+    _id: string;
   };
   journalGroup: {
     _id: string;
@@ -60,6 +60,10 @@ export default interface Article {
         files: IFile[];
         responseFile?: IFile;
       }[];
+    };
+    copyediting: {
+      draftFiles: IFile[];
+      copyEditedFile?: IFile;
     };
   };
   files: IFile[];

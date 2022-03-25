@@ -35,7 +35,6 @@ import {
   useCompleteSubmissionMutation,
   useGetArticleQuery,
   useRequestRevisionMutation,
-  useSendToCopyEditingMutation,
 } from "../../../../features/article";
 import { useUploadFileMutation } from "../../../../features/fileUpload";
 import { useAppState } from "../../../../hooks/useAppState";
@@ -49,31 +48,59 @@ import {
   FormControlComponent,
 } from "../../../../utils/components";
 import ConfirmCompleteSubmission from "./ConfirmCompleteSubmission";
-import SelectPublishedFileModal from "./SelectPublishedFileModal";
-import SendToCopyEditingModal from "./SendToCopyEditingModal";
 
-const PublishingStage: FC = (props) => {
+const CopyEditingStage: FC<{
+  confirmCompleteAlert: UseDisclosureReturn;
+}> = ({ confirmCompleteAlert }) => {
   const { articleId } = useParams();
   const article = useGetArticleQuery(articleId);
   const { role } = useAuth();
-  const publishing = article.data?.detail?.publishing;
+  const copyediting = article.data?.detail?.copyediting;
+  const completeModal = useDisclosure();
+  const [publishedFile, setPublishedFile] = useState<IFile>();
   const { toast } = useAppState();
   const requestRevisionModal = useDisclosure();
+
+  useEffect(() => {
+    if (article.data?.publishedFile)
+      setPublishedFile(article.data?.publishedFile);
+  }, [article.data?.publishedFile]);
+
+  const [completeSubmission, completeSubmissionData] =
+    useCompleteSubmissionMutation();
+
+  const handleCompleteSubmission = async () => {
+    try {
+      if (articleId && publishedFile) {
+        const result = await completeSubmission({
+          _id: articleId,
+          publishedFile,
+        }).unwrap();
+        article.refetch();
+        toast({ status: "success", title: result.message });
+        confirmCompleteAlert.onClose();
+      } else {
+        toast({ status: "error", title: "Vui lòng chọn tài liệu của bài báo" });
+      }
+    } catch (error: any) {
+      toast({ status: "error", title: error.data.message });
+    }
+  };
 
   return (
     <>
       <Stack divider={<Divider />} spacing={5}>
-        {publishing?.draftFile?.length && (
+        {copyediting?.draftFiles?.length && (
           <Stack>
             <Heading size="md">Tài liệu</Heading>
-            {publishing?.draftFile?.map((f) => (
+            {copyediting?.draftFiles?.map((f) => (
               <FileDisplayButton file={f} displayId />
             ))}
           </Stack>
         )}
 
         <Stack minH={200}>
-          <Heading size="md">Yêu cầu hoàn thiện bài báo</Heading>
+          <Heading size="md">Bài báo xuất bản</Heading>
           {article.data?.detail?.publishing &&
           article.data.detail.publishing.request.length ? (
             <>
@@ -124,12 +151,36 @@ const PublishingStage: FC = (props) => {
             Gửi yêu cầu hoàn thiện bài báo
           </Button>
         </Stack>
+
+        <Stack>
+          <Heading size="md">Bài báo xuất bản</Heading>
+          {publishedFile && (
+            <FileDisplayButton file={publishedFile} displayId />
+          )}
+          {role === Role.editors &&
+            article.data?.status === ArticleStatus.publishing && (
+              <Button
+                onClick={completeModal.onOpen}
+                isLoading={completeModal.isOpen}
+                colorScheme="green"
+              >
+                Chọn tài liệu xuất bản bài báo
+              </Button>
+            )}
+        </Stack>
       </Stack>
+      <ConfirmCompleteSubmission
+        {...confirmCompleteAlert}
+        articleId={articleId}
+        publishedFile={publishedFile}
+        onAccept={handleCompleteSubmission}
+        isLoading={completeSubmissionData.isLoading}
+      />
       <RequestRevisionModal {...requestRevisionModal} articleId={articleId} />
     </>
   );
 };
-export default PublishingStage;
+export default CopyEditingStage;
 
 const RequestRevisionModal: FC<
   UseDisclosureReturn & { articleId?: string }

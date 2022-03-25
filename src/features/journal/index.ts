@@ -77,14 +77,6 @@ export const journalApiSlice = createApi({
           method: "DELETE",
         }),
       }),
-      newJournalSubmission: builder.mutation<Article, NewSubmissionRequest>({
-        query: (body) => ({
-          url: `/journal/${body.journalId}/submission`,
-          method: "POST",
-          body,
-        }),
-        transformResponse,
-      }),
       getArticleOfJournal: builder.query<Article[], string | undefined>({
         query: (journalId) => ({
           url: `/journal/${journalId}/articles`,
@@ -105,6 +97,5 @@ export const {
   useGetJournalByIdQuery,
   useFindJournalQuery,
   useDeleteJournalMutation,
-  useNewJournalSubmissionMutation,
   useGetArticleOfJournalQuery,
 } = journalApiSlice;

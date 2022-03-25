@@ -11,16 +11,44 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { FC, useRef } from "react";
+import {
+  useCompleteSubmissionMutation,
+  useGetArticleQuery,
+} from "../../../../features/article";
+import { useAppState } from "../../../../hooks/useAppState";
 import IFile from "../../../../interface/file";
 
 const ConfirmCompleteSubmission: FC<
   UseDisclosureReturn & {
+    articleId?: string;
     onAccept: () => void;
     isLoading: boolean;
     publishedFile?: IFile;
   }
-> = ({ isOpen, onClose, onAccept, isLoading, publishedFile }) => {
+> = ({ articleId, isOpen, onClose, onAccept, isLoading, publishedFile }) => {
   const cancelRef = useRef(null);
+  const { refetch } = useGetArticleQuery(articleId);
+  const { toast } = useAppState();
+  const [completeSubmission, completeSubmissionData] =
+    useCompleteSubmissionMutation();
+
+  const handleCompleteSubmission = async () => {
+    try {
+      if (articleId && publishedFile) {
+        const result = await completeSubmission({
+          _id: articleId,
+          publishedFile,
+        }).unwrap();
+        refetch();
+        toast({ status: "success", title: result.message });
+        onClose();
+      } else {
+        toast({ status: "error", title: "Vui lòng chọn tài liệu của bài báo" });
+      }
+    } catch (error: any) {
+      toast({ status: "error", title: error.data.message });
+    }
+  };
 
   return (
     <>

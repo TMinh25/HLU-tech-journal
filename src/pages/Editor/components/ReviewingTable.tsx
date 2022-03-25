@@ -55,10 +55,10 @@ export default function ReviewingTable({ data }: any) {
         },
       },
       {
-        Header: "Số",
+        Header: "Chuyên san",
         accessor: (row) => (
-          <Tooltip label={row.journal.name}>
-            <Text isTruncated>{row.journal.name}</Text>
+          <Tooltip label={row.journalGroup.name}>
+            <Text isTruncated>{row.journalGroup.name}</Text>
           </Tooltip>
         ),
       },

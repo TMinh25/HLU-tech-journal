@@ -69,7 +69,8 @@ function App(): JSX.Element {
           dispatch(setCredentials(user));
         } catch (error: any) {
           console.log(error);
-          const title = error.data.message || "Không thể lấy dữ liệu từ phiên!";
+          const title =
+            error.data?.message || "Không thể lấy dữ liệu từ phiên!";
           toast.closeAll();
           toast({
             status: "error",

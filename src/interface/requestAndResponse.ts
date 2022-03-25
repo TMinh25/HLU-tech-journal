@@ -69,7 +69,6 @@ export interface NewSubmissionRequest {
     _id: string;
     name: string;
   };
-  journalId: string;
   language: string;
   tags: string[];
   authors: {

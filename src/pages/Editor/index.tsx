@@ -60,8 +60,7 @@ function NewArticleBox(props: any) {
   let allArticles = useMemo(
     () =>
       Array.from<Article>(
-        data?.filter((a) => a.status === ArticleStatus.submission).reverse() ??
-          []
+        data?.filter((a) => a.status === ArticleStatus.submission) ?? []
       ),
     [data]
   );

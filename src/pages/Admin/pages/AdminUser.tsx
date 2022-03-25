@@ -26,7 +26,9 @@ const AdminUser: FC = () => {
       <BigContainer>
         <Skeleton isLoaded={!users.isLoading}>
           <Stack spacing={6}>
-            <Heading as="h2">Người dùng</Heading>
+            <Flex>
+              <Heading as="h2">Người dùng</Heading>
+            </Flex>
             <Stack>
               {users.data?.length ? (
                 users.data.map((u) => (

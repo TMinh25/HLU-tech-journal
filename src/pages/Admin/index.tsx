@@ -28,7 +28,10 @@ import {
   useCreateJournalGroupMutation,
   useGetAllJournalGroupsQuery,
 } from "../../features/journalGroup";
-import { useGetAllUsersQuery } from "../../features/user";
+import {
+  useGetAllUsersQuery,
+  useGetTempReviewerQuery,
+} from "../../features/user";
 import { useAppState } from "../../hooks/useAppState";
 import Journal from "../../interface/journal.model";
 import JournalGroup from "../../interface/journalGroup.model";
@@ -37,13 +40,15 @@ import {
   NewJournalRequest,
   SignUpRequest,
 } from "../../interface/requestAndResponse";
-import User from "../../interface/user.model";
+import User, { TempReviewer } from "../../interface/user.model";
 import { BigContainer, Card } from "../../utils/components";
 import JournalGroupTable from "./components/JournalGroupTable";
 import JournalsTable from "./components/JournalsTable";
 import NewJournalGroupModal from "./components/NewJournalGroupModal";
 import NewJournalModal from "./components/NewJournalModal";
+import NewTempReviewer from "./components/NewTempReviewer";
 import NewUserModal from "./components/NewUserModal";
+import TempReviewerTable from "./components/TempReviewerTable";
 import UsersTable from "./components/UsersTable";
 
 export default function AdminPage(): JSX.Element {
@@ -55,6 +60,7 @@ export default function AdminPage(): JSX.Element {
             <JournalGroupBox />
             <JournalBox />
             <UserBox />
+            {/* <TempReviewerBox /> */}
           </Stack>
         </Accordion>
       </BigContainer>
@@ -330,6 +336,59 @@ function UserBox(props: any) {
               // toggleDisabledIsLoading={toggleDisableUserData.isLoading}
               data={allUsers}
             />{" "}
+          </Box>
+        </AccordionPanel>
+      </AccordionItem>
+    </Card>
+  );
+}
+
+function TempReviewerBox(props: any) {
+  const navigate = useNavigate();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isLoading, isFetching, refetch } = useGetTempReviewerQuery();
+
+  return (
+    <Card>
+      <AccordionItem border="none">
+        <Flex align="center">
+          <AccordionButton borderRadius={4} _focus={{ outline: "none" }}>
+            <AccordionIcon mr={3} />
+            {/* <Flex mb={6} justify="space-between" align="center"> */}
+            {/* </Flex> */}
+            <Heading as="h3">Phản biện trên hệ thống</Heading>
+          </AccordionButton>
+          <Flex>
+            <Button
+              variant={"outline"}
+              colorScheme="green"
+              rightIcon={<AddIcon />}
+              onClick={onOpen}
+              mr={2}
+            >
+              Tạo phản biện mới
+            </Button>
+            <IconButton
+              aria-label="refetch-journals"
+              icon={<RepeatIcon />}
+              onClick={refetch}
+              isLoading={isLoading || isFetching}
+              variant="ghost"
+              rounded={100}
+            />
+            <IconButton
+              aria-label="refetch-journals"
+              icon={<Icon as={BiLinkExternal} />}
+              onClick={() => navigate("user")}
+              variant="ghost"
+              rounded={100}
+            />
+          </Flex>
+        </Flex>
+        <AccordionPanel>
+          <NewTempReviewer {...{ isOpen, onClose }} />
+          <Box>
+            <TempReviewerTable />
           </Box>
         </AccordionPanel>
       </AccordionItem>

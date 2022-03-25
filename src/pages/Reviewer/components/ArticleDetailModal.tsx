@@ -41,7 +41,7 @@ const ArticleDetailModal: FC<{
                 <Text as="span" textDecor={"underline"}>
                   Số:
                 </Text>{" "}
-                {article?.journal.name}
+                {article?.journal?.name}
               </Heading>
               <Heading size="md">
                 <Text as="span" textDecor={"underline"}>

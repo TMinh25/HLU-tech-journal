@@ -395,10 +395,6 @@ export const NewReviewRoundModal: FC<{
       <SelectPublishedFileModal
         {...newDisplayFileModal}
         articleId={articleId}
-        publishedFile={requests.displayFile}
-        setPublishedFile={(val) =>
-          setRequests({ ...requests, displayFile: val })
-        }
       />
     </>
   );

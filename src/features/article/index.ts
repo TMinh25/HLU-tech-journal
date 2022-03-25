@@ -2,6 +2,7 @@ import { createApi } from "@reduxjs/toolkit/dist/query/react";
 import Article, { Discussion } from "../../interface/article.model";
 import IFile from "../../interface/file";
 import {
+  NewSubmissionRequest,
   RequestReviewerRequest,
   ReviewSubmitRequest,
 } from "../../interface/requestAndResponse";
@@ -143,6 +144,16 @@ export const articleApiSlice = createApi({
           body,
         }),
       }),
+      sendToCopyEditing: builder.mutation<
+        { success: boolean; message: string },
+        { _id?: string; draftFiles?: IFile[] }
+      >({
+        query: ({ _id, ...body }) => ({
+          url: `/article/${_id}/submission/copyediting`,
+          method: "POST",
+          body,
+        }),
+      }),
       completeSubmission: builder.mutation<
         { success: boolean; message: string },
         { _id: string | undefined; publishedFile: IFile }
@@ -187,6 +198,14 @@ export const articleApiSlice = createApi({
           method: "PATCH",
         }),
       }),
+      newSubmission: builder.mutation<Article, NewSubmissionRequest>({
+        query: (body) => ({
+          url: `/journal-group/${body.journalGroup._id}/submission`,
+          method: "POST",
+          body,
+        }),
+        transformResponse,
+      }),
     };
   },
 });
@@ -204,8 +223,10 @@ export const {
   useConfirmSubmittedResultMutation,
   useUnassignedReviewerMutation,
   useSendToPublishingMutation,
+  useSendToCopyEditingMutation,
   useCompleteSubmissionMutation,
   useRequestRevisionMutation,
   useResponseRevisionMutation,
   useToggleVisibleMutation,
+  useNewSubmissionMutation,
 } = articleApiSlice;

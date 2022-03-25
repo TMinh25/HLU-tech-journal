@@ -63,3 +63,9 @@ export default interface User {
   /** Ngày cập nhật */
   updatedAt: Date;
 }
+
+export interface TempReviewer {
+  displayName: string;
+  tags?: string[];
+  email: string;
+}

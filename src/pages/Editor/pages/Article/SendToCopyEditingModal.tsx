@@ -24,6 +24,7 @@ import { useDropzone } from "react-dropzone";
 import {
   useCompleteSubmissionMutation,
   useGetArticleQuery,
+  useSendToCopyEditingMutation,
 } from "../../../../features/article";
 import { useUploadFileMutation } from "../../../../features/fileUpload";
 import { useAppState } from "../../../../hooks/useAppState";
@@ -31,7 +32,7 @@ import IFile from "../../../../interface/file";
 import { CircularProgressInderterminate } from "../../../../utils/components";
 import ConfirmCompleteSubmission from "./ConfirmCompleteSubmission";
 
-const SelectPublishedFileModal: FC<
+const SendToCopyEditingModal: FC<
   UseDisclosureReturn & {
     articleId: string | undefined;
   }
@@ -40,8 +41,24 @@ const SelectPublishedFileModal: FC<
   const article = useGetArticleQuery(articleId);
   const [fileUpload, fileUploadData] = useUploadFileMutation();
   const [allFiles, setAllFiles] = useState<any[]>([]);
-  const [publishedFile, setPublishedFile] = useState<IFile>();
+  const [draftFiles, setDraftFiles] = useState<IFile[]>([]);
 
+  const [copyEditingSubmission, copyEditingSubmissionData] =
+    useSendToCopyEditingMutation();
+
+  const handleCopyEditingSubmission = async () => {
+    try {
+      const result = await copyEditingSubmission({
+        _id: articleId,
+        draftFiles,
+      }).unwrap();
+      article.refetch();
+      toast({ status: "success", title: result.message });
+      onClose();
+    } catch (error: any) {
+      toast({ status: "error", title: error.data.message });
+    }
+  };
   useEffect(() => {
     if (article.data?.files.length) {
       const files = [
@@ -89,15 +106,12 @@ const SelectPublishedFileModal: FC<
       <Modal isCentered size={"xl"} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Xuất bản</ModalHeader>
+          <ModalHeader>Biên tập</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <Stack spacing={2}>
-              <Text color={"gray.400"}>
-                Hãy sử dụng tệp tin pdf để có kết quả tốt nhất
-              </Text>
-              <FormControl id="draftFile">
-                <FormLabel>File bài báo xuất bản</FormLabel>
+              <FormControl id="draftFiles">
+                <FormLabel>File bài báo biên tập</FormLabel>
                 <Box {...getRootProps()} mb={2}>
                   <input {...getInputProps()} />
                   <Tooltip label="Nhấp chuột để mở cửa sổ chọn tệp tin">
@@ -128,8 +142,9 @@ const SelectPublishedFileModal: FC<
                     value: file._id,
                     label: file.title,
                   }))}
-                  value={publishedFile}
-                  onChange={(val) => setPublishedFile(val as IFile)}
+                  isMulti
+                  value={draftFiles}
+                  onChange={(val) => setDraftFiles(val.map((f) => f))}
                 />
               </FormControl>
             </Stack>
@@ -138,17 +153,17 @@ const SelectPublishedFileModal: FC<
             <Button size="lg" onClick={onClose} mr={3}>
               Đóng
             </Button>
+            <Button
+              size="lg"
+              colorScheme={"green"}
+              onClick={handleCopyEditingSubmission}
+            >
+              Biên tập
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
-
-      {/* <ConfirmCompleteSubmission
-        {...confirmCompleteAlert}
-        publishedFile={publishedFile}
-        onAccept={handleCompleteSubmission}
-        isLoading={copyEditingSubmissionData.isLoading}
-      /> */}
     </>
   );
 };
-export default SelectPublishedFileModal;
+export default SendToCopyEditingModal;

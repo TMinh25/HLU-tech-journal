@@ -60,6 +60,26 @@ export const userApiSlice = createApi({
           method: "PATCH",
         }),
       }),
+
+      newTempReviewer: builder.mutation<
+        { success: boolean },
+        { displayName: string; email: string; tags: string[] }
+      >({
+        query: (body) => ({
+          url: `/user/temp-reviewer/new`,
+          method: "POST",
+          body,
+        }),
+      }),
+      getTempReviewer: builder.query<
+        { displayName: string; email: string; tags?: string[] }[],
+        void
+      >({
+        query: () => ({
+          url: `/user/temp-reviewer`,
+          method: "GET",
+        }),
+      }),
     };
   },
 });
@@ -71,4 +91,7 @@ export const {
   useFindUserQuery,
   useDeleteUserMutation,
   useToggleDisableUserMutation,
+
+  useGetTempReviewerQuery,
+  useNewTempReviewerMutation,
 } = userApiSlice;

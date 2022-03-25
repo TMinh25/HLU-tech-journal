@@ -10,6 +10,7 @@ import {
   Avatar,
   AvatarGroup,
   Button,
+  Center,
   Divider,
   Editable,
   EditableInput,
@@ -79,7 +80,7 @@ const AdminJournalDetail = (props: any) => {
               <EditablePreview />
               <EditableInput />
             </Editable>
-            <Card>
+            {/* <Card>
               <Heading size="md" mb={4}>
                 Danh sách biên tập viên
               </Heading>
@@ -114,7 +115,7 @@ const AdminJournalDetail = (props: any) => {
                   </Button>
                 </SimpleGrid>
               )}
-            </Card>
+            </Card> */}
             <Card>
               <Heading size="md" mb={4}>
                 Danh sách bài báo
@@ -122,7 +123,7 @@ const AdminJournalDetail = (props: any) => {
               {journalsArticles.data && (
                 <Stack>
                   {/* Sort for visible article first */}
-                  {journalsArticles.data.map((article, index) => (
+                  {journalsArticles.data.length ? journalsArticles.data.map((article, index) => (
                     <>
                       <AdminArticleCard
                         key={`admin-card-${index}`}
@@ -175,7 +176,7 @@ const AdminJournalDetail = (props: any) => {
                         </AlertDialog>
                       )}
                     </>
-                  ))}
+                  )) : <Center color={useColorModeValue("gray.600", 'gray.400')}>Chưa có bài báo nào được phân vào số này</Center>}
                 </Stack>
               )}
             </Card>

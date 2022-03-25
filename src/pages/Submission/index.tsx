@@ -53,7 +53,6 @@ export default function SubmissionPage() {
       _id: "",
       name: "",
     },
-    journalId: "",
     language: "",
     tags: [],
     authors: {
@@ -92,7 +91,6 @@ export default function SubmissionPage() {
         name: yup.string(),
       })
       .required("Hãy chọn chuyên san phù hợp với bản thảo"),
-    journalId: yup.string().required("Hãy lựa chọn số để nộp bản thảo"),
     detail: yup.object().shape({
       submission: yup.object().shape({
         file: yup.object().shape({

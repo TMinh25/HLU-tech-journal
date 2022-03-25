@@ -60,8 +60,10 @@ import { getArticleStatusType, toArticleStatusString } from "../../../../utils";
 import { BigContainer } from "../../../../utils/components";
 import NotFound from "../../../404";
 import CompletedStage from "./CompletedStage";
+import CopyEditingStage from "./CopyEditingStage";
 import PublishingStage from "./PublishingStage";
 import ReviewStage from "./ReviewStage";
+import SendToCopyEditingModal from "./SendToCopyEditingModal";
 import SendToPublishingModal from "./SendToPublishingModal";
 import SubmissionStage from "./SubmissionStage";
 
@@ -70,6 +72,7 @@ const steps = [
   { status: ArticleStatus.submission, label: "Nhận bản thảo" },
   { status: ArticleStatus.review, label: "Đánh giá bản thảo" },
   { status: ArticleStatus.publishing, label: "Hoàn thiện bài báo" },
+  { status: ArticleStatus.copyediting, label: "Biên tập bài báo" },
 ];
 
 const indexArticleStatus = (articleStatus: string | undefined) => {
@@ -81,8 +84,10 @@ const indexArticleStatus = (articleStatus: string | undefined) => {
       return 1;
     case ArticleStatus.publishing:
       return 2;
-    case ArticleStatus.completed:
+    case ArticleStatus.copyediting:
       return 3;
+    case ArticleStatus.completed:
+      return 4;
     default:
       return -1;
   }
@@ -105,6 +110,7 @@ const EditorArticle = (props: any) => {
   const confirmPublishingModal = useDisclosure();
   const cancelRef = useRef(null);
   const rejectArticleModal = useDisclosure();
+  const copyEditingModal = useDisclosure();
   const [rejectArticle, rejectArticleData] = useEditorResponseMutation();
   const { toast } = useAppState();
 
@@ -151,19 +157,7 @@ const EditorArticle = (props: any) => {
                     {article.data?.journalGroup.name}
                   </BreadcrumbLink>
                 </BreadcrumbItem>
-                <BreadcrumbItem>
-                  <BreadcrumbLink
-                    as={Link}
-                    to={`/${roleHref}/journal/${article.data?.journal._id}`}
-                  >
-                    {article.data?.journal.name}
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
               </Breadcrumb>
-              {/* <Heading
-                size="sm"
-                color={useColorModeValue("gray.600", "gray.400")}
-              ></Heading> */}
               <Heading as="h3" size="md" lineHeight={1.5}>
                 {article.data?.title}
                 <Tag
@@ -229,6 +223,25 @@ const EditorArticle = (props: any) => {
                         </MenuItem>
                       )}
                       {article.data?.status === ArticleStatus.publishing && (
+                        <MenuItem
+                          icon={<Icon as={BsCheckLg} />}
+                          iconSpacing={4}
+                          onClick={copyEditingModal.onOpen}
+                          bgColor={useColorModeValue(
+                            "green.100",
+                            "rgba(154, 255, 180, 0.4)"
+                          )}
+                          _hover={{
+                            bgColor: useColorModeValue(
+                              "green.300",
+                              "rgba(154, 255, 180, 0.6)"
+                            ),
+                          }}
+                        >
+                          Biên tập bài báo
+                        </MenuItem>
+                      )}
+                      {article.data?.status === ArticleStatus.copyediting && (
                         <MenuItem
                           icon={<Icon as={BsCheckLg} />}
                           iconSpacing={4}
@@ -315,7 +328,10 @@ const EditorArticle = (props: any) => {
                   <ReviewStage />
                 </TabPanel>
                 <TabPanel>
-                  <PublishingStage
+                  <PublishingStage />
+                </TabPanel>
+                <TabPanel>
+                  <CopyEditingStage
                     confirmCompleteAlert={confirmCompleteAlert}
                   />
                 </TabPanel>
@@ -328,7 +344,7 @@ const EditorArticle = (props: any) => {
         </Skeleton>
       </BigContainer>
       <SendToPublishingModal {...publishingModal} articleId={articleId} />
-
+      <SendToCopyEditingModal {...copyEditingModal} articleId={articleId} />
       <AlertDialog
         isCentered
         isOpen={confirmPublishingModal.isOpen}
