@@ -1,6 +1,6 @@
 const SERVER = {
   // TODO: change on production
-  url: "http://localhost:3000/",
+  url: import.meta.env.VITE_BACKEND_URL,
 };
 const STREAM_CHAT = {
   key: import.meta.env.VITE_STREAM_KEY,
