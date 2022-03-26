@@ -13,7 +13,6 @@ import {
   ModalHeader,
   ModalOverlay,
   Stack,
-  Text,
   Tooltip,
   useColorModeValue,
   UseDisclosureReturn,
@@ -22,15 +21,19 @@ import { Select } from "chakra-react-select";
 import { FC, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import {
-  useCompleteSubmissionMutation,
   useGetArticleQuery,
   useSendToCopyEditingMutation,
 } from "../../../../features/article";
 import { useUploadFileMutation } from "../../../../features/fileUpload";
+import { useGetAllUsersQuery } from "../../../../features/user";
 import { useAppState } from "../../../../hooks/useAppState";
 import IFile from "../../../../interface/file";
-import { CircularProgressInderterminate } from "../../../../utils/components";
-import ConfirmCompleteSubmission from "./ConfirmCompleteSubmission";
+import User from "../../../../interface/user.model";
+import { Role } from "../../../../types";
+import {
+  CircularProgressInderterminate,
+  FormControlComponent,
+} from "../../../../utils/components";
 
 const SendToCopyEditingModal: FC<
   UseDisclosureReturn & {
@@ -39,22 +42,29 @@ const SendToCopyEditingModal: FC<
 > = ({ isOpen, onClose, articleId }) => {
   const { toast } = useAppState();
   const article = useGetArticleQuery(articleId);
+  const allUsers = useGetAllUsersQuery();
   const [fileUpload, fileUploadData] = useUploadFileMutation();
   const [allFiles, setAllFiles] = useState<any[]>([]);
-  const [draftFiles, setDraftFiles] = useState<IFile[]>([]);
+  const [draftFiles, setDraftFiles] = useState<IFile>();
+  const [notes, setNotes] = useState<string>();
+  const [copyeditor, setCopyeditor] = useState<User | null>();
 
   const [copyEditingSubmission, copyEditingSubmissionData] =
     useSendToCopyEditingMutation();
 
   const handleCopyEditingSubmission = async () => {
     try {
-      const result = await copyEditingSubmission({
-        _id: articleId,
-        draftFiles,
-      }).unwrap();
-      article.refetch();
-      toast({ status: "success", title: result.message });
-      onClose();
+      if (!!copyeditor && !!draftFiles) {
+        const result = await copyEditingSubmission({
+          _id: articleId,
+          draftFiles,
+          notes,
+          copyeditor: copyeditor._id,
+        }).unwrap();
+        article.refetch();
+        toast({ status: "success", title: result.message });
+        onClose();
+      }
     } catch (error: any) {
       toast({ status: "error", title: error.data.message });
     }
@@ -110,6 +120,33 @@ const SendToCopyEditingModal: FC<
           <ModalCloseButton />
           <ModalBody pb={6}>
             <Stack spacing={2}>
+              <FormControlComponent
+                id="note"
+                formLabel="Ghi chú"
+                placeholder="Ghi chú"
+                inputType="textarea"
+                value={notes}
+                onChange={({ target }) => setNotes(target.value)}
+              />
+              <FormControl id="copyeditor">
+                <FormLabel>Biên tập viên</FormLabel>
+                <Select
+                  placeholder="Biên tập viên"
+                  selectedOptionStyle="check"
+                  // TODO: con cặc
+                  options={allUsers.data
+                    ?.filter((user) => user.role === Role.copyeditors)
+                    ?.map((user) => ({
+                      ...user,
+                      value: user?._id,
+                      label: `${user?.displayName} (${user.aliases})`,
+                    }))}
+                  value={copyeditor}
+                  onChange={(val) => {
+                    setCopyeditor(val);
+                  }}
+                />
+              </FormControl>
               <FormControl id="draftFiles">
                 <FormLabel>File bài báo biên tập</FormLabel>
                 <Box {...getRootProps()} mb={2}>
@@ -139,26 +176,32 @@ const SendToCopyEditingModal: FC<
                   selectedOptionStyle="check"
                   options={allFiles?.map((file) => ({
                     ...file,
-                    value: file._id,
-                    label: file.title,
+                    value: file?._id,
+                    label: file?.title,
                   }))}
-                  isMulti
                   value={draftFiles}
-                  onChange={(val) => setDraftFiles(val.map((f) => f))}
+                  onChange={(val) => setDraftFiles(val as IFile)}
                 />
               </FormControl>
             </Stack>
           </ModalBody>
           <ModalFooter>
-            <Button size="lg" onClick={onClose} mr={3}>
+            <Button
+              size="lg"
+              onClick={onClose}
+              mr={3}
+              isLoading={copyEditingSubmissionData.isLoading}
+            >
               Đóng
             </Button>
             <Button
               size="lg"
               colorScheme={"green"}
               onClick={handleCopyEditingSubmission}
+              isLoading={copyEditingSubmissionData.isLoading}
+              isDisabled={!draftFiles}
             >
-              Biên tập
+              Yêu cầu biên tập
             </Button>
           </ModalFooter>
         </ModalContent>

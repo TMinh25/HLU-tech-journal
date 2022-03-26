@@ -16,31 +16,33 @@ import {
   Text,
   Tooltip,
   useColorModeValue,
-  UseDisclosureReturn,
+  useDisclosure,
+  UseDisclosureReturn
 } from "@chakra-ui/react";
 import { Select } from "chakra-react-select";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import {
   useCompleteSubmissionMutation,
-  useGetArticleQuery,
+  useGetArticleQuery
 } from "../../../../features/article";
 import { useUploadFileMutation } from "../../../../features/fileUpload";
 import { useAppState } from "../../../../hooks/useAppState";
 import IFile from "../../../../interface/file";
 import { CircularProgressInderterminate } from "../../../../utils/components";
-import ConfirmCompleteSubmission from "./ConfirmCompleteSubmission";
 
 const SelectPublishedFileModal: FC<
   UseDisclosureReturn & {
     articleId: string | undefined;
   }
 > = ({ isOpen, onClose, articleId }) => {
+  const confirmCompleteAlert = useDisclosure();
   const { toast } = useAppState();
   const article = useGetArticleQuery(articleId);
   const [fileUpload, fileUploadData] = useUploadFileMutation();
   const [allFiles, setAllFiles] = useState<any[]>([]);
   const [publishedFile, setPublishedFile] = useState<IFile>();
+  const cancelRef = useRef(null);
 
   useEffect(() => {
     if (article.data?.files.length) {
@@ -83,6 +85,27 @@ const SelectPublishedFileModal: FC<
     maxFiles: 1,
     multiple: false,
   });
+  const { refetch } = useGetArticleQuery(articleId);
+  const [completeSubmission, completeSubmissionData] =
+    useCompleteSubmissionMutation();
+
+  const handleCompleteSubmission = async () => {
+    try {
+      if (articleId && publishedFile) {
+        const result = await completeSubmission({
+          _id: articleId,
+          publishedFile,
+        }).unwrap();
+        refetch();
+        toast({ status: "success", title: result.message });
+        onClose();
+      } else {
+        toast({ status: "error", title: "Vui lòng chọn tài liệu của bài báo" });
+      }
+    } catch (error: any) {
+      toast({ status: "error", title: error.data.message });
+    }
+  };
 
   return (
     <>
@@ -125,8 +148,8 @@ const SelectPublishedFileModal: FC<
                   selectedOptionStyle="check"
                   options={allFiles?.map((file) => ({
                     ...file,
-                    value: file._id,
-                    label: file.title,
+                    value: file?._id,
+                    label: file?.title,
                   }))}
                   value={publishedFile}
                   onChange={(val) => setPublishedFile(val as IFile)}
@@ -135,19 +158,25 @@ const SelectPublishedFileModal: FC<
             </Stack>
           </ModalBody>
           <ModalFooter>
-            <Button size="lg" onClick={onClose} mr={3}>
-              Đóng
+            <Button
+              isLoading={completeSubmissionData.isLoading}
+              colorScheme="red"
+              ref={cancelRef}
+              onClick={onClose}
+            >
+              Hủy
+            </Button>
+            <Button
+              isLoading={completeSubmissionData.isLoading}
+              colorScheme="green"
+              ml={3}
+              onClick={handleCompleteSubmission}
+            >
+              Đồng ý
             </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
-
-      {/* <ConfirmCompleteSubmission
-        {...confirmCompleteAlert}
-        publishedFile={publishedFile}
-        onAccept={handleCompleteSubmission}
-        isLoading={copyEditingSubmissionData.isLoading}
-      /> */}
     </>
   );
 };

@@ -142,8 +142,8 @@ const SendToPublishingModal: FC<
                   selectedOptionStyle="check"
                   options={allFiles?.map((file) => ({
                     ...file,
-                    value: file._id,
-                    label: file.title,
+                    value: file?._id,
+                    label: file?.title,
                   }))}
                   value={draftFile}
                   onChange={(val) => setDraftFile(val.map((f) => f))}

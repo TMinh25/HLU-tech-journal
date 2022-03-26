@@ -1,11 +1,12 @@
 import { createApi } from "@reduxjs/toolkit/dist/query/react";
-import Article, { Discussion } from "../../interface/article.model";
+import Article, { Detail, Discussion } from "../../interface/article.model";
 import IFile from "../../interface/file";
 import {
   NewSubmissionRequest,
   RequestReviewerRequest,
   ReviewSubmitRequest,
 } from "../../interface/requestAndResponse";
+import ArticleDetailModal from "../../utils/components/ArticleDetailModal";
 import { baseQueryWithReauthenticate } from "../utils";
 
 const transformResponse = (
@@ -16,6 +17,7 @@ const transformResponse = (
   console.log(response.data);
   return response.data;
 };
+
 export const articleApiSlice = createApi({
   reducerPath: "articleApi",
   baseQuery: baseQueryWithReauthenticate,
@@ -51,6 +53,15 @@ export const articleApiSlice = createApi({
       }),
       getArticleForReviewer: builder.query<Article[], void>({
         query: () => ({ url: `/article/get/reviewer`, method: "GET" }),
+        transformResponse,
+        extraOptions: {
+          refetchOnMountOrArgChange: true,
+          refetchOnFocus: true,
+          refetchOnReconnect: true,
+        },
+      }),
+      getArticleForCopyeditor: builder.query<Article[], void>({
+        query: () => ({ url: `/article/get/copyeditor`, method: "GET" }),
         transformResponse,
         extraOptions: {
           refetchOnMountOrArgChange: true,
@@ -146,7 +157,12 @@ export const articleApiSlice = createApi({
       }),
       sendToCopyEditing: builder.mutation<
         { success: boolean; message: string },
-        { _id?: string; draftFiles?: IFile[] }
+        {
+          _id?: string;
+          draftFiles?: IFile;
+          notes?: string;
+          copyeditor: string;
+        }
       >({
         query: ({ _id, ...body }) => ({
           url: `/article/${_id}/submission/copyediting`,
@@ -188,6 +204,19 @@ export const articleApiSlice = createApi({
           body,
         }),
       }),
+      responseCopyEditing: builder.mutation<
+        {
+          success: boolean;
+          message: string;
+        },
+        { _id: string; copyEditedFile: IFile }
+      >({
+        query: (request) => ({
+          url: `/article/${request._id}/submission/copyediting/response`,
+          method: "POST",
+          body: request.copyEditedFile,
+        }),
+      }),
       toggleVisible: builder.mutation<
         { success: boolean; message: string },
         string | undefined
@@ -215,11 +244,13 @@ export const {
   useGetArticleQuery,
   useGetArticlesQuery,
   useGetArticleForReviewerQuery,
+  useGetArticleForCopyeditorQuery,
   useGetArticleForAuthorQuery,
   useEditorResponseMutation,
   useRequestReviewerMutation,
   useReviewSubmitMutation,
   useReviewerResponseSubmissionMutation,
+  useResponseCopyEditingMutation,
   useConfirmSubmittedResultMutation,
   useUnassignedReviewerMutation,
   useSendToPublishingMutation,

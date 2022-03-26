@@ -6,6 +6,7 @@ import authReducer from "../features/auth/authSlice";
 import { fileUploadApiSlice } from "../features/fileUpload";
 import { journalApiSlice } from "../features/journal";
 import { journalGroupApiSlice } from "../features/journalGroup";
+import {notificationApiSlice} from "../features/notification";
 import { plagiarismApiSlice } from "../features/plagiarismCheck";
 import { userApiSlice } from "../features/user";
 
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   [fileUploadApiSlice.reducerPath]: fileUploadApiSlice.reducer,
   [articleApiSlice.reducerPath]: articleApiSlice.reducer,
   [plagiarismApiSlice.reducerPath]: plagiarismApiSlice.reducer,
+  [notificationApiSlice.reducerPath]: notificationApiSlice.reducer,
 });
 
 export const store = configureStore({
@@ -32,7 +34,8 @@ export const store = configureStore({
       journalApiSlice.middleware,
       journalGroupApiSlice.middleware,
       fileUploadApiSlice.middleware,
-      articleApiSlice.middleware
+      articleApiSlice.middleware,
+      notificationApiSlice.middleware
     ),
 });
 

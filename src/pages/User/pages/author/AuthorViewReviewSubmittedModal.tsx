@@ -29,7 +29,7 @@ import {
   getReviewResultType,
   toResultRecommendationString,
 } from "../../../../utils";
-import { FileDisplayButton } from "../../../../utils/components";
+import { Card, FileDisplayButton } from "../../../../utils/components";
 
 const AuthorViewReviewSubmittedModal: FC<{
   article?: Article;
@@ -77,15 +77,15 @@ const AuthorViewReviewSubmittedModal: FC<{
               </Alert>
             )}
             <Heading size="sm">Bình luận của phản biện</Heading>
-            <UnorderedList stylePosition="inside">
+            <Stack>
               {result?.commentForEveryone && (
-                <Box>
-                  <ListItem fontWeight="bold">Đánh giá của phản biện</ListItem>
+                <Card>
+                  <Text fontWeight="bold">Đánh giá của phản biện</Text>
                   <Text opacity={0.8}>{result?.commentForEveryone}</Text>
-                </Box>
+                </Card>
               )}
-              <Box>
-                <ListItem fontWeight="bold">Tài liệu của phản biện</ListItem>
+              <Card>
+                <Text fontWeight="bold">Tài liệu của phản biện</Text>
                 <Stack mt={2} spacing={3}>
                   {result?.files?.length ? (
                     result?.files.map((file) => (
@@ -99,8 +99,8 @@ const AuthorViewReviewSubmittedModal: FC<{
                     </Center>
                   )}
                 </Stack>
-              </Box>
-            </UnorderedList>
+              </Card>
+            </Stack>
           </Stack>
         </ModalBody>
         <ModalFooter>

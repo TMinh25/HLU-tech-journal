@@ -307,8 +307,8 @@ export const NewReviewRoundModal: FC<{
                   selectedOptionStyle="check"
                   options={allFiles?.map((file) => ({
                     ...file,
-                    value: file._id,
-                    label: file.title,
+                    value: file?._id,
+                    label: file?.title,
                   }))}
                   value={requests.files}
                   onChange={(val) =>

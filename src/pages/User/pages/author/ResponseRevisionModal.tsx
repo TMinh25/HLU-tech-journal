@@ -192,7 +192,7 @@ export const ResponseRevisionModal: FC<
                   </Card>
                   <Card>
                     <Heading mb={4} size="md">
-                      File đã tải lên
+                      Tài liệu hoàn thiện
                     </Heading>
                     <Box py={2}>
                       {responseFile && (

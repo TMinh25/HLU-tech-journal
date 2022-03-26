@@ -4,6 +4,7 @@ import {
   MessageInput,
   MessageList,
   useShouldForceScrollToBottom,
+  VirtualizedMessageList,
 } from "stream-chat-react";
 import { CustomMessage } from "./index";
 import Card from "../Card";
@@ -22,12 +23,12 @@ export default function ChatInner() {
       color={useColorModeValue("gray.900", "white")}
     >
       <ChannelHeader />
-      <Box h={"100%"} pb={100} overflowY="auto">
-        <MessageList Message={CustomMessage} />
-        {/* <VirtualizedMessageList
+      <Box h={"100%"} pb={150} overflowY="auto">
+        {/* <MessageList Message={CustomMessage} /> */}
+        <VirtualizedMessageList
           Message={CustomMessage}
           defaultItemHeight={100}
-        /> */}
+        />
       </Box>
       <MessageInput focus />
     </Card>

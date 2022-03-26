@@ -1,3 +1,4 @@
+import { CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Flex,
@@ -21,7 +22,7 @@ import {
 
 const ArticlePage: FC = (props) => {
   const { articleId } = useParams();
-  const { data, isLoading } = useGetArticleQuery(articleId);
+  const { data, isLoading, isError, error } = useGetArticleQuery(articleId);
   return (
     <BigContainer>
       <Skeleton isLoaded={!isLoading} h="xl">
@@ -67,22 +68,46 @@ const ArticlePage: FC = (props) => {
                   {data.abstract}
                 </Text>
               </Stack>
-              <Stack>
-                <Heading size="md">Từ khóa</Heading>
-                <TagsComponent tags={data.tags} />
-              </Stack>
-              {data.currentFile && (
+              {data.tags?.length && (
+                <Stack>
+                  <Heading size="md">Từ khóa</Heading>
+                  <TagsComponent tags={data.tags} />
+                </Stack>
+              )}
+              {data.publishedFile && (
                 <Stack>
                   <Heading size="md">Toàn văn</Heading>
-                  <Link to={`/view/${data.currentFile._id}`} target="_blank">
-                    <FileDisplayButton file={data.currentFile} />
-                  </Link>
+                  {/* <Link to={`/view/${data.publishedFile._id}`} target="_blank"> */}
+                  <FileDisplayButton file={data.publishedFile} />
+                  {/* </Link> */}
                 </Stack>
               )}
             </Stack>
 
             {/* <Text>{JSON.stringify(data)}</Text> */}
           </>
+        )}
+        {isError && (
+          <Box textAlign="center" py={10} px={6}>
+            <Box display="inline-block">
+              <Flex
+                flexDirection="column"
+                justifyContent="center"
+                alignItems="center"
+                bg={"red.500"}
+                rounded={"50px"}
+                w={"55px"}
+                h={"55px"}
+                textAlign="center"
+              >
+                <CloseIcon boxSize={"20px"} color={"white"} />
+              </Flex>
+            </Box>
+            <Heading as="h2" size="xl" mt={6} mb={2}>
+              Không thể truy cập
+            </Heading>
+            <Text color={"gray.500"}>{(error as any)?.data.message}</Text>
+          </Box>
         )}
       </Skeleton>
     </BigContainer>

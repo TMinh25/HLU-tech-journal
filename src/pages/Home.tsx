@@ -10,12 +10,19 @@ import {
   Center,
   Image,
   Box,
+  chakra,
+  SimpleGrid,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import Logo from "../favicon.svg";
 import Illustration from "../hero-image.svg";
 import { Link } from "react-router-dom";
+import { NotificationCard } from "../utils/components";
+import { useGetAllNotificationsQuery } from "../features/notification";
 
 export default function HomePage() {
+  const notifications = useGetAllNotificationsQuery();
+
   return (
     <Container maxW={"5xl"} __css={{ height: "calc(100vh - 60px)" }}>
       <Stack
@@ -38,9 +45,10 @@ export default function HomePage() {
           </Text>
         </Heading>
         <Text color={"gray.500"} maxW={"3xl"}>
-          Never miss a meeting. Never be late for one too. Keep track of your
-          meetings and receive smart reminders in appropriate times. Read your
-          smart “Daily Agenda” every morning.
+          Tạp chí công nghệ Đại học Hạ Long là tạp chí chuyên nghành công nghệ
+          và các thông tin liên quan. Tạp chí cung cấp cơ sở lí luận, kiến thức
+          nghiệp vụ trong lĩnh vực công nghệ thông tin. Giới thiệu các công
+          trình nghiên cứu trong và ngoài nước.
         </Text>
         <Stack spacing={6} direction={"row"}>
           <Button
@@ -54,13 +62,43 @@ export default function HomePage() {
           >
             Nộp bản thảo
           </Button>
-          <Button rounded={"full"} px={6}>
+          <Button visibility={"hidden"} rounded={"full"} px={6}>
             Tìm hiểu thêm
           </Button>
         </Stack>
         <Flex w={"full"}>
           <Image src={Illustration} cursor={"pointer"} />
         </Flex>
+        {notifications.data?.length && (
+          <Flex
+            textAlign={"center"}
+            pt={10}
+            justifyContent={"center"}
+            direction={"column"}
+            width={"full"}
+          >
+            <Heading fontWeight={600} lineHeight={"110%"}>
+              <Text as={"span"} color={"blue.400"}>
+                Thông báo
+              </Text>
+            </Heading>
+            <Center color={"gray.500"}>
+              Thông báo về các số nhận bản thảo, hoặc về các nội dung cần thiết
+            </Center>
+            <SimpleGrid
+              columns={{ base: 1, xl: 2 }}
+              spacing={"20"}
+              mt={16}
+              mx={"auto"}
+            >
+              {notifications.data
+                ?.slice(Math.max(notifications.data?.length - 3, 0))
+                ?.map((noti) => (
+                  <NotificationCard title={noti.title} content={noti.content} />
+                ))}
+            </SimpleGrid>
+          </Flex>
+        )}
       </Stack>
     </Container>
   );

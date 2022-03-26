@@ -1,26 +1,17 @@
 import {
   Divider,
   Heading,
-  HStack,
-  Icon,
-  IconButton,
-  LinkBox,
-  LinkOverlay,
   Skeleton,
-  Spacer,
   Stack,
   Text,
-  Tooltip,
 } from "@chakra-ui/react";
-import { FC } from "react";
-import { MdOutlineArticle, MdOutlinePictureAsPdf } from "react-icons/md";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   useGetArticleOfJournalQuery,
   useGetJournalByIdQuery,
 } from "../../../features/journal";
-import Article from "../../../interface/article.model";
-import { BigContainer, Card } from "../../../utils/components";
+import { BigContainer } from "../../../utils/components";
+import { ArticleCard } from "../../../utils/components";
 
 export default function JournalPage(props: any) {
   const { journalId } = useParams();
@@ -58,41 +49,4 @@ export default function JournalPage(props: any) {
   );
 }
 
-const ArticleCard: FC<{
-  article: Article;
-}> = ({ article }) => (
-  <LinkBox as="article">
-    <Card py={4} isTruncated>
-      <HStack>
-        <LinkOverlay as={Link} to={`/article/${article._id}`}>
-          <HStack spacing={5}>
-            <Icon as={MdOutlineArticle} />
-            <Stack spacing={0}>
-              <Heading size="sm">{article.title}</Heading>
-              <Text color="gray.500">
-                {[...article.authors.sub, article.authors.main]
-                  .map((author) => author.displayName)
-                  .join(", ")}
-              </Text>
-            </Stack>
-          </HStack>
-        </LinkOverlay>
-        <Spacer />
-        <Tooltip
-          label={`${article.currentFile?.title
-            .split(".")
-            [
-              article.currentFile?.title.split(".").length - 1
-            ].toUpperCase()} | ${article.currentFile?.title}`}
-        >
-          <Link to={`/view/${article.currentFile?._id}`} target="_blank">
-            <IconButton
-              aria-label="article-file"
-              icon={<Icon as={MdOutlinePictureAsPdf} />}
-            />
-          </Link>
-        </Tooltip>
-      </HStack>
-    </Card>
-  </LinkBox>
-);
+

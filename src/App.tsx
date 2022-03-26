@@ -15,6 +15,8 @@ import AdminJournalDetail from "./pages/Admin/pages/AdminJournalDetail";
 import AdminJournalGroup from "./pages/Admin/pages/AdminJournalGroup";
 import AdminUser from "./pages/Admin/pages/AdminUser";
 import ArticlePage from "./pages/Article";
+import CopyEditorPage from "./pages/CopyEditor";
+import CopyEditorArticleDetail from "./pages/CopyEditor/Article";
 import EditorPage from "./pages/Editor";
 import EditorArticle from "./pages/Editor/pages/Article";
 import HomePage from "./pages/Home";
@@ -156,6 +158,16 @@ function App(): JSX.Element {
               >
                 <Route index element={<EditorPage />} />
                 <Route path="article/:articleId" element={<EditorArticle />} />
+              </Route>
+              <Route
+                path="copyeditor"
+                element={<PrivateRoute privateRole={Role.copyeditors} />}
+              >
+                <Route index element={<CopyEditorPage />} />
+                <Route
+                  path="article/:articleId"
+                  element={<CopyEditorArticleDetail />}
+                />
               </Route>
 
               <Route

@@ -70,31 +70,11 @@ import {
   FileDisplayButton,
   Card,
   CircularProgressInderterminate,
+  UserBox,
 } from "../../../utils/components";
 import GetStreamChat from "../../../utils/components/StreamChat/GetStreamChat";
 import ReviewSubmittedDetailModal from "./ReviewSubmittedDetailModal";
 
-const UserBox = ({ author, role }: any) => (
-  <Flex
-    align="center"
-    minW={150}
-    borderRadius={4}
-    border="1px solid"
-    borderColor="gray.700"
-    py={4}
-    px={2}
-    boxShadow="lg"
-  >
-    <Box pr={4} pl={2}>
-      <Avatar size="lg" src={author.photoURL} />
-    </Box>
-    <Box>
-      <Text fontWeight="bold">{author.displayName}</Text>
-      <Text>{author.email}</Text>
-      <Tag>{role}</Tag>
-    </Box>
-  </Flex>
-);
 interface ReviewRoundProps {
   reviewRound: ReviewRoundObject;
 }

@@ -22,7 +22,7 @@ import {
 import { useAppState } from "../../../hooks/useAppState";
 import { ReviewStatus } from "../../../types";
 import NotFound from "../../404";
-import ArticleDetailModal from "./ArticleDetailModal";
+import ArticleDetailModal from "../../../utils/components/ArticleDetailModal";
 import { RejectSubmissionModal } from "./RejectSubmissionModal";
 
 const StageOne: FC<{

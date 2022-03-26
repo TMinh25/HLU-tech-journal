@@ -1,56 +1,36 @@
 import { DownloadIcon } from "@chakra-ui/icons";
 import {
-  Button,
-  Center,
-  Heading,
-  Stack,
-  useDisclosure,
-  UseDisclosureReturn,
-  useColorModeValue,
-  Box,
-  Spacer,
-  Divider,
+  Badge, Box, Button,
+  Center, Divider,
   FormControl,
-  FormLabel,
-  Input,
-  Modal,
+  FormLabel, Heading, HStack, Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay,
-  Tooltip,
-  Badge,
-  HStack,
-  Text,
-  Tag,
+  ModalOverlay, Spacer, Stack, Tag, Text, Tooltip, useColorModeValue, useDisclosure,
+  UseDisclosureReturn
 } from "@chakra-ui/react";
-import { Select, chakraComponents } from "chakra-react-select";
+import { chakraComponents, Select } from "chakra-react-select";
 import { FC, useEffect, useState } from "react";
 import "react-day-picker/style.css";
 import { useDropzone } from "react-dropzone";
 import { useParams } from "react-router-dom";
 import {
-  useCompleteSubmissionMutation,
   useGetArticleQuery,
-  useRequestRevisionMutation,
-  useSendToCopyEditingMutation,
+  useRequestRevisionMutation
 } from "../../../../features/article";
 import { useUploadFileMutation } from "../../../../features/fileUpload";
 import { useAppState } from "../../../../hooks/useAppState";
 import { useAuth } from "../../../../hooks/useAuth";
 import IFile from "../../../../interface/file";
-import { ArticleStatus, Role } from "../../../../types";
 import {
   Card,
   CircularProgressInderterminate,
   FileDisplayButton,
-  FormControlComponent,
+  FormControlComponent
 } from "../../../../utils/components";
-import ConfirmCompleteSubmission from "./ConfirmCompleteSubmission";
-import SelectPublishedFileModal from "./SelectPublishedFileModal";
-import SendToCopyEditingModal from "./SendToCopyEditingModal";
 
 const PublishingStage: FC = (props) => {
   const { articleId } = useParams();

@@ -43,6 +43,7 @@ import {
 } from "@chakra-ui/react";
 import { useColorMode, useColorModeValue, chakra } from "@chakra-ui/system";
 import { useContext, useEffect, useMemo } from "react";
+import { BsNewspaper } from "react-icons/bs";
 import {
   FaFacebook,
   FaInstagram,
@@ -423,6 +424,19 @@ export default function LandingPage() {
                           Quản trị hệ thống
                         </Button>
                       )}
+                      {role === Role.copyeditors && (
+                        <Button
+                          isFullWidth
+                          borderRadius={0}
+                          px={11}
+                          iconSpacing="auto"
+                          rightIcon={<Icon as={BsNewspaper} />}
+                          onClick={() => navigate("/copyeditor")}
+                          mr={6}
+                        >
+                          Biên tập bài báo
+                        </Button>
+                      )}
                       {role === Role.reviewers && <ReviewersButton />}
                     </VStack>
                     <Button
@@ -477,6 +491,7 @@ export default function LandingPage() {
           <Outlet />
         </Box>
       </ScaleFade>
+      {/* <Footer /> */}
 
       {/* <Box>
         <Stack
@@ -496,65 +511,71 @@ export default function LandingPage() {
           <Text>© 2020 Chakra Templates. All rights reserved</Text>
         </Stack>
       </Box> */}
-      <Box
-        bg={useColorModeValue("gray.50", "gray.900")}
-        color={useColorModeValue("gray.700", "gray.200")}
-      >
-        <Container
-          as={Stack}
-          maxW={"6xl"}
-          py={4}
-          spacing={4}
-          justify={"center"}
-          align={"center"}
-        >
-          <Link to={"/"}>
-            <Image src={Logo} h={30} />
-          </Link>
+    </Box>
+  );
+}
 
-          {/* <Stack direction={"row"} spacing={6}>
+const Footer = () => {
+  return (
+    <Box
+      position={"relative"}
+      bg={useColorModeValue("gray.50", "gray.900")}
+      color={useColorModeValue("gray.700", "gray.200")}
+    >
+      <Container
+        as={Stack}
+        maxW={"6xl"}
+        py={4}
+        spacing={4}
+        justify={"center"}
+        align={"center"}
+      >
+        <Link to={"/"}>
+          <Image src={Logo} h={30} />
+        </Link>
+
+        {/* <Stack direction={"row"} spacing={6}>
             <Link to={"/"}>Home</Link>
             <Link to={"/"}>About</Link>
             <Link to={"/"}>Blog</Link>
             <Link to={"/"}>Contact</Link>
           </Stack> */}
-        </Container>
+      </Container>
 
-        <Box
-          borderTopWidth={1}
-          borderStyle={"solid"}
-          borderColor={useColorModeValue("gray.200", "gray.700")}
+      <Box
+        borderTopWidth={1}
+        borderStyle={"solid"}
+        borderColor={useColorModeValue("gray.200", "gray.700")}
+      >
+        <Container
+          as={Stack}
+          maxW={"6xl"}
+          py={4}
+          direction={{ base: "column", md: "row" }}
+          spacing={4}
+          justify={{ base: "center", md: "space-between" }}
+          align={{ base: "center", md: "center" }}
         >
-          <Container
-            as={Stack}
-            maxW={"6xl"}
-            py={4}
-            direction={{ base: "column", md: "row" }}
-            spacing={4}
-            justify={{ base: "center", md: "space-between" }}
-            align={{ base: "center", md: "center" }}
-          >
-            <Text>© 2022 HLU Tech Journal. All rights reserved</Text>
-            <Stack direction={"row"} spacing={6}>
-              <SocialButton
-                label={"Twitter"}
-                href={"https://www.facebook.com/sipp.minhh"}
-              >
-                <FaFacebook />
-              </SocialButton>
-              <SocialButton
-                label={"Instagram"}
-                href={"https://www.instagram.com/not.gr4y/"}
-              >
-                <FaInstagram />
-              </SocialButton>
-            </Stack>
-          </Container>
-        </Box>
+          <Text>© 2022 HLU Tech Journal. All rights reserved</Text>
+          <Stack direction={"row"} spacing={6}>
+            <SocialButton
+              label={"Twitter"}
+              href={"https://www.facebook.com/sipp.minhh"}
+            >
+              <FaFacebook />
+            </SocialButton>
+            <SocialButton
+              label={"Instagram"}
+              href={"https://www.instagram.com/not.gr4y/"}
+            >
+              <FaInstagram />
+            </SocialButton>
+          </Stack>
+        </Container>
       </Box>
     </Box>
   );
-}
+};
 
 const DesktopNav = ({ navigate }: { navigate: NavigateFunction }) => {
   const linkColor = useColorModeValue("gray.600", "gray.200");

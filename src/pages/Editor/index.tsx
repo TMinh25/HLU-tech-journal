@@ -102,6 +102,7 @@ function ReviewArticleBox(props: any) {
           ?.filter(
             (a) =>
               a.status === ArticleStatus.review ||
+              a.status === ArticleStatus.copyediting ||
               a.status === ArticleStatus.publishing
           )
           .reverse() ?? []

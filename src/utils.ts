@@ -40,6 +40,9 @@ export function toArticleStatusString(
     case ArticleStatus.publishing:
     case "publishing":
       return "Hoàn thiện bài báo";
+    case ArticleStatus.copyediting:
+    case "copyediting":
+      return "Biên tập bài báo";
     case ArticleStatus.completed:
     case "completed":
       return "Hoàn tất";
@@ -60,6 +63,7 @@ export function getArticleStatusType(
       return "success";
     case ArticleStatus.review:
     case ArticleStatus.publishing:
+    case ArticleStatus.copyediting:
     case ArticleStatus.submission:
       return "warning";
     default:

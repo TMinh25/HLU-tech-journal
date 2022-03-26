@@ -11,9 +11,11 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { FC } from "react";
-import Article from "../../../interface/article.model";
-import { AuthorBox } from "../../../utils/components";
-import { TagsComponent } from "../../../utils/components";
+import Article from "../../interface/article.model";
+import { AuthorBox } from ".";
+import { TagsComponent } from ".";
+import { Role } from "../../types";
+import { useAuth } from "../../hooks/useAuth";
 
 const ArticleDetailModal: FC<{
   article: Article | undefined;
@@ -21,6 +23,7 @@ const ArticleDetailModal: FC<{
   onClose: () => void;
 }> = ({ article, isOpen, onClose }) => {
   const { authors } = { ...article };
+  const { role } = useAuth();
 
   return (
     <>
@@ -53,16 +56,18 @@ const ArticleDetailModal: FC<{
                 <TagsComponent tags={article?.tags} />
               </Box>
               <Text color="gray.500">{article?.abstract}</Text>
-              <Box>
-                <Heading size="sm" mb={2}>
-                  Các tác giả
-                </Heading>
-                <Stack>
-                  {authors?.main && <AuthorBox author={authors.main} />}
-                  {authors?.sub?.length &&
-                    authors?.sub.map((a) => <AuthorBox author={a} />)}
-                </Stack>
-              </Box>
+              {role === Role.reviewers || role === Role.users || (
+                <Box>
+                  <Heading size="sm" mb={2}>
+                    Các tác giả
+                  </Heading>
+                  <Stack>
+                    {authors?.main && <AuthorBox author={authors.main} />}
+                    {authors?.sub?.length &&
+                      authors?.sub.map((a) => <AuthorBox author={a} />)}
+                  </Stack>
+                </Box>
+              )}
             </Stack>
           </ModalBody>
         </ModalContent>

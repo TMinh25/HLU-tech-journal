@@ -66,7 +66,6 @@ const FormControlComponent: FC<FormControlComponentProps> = ({
     <FormControl
       id={id}
       isInvalid={Boolean(touched && error)}
-      pb={4}
       {...{ ...rest, isRequired }}
     >
       <HStack>

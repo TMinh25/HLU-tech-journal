@@ -39,33 +39,7 @@ export default interface Article {
    */
   status: string;
   visible: boolean;
-  detail?: {
-    reject?: {
-      reason: string;
-      notes: string;
-    };
-    submission: {
-      file: IFile;
-      messageToEditor?: string;
-      orcid?: string;
-      website?: string;
-      helperFiles?: IFile[];
-    };
-    review?: ReviewRoundObject[];
-    publishing: {
-      draftFile?: IFile[];
-      request: {
-        _id?: string;
-        text?: string;
-        files: IFile[];
-        responseFile?: IFile;
-      }[];
-    };
-    copyediting: {
-      draftFiles: IFile[];
-      copyEditedFile?: IFile;
-    };
-  };
+  detail?: Detail;
   files: IFile[];
   reviewer?: string[];
   publishedFile?: IFile;
@@ -84,6 +58,36 @@ export interface Discussion {
   files?: IFile[];
   at: Date;
   seen: boolean;
+}
+
+export interface Detail {
+  reject?: {
+    reason: string;
+    notes: string;
+  };
+  submission: {
+    file: IFile;
+    messageToEditor?: string;
+    orcid?: string;
+    website?: string;
+    helperFiles?: IFile[];
+  };
+  review?: ReviewRoundObject[];
+  publishing: {
+    draftFile?: IFile[];
+    request: {
+      _id?: string;
+      text?: string;
+      files: IFile[];
+      responseFile?: IFile;
+    }[];
+  };
+  copyediting: {
+    draftFiles: IFile;
+    notes: string;
+    copyeditor: string;
+    copyEditedFile?: IFile;
+  };
 }
 
 export interface Contributor {
