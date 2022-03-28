@@ -9,7 +9,7 @@ import TokenService from "../services/token.service";
 import { setError } from "./appState";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: config.server.url,
+  baseUrl: new URL(config.server.url).toString(),
   prepareHeaders(headers) {
     const accessToken = TokenService.getLocalAccessToken();
     if (accessToken) {

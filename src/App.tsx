@@ -9,6 +9,10 @@ import { useAuth } from "./hooks/useAuth";
 import { Hooray } from "./Hooray";
 import { StreamChatContext } from "./main";
 import NotFound from "./pages/404";
+import About from "./pages/About";
+import Contact from "./pages/About/Contact";
+import EditorialBoard from "./pages/About/EditorialBoard";
+import Rules from "./pages/About/Rules";
 import AdminPage from "./pages/Admin";
 import AdminJournal from "./pages/Admin/pages/AdminJournal";
 import AdminJournalDetail from "./pages/Admin/pages/AdminJournalDetail";
@@ -187,6 +191,10 @@ function App(): JSX.Element {
                   element={<AuthorArticleDetail />}
                 />
               </Route>
+              <Route path="about" element={<About />} />
+              <Route path="editorial-board" element={<EditorialBoard />} />
+              <Route path="rules" element={<Rules />} />
+              <Route path="contact" element={<Contact />} />
             </Route>
             <Route path="view/:fileId" element={<PDFViewer />} />
             <Route path="signin" element={<SignInPage />} />

@@ -148,7 +148,8 @@ function HistoryArticleBox(props: any) {
             (a) =>
               a.status !== ArticleStatus.review &&
               a.status !== ArticleStatus.publishing &&
-              a.status !== ArticleStatus.submission
+              a.status !== ArticleStatus.copyediting &&
+              a.status !== ArticleStatus.submission 
           )
           .reverse() ?? []
       ),

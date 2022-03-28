@@ -15,10 +15,10 @@ export function toRoleString(role: Role | string | number | undefined): string {
       return "Quản trị viên";
     case 2:
     case Role.editors:
-      return "Ban Biên Tập";
+      return "Tổng Biên Tập";
     case 3:
     case Role.copyeditors:
-      return "Phản Biện";
+      return "Biên Tập Viên";
     case 4:
     case Role.reviewers:
       return "Phản Biện";

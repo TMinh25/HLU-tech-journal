@@ -9,9 +9,9 @@ import {
   Avatar,
   Box,
   Button,
+  ButtonGroup,
   CloseButton,
   Collapse,
-  Container,
   Flex,
   FormLabel,
   Heading,
@@ -19,8 +19,9 @@ import {
   Icon,
   IconButton,
   Image,
-  LinkBox,
-  LinkOverlay,
+  List,
+  ListIcon,
+  ListItem,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -41,17 +42,17 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import { useColorMode, useColorModeValue, chakra } from "@chakra-ui/system";
-import { useContext, useEffect, useMemo } from "react";
+import { useColorMode, useColorModeValue } from "@chakra-ui/system";
+import { useContext, useEffect } from "react";
 import { BsNewspaper } from "react-icons/bs";
 import {
-  FaFacebook,
-  FaInstagram,
+  FaGithub,
+  FaLinkedin,
   FaTwitter,
   FaUser,
   FaUserSecret,
-  FaYoutube,
 } from "react-icons/fa";
+import { GoLocation } from "react-icons/go";
 import { MdOutlinePowerSettingsNew } from "react-icons/md";
 import {
   Link,
@@ -62,6 +63,7 @@ import {
 } from "react-router-dom";
 import { useAppDispatch } from "../../app/hooks";
 import Logo from "../../assets/HLU Logo.png";
+import RealLogo from "../../assets/HLU Real Logo.png";
 import { useGetArticleForReviewerQuery } from "../../features/article";
 import { useSignOutMutation } from "../../features/auth/authApiSlice";
 import { resetCredentials } from "../../features/auth/authSlice";
@@ -71,7 +73,7 @@ import Article, { ReviewRoundObject } from "../../interface/article.model";
 import { StreamChatContext } from "../../main";
 import TokenService from "../../services/token.service";
 import { ArticleStatus, ReviewStatus, Role } from "../../types";
-import { Card, NotiBadge, SocialButton } from "../../utils/components";
+import { BigContainer, NotiBadge } from "../../utils/components";
 
 interface NavItem {
   label: string;
@@ -81,58 +83,42 @@ interface NavItem {
 }
 
 const NAV_ITEMS: Array<NavItem> = [
-  // {
-  //   label: "Tạp Chí Khoa Học",
-  //   href: "#",
-  //   children: [
-  //     {
-  //       label: "Số Mới Ra",
-  //       href: "/journal/recent-published",
-  //     },
-  //     {
-  //       label: "Đã Xuất Bản",
-  //       subLabel: "Các số cũ, các số cũ ",
-  //       href: "/journal/published",
-  //     },
-  //     {
-  //       label: "Đang Xuất Bản",
-  //       subLabel: "Các số đang trong quá trình biên tập",
-  //       href: "/journal/publishing",
-  //     },
-  //   ],
-  // },
-  // {
-  //   label: "Hội thảo Khoa Học",
-  //   href: "#",
-  //   children: [
-  //     {
-  //       label: "Đã Xuất Bản",
-  //       subLabel: "Các hội thảo đã tổ chức",
-  //       href: "/",
-  //     },
-  //     {
-  //       label: "Đang Xuất Bản",
-  //       subLabel: "Hội thảo sắp tới...",
-  //       href: "/",
-  //     },
-  //   ],
-  // },
   {
-    label: "Số Mới Ra",
-    href: "/journal/recent-published",
-  },
-  {
-    label: "Số đã xuất Bản",
-    subLabel: "Các số cũ, các số cũ ",
+    label: "Các số đã đăng",
     href: "/journal/published",
+    children: [
+      {
+        label: "Số Mới Ra",
+        subLabel: "Số mới xuất bản gần đây nhất",
+        href: "/journal/recent-published",
+      },
+      {
+        label: "Số Đã Xuất Bản",
+        subLabel: "Các số cũ, các số đã xuất bản",
+        href: "/journal/published",
+      },
+    ],
   },
   {
-    label: "Số đang Xuất Bản",
-    subLabel: "Các số đang trong quá trình biên tập",
-    href: "/journal/publishing",
+    label: "Giới Thiệu Về Tạp Chí",
+    href: "/about",
+    children: [
+      {
+        label: "Hội Đồng Biên Tập",
+        href: "/editorial-board",
+      },
+      {
+        label: "Thể Lệ Tạp Chí",
+        href: "/rules",
+      },
+      {
+        label: "Liên Hệ",
+        href: "/contact",
+      },
+    ],
   },
   {
-    label: "Đăng Kí Nộp Bản Thảo",
+    label: "Nộp Bản Thảo",
     href: "/submission",
   },
 ];
@@ -491,89 +477,117 @@ export default function LandingPage() {
           <Outlet />
         </Box>
       </ScaleFade>
-      {/* <Footer /> */}
-
-      {/* <Box>
-        <Stack
-          maxW={"6xl"}
-          py={4}
-          direction={{ base: "column", md: "row" }}
-          spacing={4}
-          justify={{ base: "center", md: "space-between" }}
-          align={{ base: "center", md: "center" }}
-        >
-          <Image
-            src={Logo}
-            h={30}
-            onClick={() => navigate("/")}
-            cursor={"pointer"}
-          />
-          <Text>© 2020 Chakra Templates. All rights reserved</Text>
-        </Stack>
-      </Box> */}
+      <hr />
+      <Footer />
     </Box>
   );
 }
 
 const Footer = () => {
   return (
-    <Box
-      position={"relative"}
-      bg={useColorModeValue("gray.50", "gray.900")}
-      color={useColorModeValue("gray.700", "gray.200")}
+    <BigContainer
+      maxW={"8xl"}
+      as="footer"
+      role="contentinfo"
+      pb={{ base: "4", md: "8" }}
+      pt="0"
+      px="0"
     >
-      <Container
-        as={Stack}
-        maxW={"6xl"}
-        py={4}
-        spacing={4}
-        justify={"center"}
-        align={"center"}
-      >
-        <Link to={"/"}>
-          <Image src={Logo} h={30} />
-        </Link>
-
-        {/* <Stack direction={"row"} spacing={6}>
-            <Link to={"/"}>Home</Link>
-            <Link to={"/"}>About</Link>
-            <Link to={"/"}>Blog</Link>
-            <Link to={"/"}>Contact</Link>
-          </Stack> */}
-      </Container>
-
-      <Box
-        borderTopWidth={1}
-        borderStyle={"solid"}
-        borderColor={useColorModeValue("gray.200", "gray.700")}
-      >
-        <Container
-          as={Stack}
-          maxW={"6xl"}
-          py={4}
-          direction={{ base: "column", md: "row" }}
-          spacing={4}
-          justify={{ base: "center", md: "space-between" }}
-          align={{ base: "center", md: "center" }}
+      <Box bg="#fff46e" mb={4}>
+        <Text
+          fontSize="sm"
+          color="subtle"
+          textAlign={"center"}
+          py={{ base: "2", md: "4" }}
         >
-          <Text>© 2022 HLU Tech Journal. All rights reserved</Text>
-          <Stack direction={"row"} spacing={6}>
-            <SocialButton
-              label={"Twitter"}
-              href={"https://www.facebook.com/sipp.minhh"}
-            >
-              <FaFacebook />
-            </SocialButton>
-            <SocialButton
-              label={"Instagram"}
-              href={"https://www.instagram.com/not.gr4y/"}
-            >
-              <FaInstagram />
-            </SocialButton>
-          </Stack>
-        </Container>
+          Bản quyền © 2022 TẠP CHÍ KHOA HỌC CÔNG NGHỆ ĐẠI HỌC HẠ LONG
+        </Text>
       </Box>
-    </Box>
+      <Stack spacing={{ base: "4", md: "5" }}>
+        <Flex>
+          <Stack flex={2} spacing={4}>
+            <Text>TRƯỜNG ĐẠI HỌC HẠ LONG</Text>
+            <List spacing={4}>
+              <ListItem>
+                <ListIcon as={GoLocation} color="#eac71c" />
+                Cơ sở 1: Số 258, đường Bạch Đằng, phường Nam Khê - thành phố
+                Uông Bí - tỉnh Quảng Ninh
+              </ListItem>
+              <ListItem>
+                <ListIcon as={GoLocation} color="#eac71c" />
+                Cơ sở 2: Số 58 - đường Nguyễn Văn Cừ - thành phố Hạ Long - tỉnh
+                Quảng Ninh
+              </ListItem>
+            </List>
+          </Stack>
+          <Stack flex={1}>
+            Thông tin liên hệ:
+            <Text>Website: daihochalong.edu.vn</Text>
+            <Text>Email: tonghop@daihochalong.edu.vn</Text>
+            <Text>Điện thoại: (84 - 0203).3850304</Text>
+            <Text>Fax: (84 - 0203).3852174s</Text>
+          </Stack>
+        </Flex>
+      </Stack>
+    </BigContainer>
+
+    // <Box
+    //   position={"relative"}
+    //   bg={useColorModeValue("gray.50", "gray.900")}
+    //   color={useColorModeValue("gray.700", "gray.200")}
+    // >
+    //   <Container
+    //     as={Stack}
+    //     maxW={"6xl"}
+    //     py={4}
+    //     spacing={4}
+    //     justify={"center"}
+    //     align={"center"}
+    //   >
+    //     <Link to={"/"}>
+    //       <Image src={Logo} h={30} />
+    //     </Link>
+
+    //     {/* <Stack direction={"row"} spacing={6}>
+    //         <Link to={"/"}>Home</Link>
+    //         <Link to={"/"}>About</Link>
+    //         <Link to={"/"}>Blog</Link>
+    //         <Link to={"/"}>Contact</Link>
+    //       </Stack> */}
+    //   </Container>
+
+    //   <Box
+    //     borderTopWidth={1}
+    //     borderStyle={"solid"}
+    //     borderColor={useColorModeValue("gray.200", "gray.700")}
+    //   >
+    //     <Container
+    //       as={Stack}
+    //       maxW={"6xl"}
+    //       py={4}
+    //       direction={{ base: "column", md: "row" }}
+    //       spacing={4}
+    //       justify={{ base: "center", md: "space-between" }}
+    //       align={{ base: "center", md: "center" }}
+    //     >
+    //       <Text>© 2022 HLU Tech Journal. All rights reserved</Text>
+    //       <Stack direction={"row"} spacing={6}>
+    //         <SocialButton
+    //           label={"Twitter"}
+    //           href={"https://www.facebook.com/sipp.minhh"}
+    //         >
+    //           <FaFacebook />
+    //         </SocialButton>
+    //         <SocialButton
+    //           label={"Instagram"}
+    //           href={"https://www.instagram.com/not.gr4y/"}
+    //         >
+    //           <FaInstagram />
+    //         </SocialButton>
+    //       </Stack>
+    //     </Container>
+    //   </Box>
+    // </Box>
   );
 };
 

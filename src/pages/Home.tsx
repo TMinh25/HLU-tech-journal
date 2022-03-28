@@ -14,7 +14,7 @@ import {
   SimpleGrid,
   useColorModeValue,
 } from "@chakra-ui/react";
-import Logo from "../favicon.svg";
+import Logo from "../assets/HLU Real Logo.png";
 import Illustration from "../hero-image.svg";
 import { Link } from "react-router-dom";
 import { NotificationCard } from "../utils/components";
@@ -39,16 +39,20 @@ export default function HomePage() {
           <Center>
             <Image src={Logo} h={100} cursor={"pointer"} />
           </Center>
-          Số khoa học{" "}
+          Tạp chí Khoa học{" "}
           <Text as={"span"} color={"blue.400"}>
             Đại học Hạ Long
           </Text>
         </Heading>
         <Text color={"gray.500"} maxW={"3xl"}>
-          Tạp chí công nghệ Đại học Hạ Long là tạp chí chuyên nghành công nghệ
-          và các thông tin liên quan. Tạp chí cung cấp cơ sở lí luận, kiến thức
-          nghiệp vụ trong lĩnh vực công nghệ thông tin. Giới thiệu các công
-          trình nghiên cứu trong và ngoài nước.
+          Tạp chí Khoa Đại học Hạ Long hoạt động theo Giấy phép hoạt động tạp
+          chí in số 708/GP/BTTTTngày 03 tháng 11 năm 2021 của Bộ trưởng Bộ Thông
+          tin và Truyền thông và được Trung tâm thông tin Khoa học và Công nghệ
+          Quốc gia, Bộ Khoa học và Công nghệ cấp mã số{" "}
+          <Text as="span" color={useColorModeValue("gray.800", "white")}>
+            ISSN 2815-5521
+          </Text>{" "}
+          năm 2021.
         </Text>
         <Stack spacing={6} direction={"row"}>
           <Button
@@ -62,7 +66,7 @@ export default function HomePage() {
           >
             Nộp bản thảo
           </Button>
-          <Button visibility={"hidden"} rounded={"full"} px={6}>
+          <Button as={Link} to={"/about"} rounded={"full"} px={6}>
             Tìm hiểu thêm
           </Button>
         </Stack>
