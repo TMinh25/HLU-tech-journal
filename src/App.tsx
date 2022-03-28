@@ -6,7 +6,6 @@ import { useFetchAuthInfoMutation } from "./features/auth/authApiSlice";
 import { setCredentials, setIsAuthenticating } from "./features/auth/authSlice";
 import { useAppState } from "./hooks/useAppState";
 import { useAuth } from "./hooks/useAuth";
-import { Hooray } from "./Hooray";
 import { StreamChatContext } from "./main";
 import NotFound from "./pages/404";
 import About from "./pages/About";
@@ -114,10 +113,6 @@ function App(): JSX.Element {
             <Route path="/" element={<LandingPage />}>
               <Route index element={<HomePage />} />
               <Route path="*" element={<NotFound />} />
-              <Route path="hooray" element={<PrivateRoute />}>
-                <Route index element={<Hooray />} />
-              </Route>
-              <Route path="hooray2" element={<Hooray />} />
               <Route path="message/:channelId" element={<MessagePage />} />
               <Route path="article">
                 {/* <Route index element={<JournalPage />} /> */}
@@ -136,7 +131,6 @@ function App(): JSX.Element {
               <Route path="submission" element={<PrivateRoute />}>
                 <Route index element={<SubmissionPage />} />
               </Route>
-              <Route path="seminor" element={<Hooray />} />
               <Route path="user/:userId">
                 <Route index element={<ProfilePage />} />
               </Route>

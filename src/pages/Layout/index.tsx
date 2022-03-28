@@ -496,7 +496,7 @@ const Footer = () => {
       <Box bg="#fff46e" mb={4}>
         <Text
           fontSize="sm"
-          color="subtle"
+          color="#696969"
           textAlign={"center"}
           py={{ base: "2", md: "4" }}
         >
