@@ -10,16 +10,9 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { FC } from "react";
-<<<<<<< HEAD
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { useGetAllJournalsQuery } from "../../../features/journal";
 import { BigContainer, Card } from "../../../utils/components";
-=======
-import { useGetAllJournalGroupsQuery } from "../../../features/journalGroup";
-import { BigContainer, Card } from "../../../utils/components";
-import { AiOutlineInfoCircle } from "react-icons/ai";
-import { useGetAllJournalsQuery } from "../../../features/journal";
->>>>>>> 165182b955d19798f8d3fd92cb4876eb916f0780
 
 const AdminJournal: FC = () => {
   const journals = useGetAllJournalsQuery();
@@ -51,10 +44,7 @@ const AdminJournal: FC = () => {
               ) : (
                 <></>
               )}
-<<<<<<< HEAD
               <Button>Thêm bài báo</Button>
-=======
->>>>>>> 165182b955d19798f8d3fd92cb4876eb916f0780
             </Stack>
           </Stack>
         </Skeleton>

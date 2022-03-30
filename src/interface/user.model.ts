@@ -7,11 +7,7 @@ export default interface User {
   /** GetStream.io token */
   streamToken: string;
   /** Bí danh */
-<<<<<<< HEAD
   aliases?: string;
-=======
-  aliases: string;
->>>>>>> 165182b955d19798f8d3fd92cb4876eb916f0780
   /** Giới tính
    * ```js
    * 0 = "nữ"

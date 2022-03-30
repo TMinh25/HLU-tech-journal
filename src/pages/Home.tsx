@@ -22,11 +22,8 @@ import { useGetAllNotificationsQuery } from "../features/notification";
 
 export default function HomePage() {
   const notifications = useGetAllNotificationsQuery();
-<<<<<<< HEAD
   var message = "Hello World";
   console.log(message);
-=======
->>>>>>> 165182b955d19798f8d3fd92cb4876eb916f0780
 
   return (
     <Container maxW={"5xl"} __css={{ height: "calc(100vh - 60px)" }}>

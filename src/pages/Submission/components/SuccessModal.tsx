@@ -27,18 +27,10 @@ const SuccessModal: FC<{
       onClose={onClose}
       isCentered
       motionPreset="slideInBottom"
-<<<<<<< HEAD
       size={"4xl"}
     >
       <ModalOverlay />
       <ModalContent>
-=======
-      size={"lg"}
-    >
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Thành Công</ModalHeader>
->>>>>>> 165182b955d19798f8d3fd92cb4876eb916f0780
         <ModalCloseButton />
         <ModalBody>
           <Box textAlign="center" py={10} px={6}>
