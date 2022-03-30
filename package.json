@@ -1,0 +1,98 @@
+{
+  "name": "hlu-tech-journal",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@babel/core": "7.0.0",
+    "@chakra-ui/icons": "^1.1.1",
+    "@chakra-ui/react": "^1.8.5",
+    "@emotion/react": "^11.8.2",
+    "@emotion/styled": "^11.8.1",
+    "@ggascoigne/namor": "^2.0.4",
+    "@pdftron/pdfjs-express": "^8.3.0",
+    "@pdftron/pdfjs-express-viewer": "^8.3.0",
+    "@pdftron/webviewer": "^8.3.1",
+    "@reduxjs/toolkit": "^1.7.1",
+    "@types/emoji-mart": "^3.0.9",
+    "@types/history": "^5.0.0",
+    "@types/match-sorter": "^6.0.0",
+    "@types/react-image-gallery": "^1.0.5",
+    "@types/react-router": "^5.1.18",
+    "@types/react-router-dom": "^5.3.2",
+    "@types/react-table": "^7.7.9",
+    "chakra-react-select": "^3.0.5",
+    "date-fns": "^2.28.0",
+    "downshift": "^6.1.7",
+    "emoji-mart": "^3.0.1",
+    "formik": "^2.2.9",
+    "framer-motion": "5",
+    "getstream": "^8.0.0",
+    "global": "^4.4.0",
+    "history": "^5.3.0",
+    "isomorphic-ws": "4.0.1",
+    "jquery": "^3.6.0",
+    "match-sorter": "^6.3.1",
+    "moment": "^2.29.1",
+    "prettier": "^2.6.0",
+    "react": "^17.0.2",
+    "react-day-picker": "8.0.0-beta.29",
+    "react-dom": "^17.0.2",
+    "react-dropzone": "^11.5.1",
+    "react-file-utils": "^1.1.10",
+    "react-icons": "^4.3.1",
+    "react-image-gallery": "^1.2.7",
+    "react-redux": "^7.2.6",
+    "react-router": "^6.2.1",
+    "react-router-dom": "^6.2.1",
+    "react-table": "^7.7.0",
+    "react-textarea-autosize": "^8.3.3",
+    "react-use": "^17.3.2",
+    "react-virtuoso": "2.8.0",
+    "redux": "^4.1.2",
+    "redux-toolkit": "^1.1.2",
+    "stream-chat": "5.0.0",
+    "stream-chat-react": "7.0.0",
+    "ws": "*",
+    "yup": "^0.32.11"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.21",
+    "@types/react": "^17.0.33",
+    "@types/react-dom": "^17.0.10",
+    "@types/react-table": "^7.7.9",
+    "@vitejs/plugin-react": "^1.0.7",
+    "eslint-config-prettier": "^8.4.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "husky": "^7.0.4",
+    "typescript": "~4.5.5",
+    "typesync": "^0.8.0",
+    "vite": "^2.7.2"
+  },
+  "resolutions": {
+    "@types/react": "link:../../node_modules/@types/react",
+    "@types/react-dom": "link:../../node_modules/@types/react-dom"
+  },
+  "importSort": {
+    ".js, .jsx": {
+      "style": "module"
+    },
+    ".ts, .tsx": {
+      "style": "module",
+      "parser": "typescript"
+    }
+  },
+  "staticFiles": {
+    "staticPath": [
+      {
+        "staticPath": "node_modules/@pdftron/pdfjs-express/public",
+        "staticOutDir": "lib"
+      }
+    ],
+    "watcherGlob": "**"
+  }
+}
