@@ -260,7 +260,6 @@ export default function LandingPage() {
     }
     return null;
   };
-
   return (
     <Box>
       {authenticated && (

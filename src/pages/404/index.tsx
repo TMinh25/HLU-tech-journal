@@ -1,6 +1,16 @@
 import {
+<<<<<<< HEAD
   Box, Button, Flex, Heading,
   Text, useColorModeValue
+=======
+  Box,
+  Heading,
+  Text,
+  Button,
+  Center,
+  Flex,
+  useColorModeValue,
+>>>>>>> 165182b955d19798f8d3fd92cb4876eb916f0780
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 

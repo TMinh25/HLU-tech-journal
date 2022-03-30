@@ -6,24 +6,19 @@ import {
   Divider,
   Flex,
   FormControl,
-  FormErrorMessage,
-  FormHelperText,
-  FormLabel,
+  FormErrorMessage, FormLabel,
   Heading,
   HStack,
   Icon,
   IconButton,
   Input,
   InputGroup,
-  InputRightElement,
-  Kbd,
-  Link,
-  Radio,
+  InputRightElement, Link,
   Select,
   Spacer,
   Stack,
   Text,
-  useColorModeValue,
+  useColorModeValue
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
@@ -36,8 +31,7 @@ import { useUploadFileMutation } from "../../features/fileUpload";
 import { useAppState } from "../../hooks/useAppState";
 import {
   AvatarDropzone,
-  FormControlComponent,
-  TagsComponent,
+  FormControlComponent
 } from "../../utils/components";
 
 export default function SignUpPage() {
@@ -107,6 +101,7 @@ export default function SignUpPage() {
     onSubmit: (signUpForm) => {
       console.log(typeof signUpForm);
       signUpForm.role = isReviewer ? 4 : 5;
+
       signUp(signUpForm)
         .unwrap()
         .then((user) => {

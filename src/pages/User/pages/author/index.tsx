@@ -261,12 +261,19 @@ const AuthorArticleDetail: FC = () => {
       <BigContainer>
         <Stack spacing={4}>
           <Flex align="center">
+<<<<<<< HEAD
             <Heading size="lg" >
               {article.data?.title}
               <Tag ml={4} colorScheme={steps[currentStep].colorScheme}>
                 {steps[currentStep].title}
               </Tag>
             </Heading>
+=======
+            <Heading size="lg">{article.data?.title}</Heading>
+            <Tag ml={4} colorScheme={steps[currentStep].colorScheme}>
+              {steps[currentStep].title}
+            </Tag>
+>>>>>>> 165182b955d19798f8d3fd92cb4876eb916f0780
           </Flex>
 
           {article.data?.tags?.length && (

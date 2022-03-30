@@ -11,6 +11,10 @@
     "download": "Tải xuống",
     "edit": "Chỉnh sửa",
     "enterFullscreen": "Toàn màn hình",
+<<<<<<< HEAD
+=======
+    "themeChangeButton": "Chế độ tối",
+>>>>>>> 165182b955d19798f8d3fd92cb4876eb916f0780
     "exitFullscreen": "Thoát chế độ toàn màn hình",
     "fit": "Làm vừa",
     "fitToPage": "Làm vừa theo trang",
@@ -67,6 +71,10 @@
     "searchOverlay": "Tìm kiếm",
     "menuOverlay": "Menu",
     "miscToolsButton": "Công cụ khác",
+<<<<<<< HEAD
+=======
+    "searchPanel": "Tìm kiếm",
+>>>>>>> 165182b955d19798f8d3fd92cb4876eb916f0780
     "notesPanel": "Ghi chú",
     "outlinesPanel": "Tóm tắt",
     "shapeToolsButton": "Công cụ hình",
@@ -137,7 +145,11 @@
       "warningPopupTitle": "Áp Dụng Biên Tập"
     },
     "searchPanel": {
+<<<<<<< HEAD
       "caseSensitive": "Nhạy cảm viết hoa",
+=======
+      "caseSensitive": "Viết hoa",
+>>>>>>> 165182b955d19798f8d3fd92cb4876eb916f0780
       "wholeWordOnly": "Toàn bộ từ"
     },
     "signatureOverlay": {
@@ -195,4 +207,8 @@
     "select": "Chọn",
     "Marquee": "Thu Phóng Màn"
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 165182b955d19798f8d3fd92cb4876eb916f0780
