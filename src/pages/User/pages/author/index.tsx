@@ -21,6 +21,7 @@ import { useAuth } from "../../../../hooks/useAuth";
 import IFile from "../../../../interface/file";
 import { StreamChatContext } from "../../../../main";
 import { ArticleStatus } from "../../../../types";
+import { isEmptyObject } from "../../../../utils";
 import {
   BigContainer,
   Card,
@@ -261,7 +262,7 @@ const AuthorArticleDetail: FC = () => {
       <BigContainer>
         <Stack spacing={4}>
           <Flex align="center">
-            <Heading size="lg" >
+            <Heading size="lg">
               {article.data?.title}
               <Tag ml={4} colorScheme={steps[currentStep].colorScheme}>
                 {steps[currentStep].title}
@@ -325,6 +326,17 @@ const AuthorArticleDetail: FC = () => {
                           />
                         )
                       )}
+                    </>
+                  )}
+                  {isEmptyObject(article.data?.publishedFile) && (
+                    <>
+                      <Heading size="xs">Tài liệu xuất bản</Heading>
+                      {/* remove duplicate files */}
+                      <FileDisplayButton
+                        key={`published-file`}
+                        file={article.data?.publishedFile}
+                        displayId
+                      />
                     </>
                   )}
                 </>

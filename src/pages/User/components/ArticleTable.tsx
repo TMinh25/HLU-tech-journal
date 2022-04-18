@@ -38,10 +38,10 @@ const ArticleTable: FC<
 
   const columns: readonly Column<Article>[] = useMemo(
     () => [
-      {
-        Header: "ID",
-        accessor: (row) => <Text isTruncated>{row?._id}</Text>,
-      },
+      // {
+      //   Header: "ID",
+      //   accessor: (row) => <Text isTruncated>{row?._id}</Text>,
+      // },
       {
         Header: "Tên",
         accessor: (row) => {
@@ -138,8 +138,8 @@ const ArticleTable: FC<
                           {...cell.getCellProps({
                             key: `author-article-cell-${tdIndex}`,
                           })}
-                          maxW={tdIndex == 0 ? "3xs" : "base"}
-                          p={tdIndex == 2 ? 0 : "base"}
+                          maxW={tdIndex == 0 ? "80" : "base"}
+                          // p={tdIndex == 1 ? 0 : "base"}
                           isTruncated
                         >
                           {cell.render("Cell")}

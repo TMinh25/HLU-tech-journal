@@ -13,12 +13,15 @@ import {
   chakra,
   SimpleGrid,
   useColorModeValue,
+  Link as ChakraLink,
+  VStack,
 } from "@chakra-ui/react";
 import Logo from "../assets/HLU Real Logo.png";
 import Illustration from "../hero-image.svg";
 import { Link } from "react-router-dom";
 import { NotificationCard } from "../utils/components";
 import { useGetAllNotificationsQuery } from "../features/notification";
+import { getFirstElementsOfArray } from "../utils";
 
 export default function HomePage() {
   const notifications = useGetAllNotificationsQuery();
@@ -91,18 +94,20 @@ export default function HomePage() {
             <Center color={"gray.500"}>
               Thông báo về các số nhận bản thảo, hoặc về các nội dung cần thiết
             </Center>
-            <SimpleGrid
-              columns={{ base: 1, xl: 2 }}
-              spacing={"20"}
-              mt={16}
-              mx={"auto"}
-            >
-              {notifications.data
-                ?.slice(Math.max(notifications.data?.length - 3, 0))
-                ?.map((noti) => (
-                  <NotificationCard title={noti.title} content={noti.content} />
-                ))}
-            </SimpleGrid>
+
+            <Box>
+              {getFirstElementsOfArray(notifications.data, 4).map((noti) => (
+                <NotificationCard {...noti} />
+              ))}
+              <ChakraLink
+                color={"gray"}
+                borderRadius={"sm"}
+                as={Link}
+                to={"/notifications"}
+              >
+                Xem Thêm Thông Báo
+              </ChakraLink>
+            </Box>
           </Flex>
         )}
       </Stack>

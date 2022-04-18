@@ -1,21 +1,31 @@
 import { Text } from "@chakra-ui/react";
-import { FC, useMemo } from "react";
+import { FC, ReactElement, useMemo } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAppState } from "../../hooks/useAppState";
 import { useAuth } from "../../hooks/useAuth";
 import { Role } from "../../types";
 import { toRoleString } from "../../utils";
+import { Component } from "react";
 
-const PrivateRoute: FC<{ privateRole?: Role }> = ({ privateRole }) => {
+const PrivateRoute: FC<{
+  privateRole?: Role;
+  Layout?: any;
+}> = ({ privateRole, Layout }) => {
   const location = useLocation();
   const { authenticated, role, currentUser } = useAuth();
   const { toast } = useAppState();
 
   const privateOutlet = useMemo(() => {
-    console.log(role <= Number(privateRole));
     if (Boolean(privateRole)) {
       if (authenticated && role === privateRole) {
         toast.closeAll();
+        if (Layout) {
+          return (
+            <Layout>
+              <Outlet />
+            </Layout>
+          );
+        }
         return <Outlet />;
       } else {
         toast.closeAll();

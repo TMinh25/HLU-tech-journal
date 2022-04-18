@@ -1,16 +1,29 @@
 import { DownloadIcon } from "@chakra-ui/icons";
 import {
-  Badge, Box, Button,
-  Center, Divider,
+  Badge,
+  Box,
+  Button,
+  Center,
+  Divider,
   FormControl,
-  FormLabel, Heading, HStack, Modal,
+  FormLabel,
+  Heading,
+  HStack,
+  Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay, Spacer, Stack, Tag, Text, Tooltip, useColorModeValue, useDisclosure,
-  UseDisclosureReturn
+  ModalOverlay,
+  Spacer,
+  Stack,
+  Tag,
+  Text,
+  Tooltip,
+  useColorModeValue,
+  useDisclosure,
+  UseDisclosureReturn,
 } from "@chakra-ui/react";
 import { chakraComponents, Select } from "chakra-react-select";
 import { FC, useEffect, useState } from "react";
@@ -19,7 +32,7 @@ import { useDropzone } from "react-dropzone";
 import { useParams } from "react-router-dom";
 import {
   useGetArticleQuery,
-  useRequestRevisionMutation
+  useRequestRevisionMutation,
 } from "../../../../features/article";
 import { useUploadFileMutation } from "../../../../features/fileUpload";
 import { useAppState } from "../../../../hooks/useAppState";
@@ -29,7 +42,7 @@ import {
   Card,
   CircularProgressInderterminate,
   FileDisplayButton,
-  FormControlComponent
+  FormControlComponent,
 } from "../../../../utils/components";
 
 const PublishingStage: FC = (props) => {
@@ -55,7 +68,7 @@ const PublishingStage: FC = (props) => {
         <Stack minH={200}>
           <Heading size="md">Yêu cầu hoàn thiện bài báo</Heading>
           {article.data?.detail?.publishing &&
-          article.data.detail.publishing.request.length ? (
+          article.data.detail.publishing.request?.length ? (
             <>
               {article.data.detail.publishing.request.map((r) => (
                 <>

@@ -167,3 +167,23 @@ export async function copyTextToClipboard(text: string) {
 export function getCountryName(slug: string): string | undefined {
   return countries.find((country) => country.slug === slug)?.name;
 }
+
+export function isEmptyObject(obj: any): boolean {
+  // because Object.keys(new Date()).length === 0;
+  // we have to do some additional check
+  return !(
+    obj && // 👈 null and undefined check
+    Object.keys(obj).length === 0 &&
+    Object.getPrototypeOf(obj) === Object.prototype
+  );
+}
+
+export const getLastElementsOfArray = <Type>(
+  array: Type[],
+  number: number
+): Type[] => array?.slice(Math.max(array?.length - number, 0));
+
+export const getFirstElementsOfArray = <Type>(
+  array: Type[],
+  number: number
+): Type[] => array?.slice(0, Math.max(number, array.length - number));

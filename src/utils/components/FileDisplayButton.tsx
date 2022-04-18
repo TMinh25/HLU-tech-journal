@@ -24,13 +24,14 @@ const FileDisplayButton: FC<
     onChangeFile?: () => void;
     onRemoveFile?: () => void;
     displayId?: boolean;
+    displayDate?: boolean;
   } & ButtonProps
 > = ({
   file,
   systemFile,
   onChangeFile,
   onRemoveFile,
-  displayId = false,
+  displayDate = true,
   ...props
 }) => {
   return (
@@ -51,12 +52,20 @@ const FileDisplayButton: FC<
                 </HStack>
 
                 <Spacer />
-                {displayId && (
+                {/* {displayId && (
                   <Text
                     isTruncated
                     color={useColorModeValue("gray.600", "gray.400")}
                   >
                     {file?._id}
+                  </Text>
+                )} */}
+                {displayDate && file?.createdAt && (
+                  <Text
+                    isTruncated
+                    color={useColorModeValue("gray.600", "gray.400")}
+                  >
+                    {new Date(file?.createdAt).toLocaleString("vi")}
                   </Text>
                 )}
               </Button>

@@ -1,5 +1,4 @@
 import {
-  BoxProps,
   Heading,
   HStack,
   Icon,
@@ -17,12 +16,10 @@ import { Link } from "react-router-dom";
 import Article from "../../interface/article.model";
 import { Card } from ".";
 
-const ArticleCard: FC<
-  BoxProps & {
-    article: Article;
-    publishedFile?: boolean;
-  }
-> = ({ article, publishedFile = true }) => (
+const ArticleCard: FC<{
+  article: Article;
+  publishedFile?: boolean;
+}> = ({ article, publishedFile = true }) => (
   <LinkBox as="article">
     <Card py={4} isTruncated>
       <HStack>

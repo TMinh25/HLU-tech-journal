@@ -16,13 +16,14 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-    "baseUrl": "./",
-    "paths": {
-      "*": ["src/@types/*"]
-    },
-    "typeRoots": ["src/types", "./node_modules/@types"]
+    "jsx": "react-jsx"
+    // "baseUrl": "./",
+    // "paths": {
+    //   "@/*": ["src/*"],
+    //   "@/assets/*": ["src/assets/*"]
+    // },
+    // "typeRoots": ["src/types", "./node_modules/@types"]
   },
-  "include": ["src", "src/types"],
+  "include": ["src", "**/*.ts", "**/*.tsx", "types/pdftron.d.ts"],
   "exclude": ["node_modules"]
 }
