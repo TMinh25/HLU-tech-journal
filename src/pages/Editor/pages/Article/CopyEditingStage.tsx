@@ -1,24 +1,24 @@
 import {
   Alert,
-  AlertIcon, Button, Divider, Heading,
+  AlertIcon,
+  Button,
+  Divider,
+  Heading,
   Stack,
   useDisclosure,
-  UseDisclosureReturn
+  UseDisclosureReturn,
 } from "@chakra-ui/react";
 import { FC, useEffect, useState } from "react";
 import "react-day-picker/style.css";
 import { useParams } from "react-router-dom";
-import {
-  useGetArticleQuery
-} from "../../../../features/article";
+import { useGetArticleQuery } from "../../../../features/article";
 import { useGetUserQuery } from "../../../../features/user";
 import { useAppState } from "../../../../hooks/useAppState";
 import { useAuth } from "../../../../hooks/useAuth";
 import IFile from "../../../../interface/file";
 import { ArticleStatus, Role } from "../../../../types";
-import {
-  Card, FileDisplayButton, UserBox
-} from "../../../../utils/components";
+import { isEmptyObject } from "../../../../utils";
+import { Card, FileDisplayButton, UserBox } from "../../../../utils/components";
 import SelectPublishedFileModal from "./SelectPublishedFileModal";
 
 const CopyEditingStage: FC<{
@@ -86,7 +86,7 @@ const CopyEditingStage: FC<{
 
         <Stack>
           <Heading size="md">Xuất bản bài báo</Heading>
-          {publishedFile && (
+          {isEmptyObject(publishedFile) && (
             <FileDisplayButton file={publishedFile} displayId />
           )}
           {role === Role.editors &&

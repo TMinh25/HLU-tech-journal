@@ -30,7 +30,10 @@ import PublishedJournalPage from "./pages/Journal/page/PublishedJournalPage";
 import PublishingJournalPage from "./pages/Journal/page/PublishingJournalPage";
 import RecentPublishedJournalPage from "./pages/Journal/page/RecentPublishedJournalPage";
 import LandingPage from "./pages/Layout";
+import AdminLayout from "./pages/Layout/AdminLayout";
 import MessagePage from "./pages/Message";
+import Notifications from "./pages/Notifications";
+import NotificationDetail from "./pages/Notifications/NotificationDetail";
 import ForgotPasswordPage from "./pages/ResetPassword/request";
 import ResetPasswordPage from "./pages/ResetPassword/reset";
 import ReviewerPage from "./pages/Reviewer";
@@ -139,7 +142,9 @@ function App(): JSX.Element {
 
               <Route
                 path="admin"
-                element={<PrivateRoute privateRole={Role.admin} />}
+                element={
+                  <PrivateRoute privateRole={Role.admin} Layout={AdminLayout} />
+                }
               >
                 <Route index element={<AdminPage />} />
                 <Route path="journal-group" element={<AdminJournalGroup />} />
@@ -192,6 +197,10 @@ function App(): JSX.Element {
                   element={<AuthorArticleDetail />}
                 />
               </Route>
+              <Route path="notifications" element={<Notifications />}>
+                <Route path=":_id" element={<NotificationDetail />} />
+              </Route>
+
               <Route path="about" element={<About />} />
               <Route path="editorial-board" element={<EditorialBoard />} />
               <Route path="rules" element={<Rules />} />

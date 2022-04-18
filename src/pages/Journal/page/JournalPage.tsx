@@ -1,11 +1,24 @@
 import {
+  Avatar,
+  AvatarGroup,
   Divider,
   Heading,
+  ListItem,
+  OrderedList,
+  Popover,
+  PopoverBody,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger,
   Skeleton,
   Stack,
   Text,
+  Tooltip,
 } from "@chakra-ui/react";
+import { useMemo } from "react";
 import { useParams } from "react-router-dom";
+import { Column, usePagination, useSortBy, useTable } from "react-table";
+import Article from "../../../interface/article.model";
 import {
   useGetArticleOfJournalQuery,
   useGetJournalByIdQuery,
@@ -36,6 +49,26 @@ export default function JournalPage(props: any) {
             <Stack spacing={6}>
               <Heading size="md">Các bài báo</Heading>
               <Stack spacing={4}>
+                {/* {Object.keys(groupedArticles).map((key) => (
+                  <>
+                    <Heading>{key}</Heading>
+                    {groupedArticles[key]
+                      .filter((article) => article.visible)
+                      .map((article) => (
+                        <ArticleCard {...{ article }} />
+                      ))}
+                  </>
+                ))} */}
+                {/* <BigContainer {...getTableBodyProps()}>
+                  {
+                    // Loop over the table rows
+                    rows.map((row) => {
+                      // Prepare the row for display
+                      prepareRow(row);
+                      return <ArticleCard article={row.original} mb={4} />;
+                    })
+                  }
+                </BigContainer> */}
                 {articles.data?.length &&
                   articles.data
                     .filter((article) => article.visible)
@@ -48,5 +81,3 @@ export default function JournalPage(props: any) {
     </>
   );
 }
-
-

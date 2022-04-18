@@ -22,7 +22,7 @@ import {
   Center,
   useColorModeValue,
 } from "@chakra-ui/react";
-import WebViewer from "@pdftron/webviewer";
+import WebViewer from "@pdftron/pdfjs-express-viewer";
 
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "react-day-picker";
@@ -98,7 +98,8 @@ const PDFViewer: FC = (props) => {
           "selectToolButton",
           "panToolButton",
           "printButton",
-          "downloadButton",
+          // "downloadButton",
+          "menuButton",
         ],
       },
       viewerBox.current as HTMLDivElement
@@ -107,43 +108,42 @@ const PDFViewer: FC = (props) => {
         const { documentViewer } = instance.Core;
         instance.UI.setLanguage("vi");
 
-        if (authenticated && role < Role.users) {
-          instance.UI.setHeaderItems((header: any) => {
-            const leftPanel = header.get("leftPanelButton");
-            leftPanel.insertBefore({
-              type: "actionButton",
-              img: "/view/favicon.svg",
-              onClick: () => navigate("/"),
-            });
-            const searchButton = header.get("searchButton");
-            searchButton.insertBefore({
-              type: "actionButton",
-              img: "/view/download.svg",
-              onClick: () =>
-                file.data?.downloadUri &&
-                window.open(file.data?.downloadUri, "_blank")?.focus(),
-            });
-            searchButton.insertBefore({
-              type: "customElement",
-              render: () => <h2>{file.data?.title}</h2>,
-            });
-            header.push({
-              type: "actionButton",
-              img: "/view/search-para.svg",
-              onClick: onOpen,
-            });
+        instance.UI.setHeaderItems(function (header: any) {
+          // if (authenticated && role < Role.users) {
+          const leftPanel = header.get("leftPanelButton");
+          leftPanel.insertBefore({
+            type: "actionButton",
+            img: "/view/favicon.svg",
+            onClick: () => navigate("/"),
           });
-
-          instance.UI.textPopup.update([
-            {
-              type: "actionButton",
-              img: "/view/search-para.svg",
-              onClick: () => handleSearchPlag(documentViewer),
-            },
-          ]);
-        } else {
-          instance.UI.textPopup.update([]);
-        }
+          const searchButton = header.get("searchButton");
+          searchButton.insertBefore({
+            type: "actionButton",
+            img: "/view/download.svg",
+            onClick: () =>
+              file.data?.downloadUri &&
+              window.open(file.data?.downloadUri, "_blank")?.focus(),
+          });
+          searchButton.insertBefore({
+            type: "customElement",
+            render: () => <h2>{file.data?.title}</h2>,
+          });
+          // header.push({
+          //   type: "actionButton",
+          //   img: "/view/search-para.svg",
+          //   onClick: onOpen,
+          // });
+          // instance.UI.textPopup.update([
+          //   {
+          //     type: "actionButton",
+          //     img: "/view/search-para.svg",
+          //     onClick: () => handleSearchPlag(documentViewer),
+          //   },
+          // ]);
+          // } else {
+          // instance.UI.textPopup.update([]);
+          // }
+        });
 
         // instance.UI.setTheme(
         //   (localStorage.getItem("chakra-ui-color-mode") ||

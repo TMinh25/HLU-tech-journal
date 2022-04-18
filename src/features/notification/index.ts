@@ -16,6 +16,16 @@ export const notificationApiSlice = createApi({
   baseQuery: baseQueryWithReauthenticate,
   endpoints(builder) {
     return {
+      newNotification: builder.mutation<
+        { message: string },
+        Pick<INotification, "title" | "content" | "detail">
+      >({
+        query: (body) => ({
+          url: "/notification/new",
+          method: "POST",
+          body,
+        }),
+      }),
       getAllNotifications: builder.query<INotification[], void>({
         query: () => ({
           url: `/notification`,
@@ -23,8 +33,19 @@ export const notificationApiSlice = createApi({
         }),
         transformResponse,
       }),
+      getNotification: builder.query<
+        INotification | undefined,
+        string | undefined
+      >({
+        query: (_id) => ({ url: `/notification/${_id}`, method: "get" }),
+        transformResponse,
+      }),
     };
   },
 });
 
-export const { useGetAllNotificationsQuery } = notificationApiSlice;
+export const {
+  useGetNotificationQuery,
+  useNewNotificationMutation,
+  useGetAllNotificationsQuery,
+} = notificationApiSlice;
