@@ -6,21 +6,28 @@ import {
   useColorModeValue as mode,
   Text,
 } from "@chakra-ui/react";
-import * as React from "react";
-import { Link as RouterLink } from "react-router-dom";
+import {
+  Link as RouterLink,
+  useResolvedPath,
+  useMatch,
+} from "react-router-dom";
 
 interface SideNavLinkProps extends LinkProps {
   isActive?: boolean;
   label: string;
   icon: any;
+  activeIcon?: any;
   to: string;
 }
 
 export const SideNavLink = (props: SideNavLinkProps) => {
-  const { icon, isActive, label, to, ...rest } = props;
+  const { icon, activeIcon, label, to, ...rest } = props;
+  let resolved = useResolvedPath(to);
+  let isActive = useMatch({ path: resolved.pathname, end: true });
   return (
     <Link
       as={RouterLink}
+      to={to}
       display="block"
       py={2}
       px={3}
@@ -41,7 +48,7 @@ export const SideNavLink = (props: SideNavLinkProps) => {
       {...rest}
     >
       <HStack spacing={4}>
-        <Icon as={icon} boxSize="20px" />
+        <Icon as={isActive ? activeIcon || icon : icon} boxSize="20px" />
         <Text as="span">{label}</Text>
       </HStack>
     </Link>

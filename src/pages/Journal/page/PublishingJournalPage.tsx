@@ -61,7 +61,7 @@ const PublishingJournalPage: FC = (props) => {
                   <Input
                     w="200"
                     value={filter}
-                    placeholder="Tìm kiếm"
+                    placeholder="Tìm kiếm"    
                     onChange={({ target }) => setFilter(target.value)}
                   />
                 </InputGroup>

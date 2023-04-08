@@ -22,7 +22,7 @@ import {
   Center,
   useColorModeValue,
 } from "@chakra-ui/react";
-import WebViewer from "@pdftron/pdfjs-express-viewer";
+import WebViewer from "@pdftron/webviewer";
 
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "react-day-picker";
@@ -56,8 +56,6 @@ const PDFViewer: FC = (props) => {
         const text = documentViewer.getSelectedText();
         onOpen();
         const result = await checkPlag({ text }).unwrap();
-        // const newArr = [...plagChecked];
-        // newArr.push({ text, data: result });
         const newPlagChecked = [...plagChecked, { text, data: result }];
         setPlagChecked(newPlagChecked);
         toast({
@@ -80,87 +78,84 @@ const PDFViewer: FC = (props) => {
 
   useEffect(() => {
     setIsLoading(true);
-    // if (file.data?.downloadUri && !file.isLoading) {
-    WebViewer(
-      {
-        path: "pdftron",
-        initialDoc: file.data?.downloadUri,
-        css: "pdftron/styles/index.css",
-        disableLogs: true,
-        disabledElements: [
-          // "ribbons",
-          "toolsHeader",
-          "toggleNotesButton",
-          "viewControlsButton",
-          "contextMenuPopup",
-          "zoomOutButton",
-          "zoomInButton",
-          "selectToolButton",
-          "panToolButton",
-          "printButton",
-          // "downloadButton",
-          "menuButton",
-        ],
-      },
-      viewerBox.current as HTMLDivElement
-    )
-      .then((instance: any) => {
-        const { documentViewer } = instance.Core;
-        instance.UI.setLanguage("vi");
+    if (file.data?.downloadUri && !file.isLoading) {
+      WebViewer(
+        {
+          path: "pdftron",
+          initialDoc: file.data?.downloadUri,
+          css: "pdftron/styles/index.css",
+          disableLogs: true,
+          disabledElements: [
+            "ribbons",
+            "toolsHeader",
+            "toggleNotesButton",
+            "viewControlsButton",
+            "contextMenuPopup",
+            "zoomOutButton",
+            "zoomInButton",
+            "selectToolButton",
+            "panToolButton",
+            "printButton",
+            "downloadButton",
+            "menuButton",
+          ],
+        },
+        viewerBox.current as HTMLDivElement
+      )
+        .then((instance: any) => {
+          const { documentViewer } = instance.Core;
+          instance.UI.setLanguage("vi");
 
-        instance.UI.setHeaderItems(function (header: any) {
-          // if (authenticated && role < Role.users) {
-          const leftPanel = header.get("leftPanelButton");
-          leftPanel.insertBefore({
-            type: "actionButton",
-            img: "/view/favicon.svg",
-            onClick: () => navigate("/"),
+          instance.UI.setHeaderItems(function (header: any) {
+            if (authenticated && role < Role.users) {
+              const leftPanel = header.get("leftPanelButton");
+              leftPanel.insertBefore({
+                type: "actionButton",
+                img: "/view/favicon.svg",
+                onClick: () => navigate("/"),
+              });
+              const searchButton = header.get("searchButton");
+              searchButton.insertBefore({
+                type: "actionButton",
+                img: "/view/download.svg",
+                onClick: () =>
+                  file.data?.downloadUri &&
+                  window.open(file.data?.downloadUri, "_blank")?.focus(),
+              });
+              searchButton.insertBefore({
+                type: "customElement",
+                render: () => <h2>{file.data?.title}</h2>,
+              });
+              header.push({
+                type: "actionButton",
+                img: "/view/search-para.svg",
+                onClick: onOpen,
+              });
+              instance.UI.textPopup.update([
+                {
+                  type: "actionButton",
+                  img: "/view/search-para.svg",
+                  onClick: () => handleSearchPlag(documentViewer),
+                },
+              ]);
+            } else {
+              instance.UI.textPopup.update([]);
+            }
           });
-          const searchButton = header.get("searchButton");
-          searchButton.insertBefore({
-            type: "actionButton",
-            img: "/view/download.svg",
-            onClick: () =>
-              file.data?.downloadUri &&
-              window.open(file.data?.downloadUri, "_blank")?.focus(),
-          });
-          searchButton.insertBefore({
-            type: "customElement",
-            render: () => <h2>{file.data?.title}</h2>,
-          });
-          // header.push({
-          //   type: "actionButton",
-          //   img: "/view/search-para.svg",
-          //   onClick: onOpen,
-          // });
-          // instance.UI.textPopup.update([
-          //   {
-          //     type: "actionButton",
-          //     img: "/view/search-para.svg",
-          //     onClick: () => handleSearchPlag(documentViewer),
-          //   },
-          // ]);
-          // } else {
-          // instance.UI.textPopup.update([]);
-          // }
-        });
 
-        // instance.UI.setTheme(
-        //   (localStorage.getItem("chakra-ui-color-mode") ||
-        //     "light") as unknown as UI.Theme
-        // );
-
-        documentViewer.addEventListener(
-          "documentLoaded",
-          () => {
-            setIsLoading(false);
-            console.log("document loaded");
-          },
-          { once: true }
+          documentViewer.addEventListener(
+            "documentLoaded",
+            () => {
+              setIsLoading(false);
+              console.log("document loaded");
+            },
+            { once: true }
+          );
+        })
+        .catch((e: any) =>
+          console.error({ status: "error", title: e.message })
         );
-      })
-      .catch((e: any) => console.error({ status: "error", title: e.message }));
-    // }
+    }
   }, []);
 
   useEffect(() => console.log({ plagChecked }), [plagChecked]);
